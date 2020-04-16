@@ -9,7 +9,7 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - cd client
+      - run: cd client
       - restore_cache:
           key: v1-app
       - run: yarn install
