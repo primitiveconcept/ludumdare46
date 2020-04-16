@@ -15,10 +15,10 @@ jobs:
           key: v1-app
       - run: yarn install
       - save_cache:
-          key: v1-app	workflows:
+          key: v1-app
           paths:
-            # since we use Yarn it caches NPM modules in ~/.cache	      jobs:
-            # and Cypress caches its binary there!	        - build-and-test
+            # since we use Yarn it caches NPM modules in ~/.cache
+            # and Cypress caches its binary there!
             # to confirm:
             #   yarn cache dir
             #   npx print-cachedir Cypress
