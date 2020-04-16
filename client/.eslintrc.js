@@ -88,6 +88,7 @@ module.exports = {
     "react-hooks/exhaustive-deps": "error",
     "react-hooks/rules-of-hooks": "error",
     "react/display-name": "off",
+    "react/jsx-key": "error",
     "react/jsx-boolean-value": ["error", "never"],
     "react/no-unknown-property": "error",
     "react/prop-types": "off",

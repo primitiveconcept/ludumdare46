@@ -1,7 +1,7 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global } from "@emotion/core";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Head from "next/head";
 import { useImmer } from "use-immer";
@@ -35,7 +35,7 @@ export const Index = () => {
     [],
   );
   const [sendMessage, lastMessage, readyState] = useWebSocket(
-    "ws://dev.primitiveconcept.com/",
+    "wss://echo.websocket.org/",
     options,
   );
   useEffect(() => {
@@ -45,7 +45,7 @@ export const Index = () => {
   }, [readyState, sendMessage]);
   useEffect(() => {
     if (lastMessage) {
-      setState(draft => {
+      setState((draft) => {
         draft.messages.push(lastMessage.data);
       });
     }
@@ -77,7 +77,11 @@ export const Index = () => {
           }
         `}
       />
-      <div>{lastMessage?.data}</div>
+      <div>
+        {state.messages.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+      </div>
     </>
   );
 };
