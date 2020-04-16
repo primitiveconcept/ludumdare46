@@ -9,22 +9,22 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        key: v1-app
+          key: v1-app
       - run:
-        command: yarn install
-        working_directory: client
+          command: yarn install
+          working_directory: client
       - save_cache:
-        key: v1-app
-        paths:
-          # since we use Yarn it caches NPM modules in ~/.cache
-          # and Cypress caches its binary there!
-          # to confirm:
-          #   yarn cache dir
-          #   npx print-cachedir Cypress
-          - ~/.cache
+          key: v1-app
+          paths:
+            # since we use Yarn it caches NPM modules in ~/.cache
+            # and Cypress caches its binary there!
+            # to confirm:
+            #   yarn cache dir
+            #   npx print-cachedir Cypress
+            - ~/.cache
       - run:
-        command: yarn tsc
-        working_directory: client
+          command: yarn tsc
+          working_directory: client
       - run:
-        command: LINT_ERRORS=true yarn lint
-        working_directory: client
+          command: LINT_ERRORS=true yarn lint
+          working_directory: client
