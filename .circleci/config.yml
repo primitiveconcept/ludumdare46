@@ -1,25 +1,17 @@
 version: 2.1
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  build:
-    docker:
-      - image: cypress/browsers:node12.13.0-chrome78-ff70
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    working_directory: ~/app
+  build-and-test:
+    executor:
+      name: node/default
     steps:
       - checkout
-      - restore_cache:
-          key: v1-app
-      - run: yarn install
-      - save_cache:
-          key: v1-app
-          paths:
-            # since we use Yarn it caches NPM modules in ~/.cache
-            # and Cypress caches its binary there!
-            # to confirm:
-            #   yarn cache dir
-            #   npx print-cachedir Cypress
-            - ~/.cache
-      - run: yarn tsc
-      - run: yarn lint
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm test
+workflows:
+    build-and-test:
+      jobs:
+        - build-and-test
