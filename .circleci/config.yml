@@ -6,23 +6,22 @@ jobs:
         environment:
           ## this enables colors in the output
           TERM: xterm
-    working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
-          key: v1-app
+        key: v1-app
       - run:
         command: yarn install
         working_directory: client
       - save_cache:
-          key: v1-app
-          paths:
-            # since we use Yarn it caches NPM modules in ~/.cache
-            # and Cypress caches its binary there!
-            # to confirm:
-            #   yarn cache dir
-            #   npx print-cachedir Cypress
-            - ~/.cache
+        key: v1-app
+        paths:
+          # since we use Yarn it caches NPM modules in ~/.cache
+          # and Cypress caches its binary there!
+          # to confirm:
+          #   yarn cache dir
+          #   npx print-cachedir Cypress
+          - ~/.cache
       - run:
         command: yarn tsc
         working_directory: client
