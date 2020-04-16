@@ -24,4 +24,4 @@ jobs:
             #   npx print-cachedir Cypress
             - ~/.cache
       - run: yarn tsc
-      - run: yarn lint
+      - run: LINT_ERRORS=true yarn lint
