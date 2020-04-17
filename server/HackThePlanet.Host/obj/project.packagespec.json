@@ -1,0 +1,56 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "D:\\Projects\\Games\\hack-the-planet\\server\\HackThePlanet.Host\\HackThePlanet.Host.csproj",
+    "projectName": "HackThePlanet.Host",
+    "projectPath": "D:\\Projects\\Games\\hack-the-planet\\server\\HackThePlanet.Host\\HackThePlanet.Host.csproj",
+    "outputPath": "D:\\Projects\\Games\\hack-the-planet\\server\\HackThePlanet.Host\\obj\\",
+    "projectStyle": "PackageReference",
+    "originalTargetFrameworks": [
+      "netcoreapp3.0"
+    ],
+    "sources": {
+      "https://api.nuget.org/v3/index.json": {}
+    },
+    "frameworks": {
+      "netcoreapp3.0": {
+        "projectReferences": {
+          "D:\\Projects\\Games\\hack-the-planet\\server\\HackThePlanet\\HackThePlanet.csproj": {
+            "projectPath": "D:\\Projects\\Games\\hack-the-planet\\server\\HackThePlanet\\HackThePlanet.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp3.0": {
+      "dependencies": {
+        "Microsoft.Extensions.Hosting": {
+          "target": "Package",
+          "version": "[3.1.3, )"
+        }
+      },
+      "imports": [
+        "net461",
+        "net462",
+        "net47",
+        "net471",
+        "net472",
+        "net48"
+      ],
+      "assetTargetFallback": true,
+      "warn": true,
+      "frameworkReferences": {
+        "Microsoft.NETCore.App": {
+          "privateAssets": "all"
+        }
+      },
+      "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+    }
+  }
+}
