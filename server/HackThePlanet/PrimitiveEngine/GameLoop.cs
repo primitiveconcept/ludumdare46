@@ -1,5 +1,8 @@
 ﻿namespace PrimitiveEngine
 {
+	using System.Threading;
+
+
 	public abstract class GameLoop
 	{
 		private bool running;
@@ -37,7 +40,7 @@
 				this.gameTime.Update();
 			}
 		}
-		
+
 
 		/// <summary>
 		/// Stops the game loop.
