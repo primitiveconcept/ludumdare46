@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Threading.Tasks;
+	using HackThePlanet.Server.Endpoints;
 	using WebSocketSharp.Server;
 
 
@@ -10,9 +11,12 @@
 		static void Main(string[] args)
 		{
 			Game game = new Game();
-			var gameWebSocket = new GameWebSocket(game);
-			
 			Task task = Task.Run(() => game.Start());
+			
+			var gameWebSocket = new GameWebSocket(game);
+			gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
+			gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
+			gameWebSocket.Start();
 			
 			Console.ReadKey(true);
 			Console.Out.WriteLine("Stopping...");

@@ -7,7 +7,6 @@ namespace HackThePlanet.Server.Endpoints
 	{
 		protected override void OnMessage(MessageEventArgs message)
 		{
-			// Echo
 			Send("Echo: " + message.Data);
 		}
 	}
