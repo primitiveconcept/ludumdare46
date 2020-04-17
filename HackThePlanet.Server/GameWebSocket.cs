@@ -6,13 +6,14 @@ namespace HackThePlanet.Server
 	public class GameWebSocket
 	{
 		private Game game;
-		private WebSocketServer webSocketServer;
+		private HttpServer webSocketServer;
 		
 		
 		public GameWebSocket(Game game)
 		{
 			this.game = game;
-			this.webSocketServer = new WebSocketServer("ws://localhost:31337");
+			this.webSocketServer = new HttpServer(31337);
+			this.webSocketServer.ReuseAddress = true;
 		}
 
 		public void Start()
@@ -27,13 +28,10 @@ namespace HackThePlanet.Server
 		}
 
 
-		public WebsocketEndpoint AddEndpoint<T>(string endpointPath)
+		public void AddEndpoint<T>(string endpointPath)
 			where T: WebsocketEndpoint, new()
 		{
-			var websocketEndpoint = this.webSocketServer.AddWebSocketService<T>(endpointPath) as T;
-			websocketEndpoint.Game = this.game;
-
-			return websocketEndpoint;
+			this.webSocketServer.AddWebSocketService<T>(endpointPath);
 		}
 	}
 }

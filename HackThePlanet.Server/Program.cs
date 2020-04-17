@@ -18,7 +18,7 @@
 			gameWebSocket.Start();
 			
 			Console.Out.WriteLine("Server listening. Press any key to exit.");
-			Console.ReadKey();
+			Console.ReadKey(true);
 		}
 	}
 }
