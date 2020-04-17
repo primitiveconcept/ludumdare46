@@ -1,5 +1,6 @@
 namespace HackThePlanet.Server
 {
+	using System.Net;
 	using WebSocketSharp.Server;
 
 
@@ -12,8 +13,11 @@ namespace HackThePlanet.Server
 		public GameWebSocket(Game game)
 		{
 			this.game = game;
-			this.webSocketServer = new HttpServer(31337);
-			this.webSocketServer.ReuseAddress = true;
+			this.webSocketServer = 
+				new HttpServer(31337) 
+					{ 
+						ReuseAddress = true 
+					};
 		}
 
 		public void Start()
@@ -31,7 +35,14 @@ namespace HackThePlanet.Server
 		public void AddEndpoint<T>(string endpointPath)
 			where T: WebsocketEndpoint, new()
 		{
-			this.webSocketServer.AddWebSocketService<T>(endpointPath);
+			this.webSocketServer.AddWebSocketService<T>(
+				path: endpointPath, 
+				creator: () =>
+				{
+					T service = new T();
+					service.Game = this.game;
+					return service;
+				});
 		}
 	}
 }
