@@ -1,8 +1,7 @@
-﻿namespace HackThePlanet.Server
+﻿namespace HackThePlanet.Host
 {
 	using System;
 	using System.Threading.Tasks;
-	using HackThePlanet.Server;
 
 
 	internal class Program

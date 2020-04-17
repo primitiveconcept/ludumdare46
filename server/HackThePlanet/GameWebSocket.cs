@@ -1,6 +1,5 @@
-namespace HackThePlanet.Server
+namespace HackThePlanet
 {
-	using System.Net;
 	using WebSocketSharp.Server;
 
 

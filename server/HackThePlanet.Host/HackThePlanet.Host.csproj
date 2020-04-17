@@ -3,10 +3,11 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
+        <RootNamespace>HackThePlanet.Server</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <ProjectReference Include="..\HackThePlanet\HackThePlanet.csproj" />
     </ItemGroup>
 
 </Project>

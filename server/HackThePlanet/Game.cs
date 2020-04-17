@@ -1,4 +1,4 @@
-namespace HackThePlanet.Server
+namespace HackThePlanet
 {
 	using PrimitiveEngine;
 
