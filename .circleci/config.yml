@@ -6,12 +6,13 @@ jobs:
         environment:
           ## this enables colors in the output
           TERM: xterm
-    working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
           key: v1-app
-      - run: yarn install
+      - run:
+          command: yarn install
+          working_directory: client
       - save_cache:
           key: v1-app
           paths:
@@ -21,5 +22,9 @@ jobs:
             #   yarn cache dir
             #   npx print-cachedir Cypress
             - ~/.cache
-      - run: yarn tsc
-      - run: yarn lint
+      - run:
+          command: yarn tsc
+          working_directory: client
+      - run:
+          command: LINT_ERRORS=true yarn lint
+          working_directory: client
