@@ -35,12 +35,12 @@ export const Index = () => {
     [],
   );
   const [sendMessage, lastMessage, readyState] = useWebSocket(
-    "wss://echo.websocket.org/",
+    "ws://localhost:31337/linkinpark",
     options,
   );
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
-      sendMessage("Hi");
+      sendMessage("wut");
     }
   }, [readyState, sendMessage]);
   useEffect(() => {
@@ -59,7 +59,14 @@ export const Index = () => {
           rel="stylesheet"
         />
       </Head>
-      <div>Status: {readyState}</div>
+      <div>
+        Status:{" "}
+        {readyState === ReadyState.CONNECTING
+          ? "Connecting..."
+          : readyState === ReadyState.CLOSED
+          ? "Closed"
+          : ":shrug:"}
+      </div>
       <button
         onClick={() => sendMessage(lastMessage?.data === "Hi" ? "Hello" : "Hi")}
       >
