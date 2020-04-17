@@ -2,26 +2,23 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using HackThePlanet.Server.Endpoints;
-	using WebSocketSharp.Server;
+	using HackThePlanet.Server;
 
 
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			Game game = new Game();
 			Task task = Task.Run(() => game.Start());
 			
-			var gameWebSocket = new GameWebSocket(game);
+			GameWebSocket gameWebSocket = new GameWebSocket(game);
 			gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
 			gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
 			gameWebSocket.Start();
 			
-			Console.ReadKey(true);
-			Console.Out.WriteLine("Stopping...");
-			Console.Out.WriteLine("Listening...");
-			gameWebSocket.Stop();
+			Console.Out.WriteLine("Server listening. Press any key to exit.");
+			Console.ReadKey();
 		}
 	}
 }

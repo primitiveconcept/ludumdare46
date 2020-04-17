@@ -1,4 +1,4 @@
-namespace HackThePlanet.Server.Endpoints
+namespace HackThePlanet.Server
 {
 	using WebSocketSharp.Server;
 
