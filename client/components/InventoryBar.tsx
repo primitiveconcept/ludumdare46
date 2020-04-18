@@ -54,13 +54,15 @@ export const InventoryBar = ({ inventory }: InventoryProps) => {
           );
         })}
         <li>
-          <button
-            onClick={() => {
+          <a
+            href="back"
+            onClick={(event) => {
+              event.preventDefault();
               setCurrentIp(null);
             }}
           >
             Back
-          </button>
+          </a>
         </li>
       </ul>
     </>
