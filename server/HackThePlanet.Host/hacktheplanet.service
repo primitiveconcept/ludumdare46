@@ -2,17 +2,10 @@
 Description=dotnetcore 2.1 sample service with generic host  
   
 [Service]  
-<<<<<<< HEAD
-ExecStart=/usr/bin/dotnet HackThePlanet.Host.dll  
-WorkingDirectory=/usr/local/sbin/hacktheplanet/
-User=root
-Group=root
-=======
 ExecStart=/bin/dotnet/dotnet HackThePlanet.Host.dll  
 WorkingDirectory=/etc/Core.Service.Sample/  
 User=dotnetuser  
 Group=dotnetuser  
->>>>>>> 9120d72f1cbd9bfb5a2bf5523c44cf0d7c22fa25
 Restart=on-failure  
 SyslogIdentifier=hacktheplanet-service  
 PrivateTemp=true  
