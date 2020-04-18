@@ -3,7 +3,12 @@ namespace HackThePlanet
 	using Microsoft.Extensions.Logging;
 	using WebSocketSharp.Server;
 
-
+	
+	/// <summary>
+	/// A wrapper around the web socket server, to inject Game state reference into each.
+	/// Also handles starting and stopping of the server.
+	/// Don't add endpoint here; do that in GameService (RegisterEndpoints).
+	/// </summary>
 	public class GameWebSocket
 	{
 		private static readonly ILogger logger = ApplicationLogging.CreateLogger<GameWebSocket>();

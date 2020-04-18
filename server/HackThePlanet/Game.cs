@@ -4,6 +4,9 @@ namespace HackThePlanet
 	using PrimitiveEngine;
 
 
+	/// <summary>
+	/// Main game state and game loop.
+	/// </summary>
 	public class Game : GameLoop
 	{
 		private static readonly ILogger logger = ApplicationLogging.CreateLogger<Game>();
@@ -29,7 +32,7 @@ namespace HackThePlanet
 
 		public override void Update(long deltaTime)
 		{
-			// TODO
+			this.entityWorld.FixedUpdate(deltaTime);
 		}
 	}
 }
