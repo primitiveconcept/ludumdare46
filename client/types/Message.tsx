@@ -4,7 +4,6 @@ import {
   Number,
   Record,
   String,
-  Null,
   Literal,
   Partial,
 } from "runtypes";
@@ -21,6 +20,9 @@ const Ssh = Literal("SSH");
 const SshCrack = Literal("SSH_CRACK");
 
 const Commands = Union(Portscan, Ssh, SshCrack);
+export const Device = Record({
+  ip: String,
+});
 
 const InitialStateMessage = Record({
   type: Literal("INITIAL_STATE"),
@@ -28,6 +30,7 @@ const InitialStateMessage = Record({
     nodeCount: Number,
     bitcoin: Number,
     availableCommands: Array(Commands),
+    knownDevices: Array(Device),
   }).And(
     Partial({
       message: String,

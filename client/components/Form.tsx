@@ -30,6 +30,8 @@ import {
   borderRight,
   borderTop,
   borderBottom,
+  JustifyItemsProps,
+  justifyItems,
 } from "styled-system";
 
 export const Form = styled.form<
@@ -39,6 +41,7 @@ export const Form = styled.form<
     MaxWidthProps &
     AlignSelfProps &
     JustifySelfProps &
+    JustifyItemsProps &
     GridAreaProps &
     HeightProps &
     OverflowProps &
@@ -59,6 +62,7 @@ export const Form = styled.form<
   ${display}
   ${gridArea}
   ${height}
+  ${justifyItems}
   ${justifySelf}
   ${maxWidth}
   ${overflow}

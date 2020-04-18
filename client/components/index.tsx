@@ -3,6 +3,8 @@ export * from "./Flex";
 export * from "./Form";
 export * from "./Grid";
 export * from "./Input";
+export * from "./Inventory";
 export * from "./Messages";
 export * from "./Prompt";
 export * from "./Status";
+export * from "./Terminal";
