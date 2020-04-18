@@ -1,41 +1,26 @@
 import React, { createRef, useEffect, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
 import { Input, Box } from ".";
-import { Command } from "../types";
 import { CommandContext } from "./CommandContext";
 import { MessageContext } from "./MessageContext";
 import keycode from "keycode";
 
 const prompt = "threehams@local$";
 
-type PromptProps = {
-  sendMessage: (message: Command) => void;
-};
-export const Prompt = ({ sendMessage }: PromptProps) => {
+export const Prompt = () => {
   const { command, setCommand } = useContext(CommandContext);
-  const { addMessage } = useContext(MessageContext);
+  const { sendMessage, sendLocalMessage } = useContext(MessageContext);
   const inputRef = createRef<HTMLInputElement>();
   const onSubmit = useCallback(() => {
-    addMessage(`${prompt} ${command}`);
-    const [base, ...args] = command.trim().split(/ +/);
-    if (!base) {
-      return;
-    }
+    sendLocalMessage(`${prompt} ${command}`);
+    const [base] = command.trim().split(/ +/);
     if (base === "ssh") {
-      const [ip, username, password] = args;
-      sendMessage({
-        type: "SSH",
-        payload: {
-          ip,
-          username,
-          password,
-        },
-      });
+      sendMessage(command);
     } else {
-      addMessage(`${base}: command not found`);
+      sendLocalMessage(`${base}: command not found`);
     }
     setCommand("");
-  }, [addMessage, command, sendMessage, setCommand]);
+  }, [command, sendLocalMessage, sendMessage, setCommand]);
   useEffect(() => {
     const focusInput = (event: KeyboardEvent) => {
       inputRef.current?.focus();

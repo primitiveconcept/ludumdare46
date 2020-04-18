@@ -1,87 +1,33 @@
-import {
-  Array,
-  Union,
-  Number,
-  Record,
-  String,
-  Literal,
-  Partial,
-} from "runtypes";
+import { Array, Union, Record, String, Literal } from "runtypes";
 
-const Port = Union(Literal(21), Literal(22), Literal(80));
-const Status = Union(
-  Literal("SUCCESS"),
-  Literal("FAILURE"),
-  Literal("PENDING"),
-);
-const Permission = Union(Literal("USER"), Literal("ROOT"));
-const Portscan = Literal("PORTSCAN");
-const Ssh = Literal("SSH");
-const SshCrack = Literal("SSH_CRACK");
+const Status = String;
+// const Permission = Union(Literal("None"), Literal("User"), Literal("Root"));
 
-const Commands = Union(Portscan, Ssh, SshCrack);
+// const Command = Union(
+//   Literal("portscan"),
+//   Literal("ssh"),
+//   Literal("sshcrack"),
+//   Literal("disconnect"),
+// );
 export const Device = Record({
   ip: String,
+  status: Status,
+  commands: Array(String),
 });
 
-const InitialStateMessage = Record({
-  type: Literal("INITIAL_STATE"),
+const TerminalMessage = Record({
+  update: Literal("Terminal"),
   payload: Record({
-    nodeCount: Number,
-    bitcoin: Number,
-    availableCommands: Array(Commands),
-    knownDevices: Array(Device),
-  }).And(
-    Partial({
-      message: String,
-    }),
-  ),
+    message: String,
+  }),
 });
 
-const PortscanMessage = Record({
-  type: Portscan,
+const ResourcesMessage = Record({
+  update: Literal("Resources"),
   payload: Record({
-    ip: String,
-    status: Status,
-    progress: Number,
-    ports: Array(Port),
-  }).And(
-    Partial({
-      message: String,
-    }),
-  ),
+    bitcoin: String,
+    devices: Array(Device),
+  }),
 });
 
-const SshMessage = Record({
-  type: Ssh,
-  payload: Record({
-    ip: String,
-    status: Status,
-    permission: Permission,
-  }).And(
-    Partial({
-      message: String,
-    }),
-  ),
-});
-
-const SshCrackMessage = Record({
-  type: SshCrack,
-  payload: Record({
-    ip: String,
-    status: Status,
-    progress: Number,
-    permission: Permission,
-  }).And(
-    Partial({
-      message: String,
-    }),
-  ),
-});
-
-export const MessageData = Union(
-  InitialStateMessage,
-  SshCrackMessage,
-  SshMessage,
-  PortscanMessage,
-);
+export const MessageData = Union(TerminalMessage, ResourcesMessage);

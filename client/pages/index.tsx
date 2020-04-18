@@ -33,20 +33,16 @@ export const Index = () => {
     if (!lastMessage) {
       return;
     }
-    const message = lastMessage.payload.message;
-    if (message) {
+    if (lastMessage.update === "Terminal") {
       setState((draft) => {
-        message.split("\n").forEach((text) => {
-          draft.messages.push(text);
-        });
+        // message.split("\n").forEach((text) => {
+        draft.messages.push(lastMessage.payload.message);
+        // });
       });
     }
-    if (lastMessage.type === "INITIAL_STATE") {
+    if (lastMessage.update === "Resources") {
       setState((draft) => {
-        draft.inventory = {
-          bitcoin: lastMessage.payload.bitcoin,
-          knownDevices: lastMessage.payload.knownDevices,
-        };
+        draft.inventory = lastMessage.payload;
       });
     }
   }, [lastMessage, setState]);
@@ -59,12 +55,13 @@ export const Index = () => {
   );
   const messageContextValue = useMemo(
     () => ({
-      addMessage: (message: string) =>
+      sendMessage,
+      sendLocalMessage: (message: string) =>
         setState((draft) => {
           draft.messages.push(message);
         }),
     }),
-    [setState],
+    [sendMessage, setState],
   );
 
   return (
@@ -124,12 +121,12 @@ export const Index = () => {
               `}
             />
             <Box overflow="auto" gridArea="leftbar" padding={4}>
-              <InventoryBar inventory={state.inventory} />
+              {state.inventory && <InventoryBar inventory={state.inventory} />}
             </Box>
             <Box overflow="auto" gridArea="main" padding={4}>
               <Status readyState={readyState} />
               <Messages messages={state.messages} />
-              <Prompt sendMessage={sendMessage} />
+              <Prompt />
             </Box>
           </Grid>
         </Terminal>

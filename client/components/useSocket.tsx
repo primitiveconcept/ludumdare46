@@ -1,9 +1,9 @@
 import { useMemo, useCallback, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
-import { Command } from "../types";
 import { camelizeKeys } from "humps";
 
+const temp = false;
 export const useSocket = (sessionId: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
@@ -18,14 +18,16 @@ export const useSocket = (sessionId: string) => {
     [],
   );
   const [sendMessageUnsafe, lastMessageUnsafe, readyState] = useWebSocket(
-    `ws://${hostname}:31337/echo`,
+    temp
+      ? `ws://dev.primitiveconcept.com:31337/echo`
+      : `ws://${hostname}:31337/echo`,
     options,
   );
   const sendMessage = useCallback(
-    (message: Command) => {
+    (command: string) => {
       sendMessageUnsafe(
         JSON.stringify({
-          ...message,
+          command,
           sessionId,
         }),
       );
@@ -44,7 +46,7 @@ export const useSocket = (sessionId: string) => {
   ]);
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
-      sendMessage({ type: "INITIAL_STATE" });
+      sendMessage("initial");
     }
   }, [readyState, sendMessage]);
   return result;
