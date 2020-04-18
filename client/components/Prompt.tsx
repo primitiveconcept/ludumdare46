@@ -1,9 +1,10 @@
 import React, { createRef, useEffect, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
-import { Input, Form } from ".";
+import { Input, Box } from ".";
 import { Command } from "../types";
 import { CommandContext } from "./CommandContext";
 import { MessageContext } from "./MessageContext";
+import keycode from "keycode";
 
 const prompt = "threehams@local$";
 
@@ -14,44 +15,43 @@ export const Prompt = ({ sendMessage }: PromptProps) => {
   const { command, setCommand } = useContext(CommandContext);
   const { addMessage } = useContext(MessageContext);
   const inputRef = createRef<HTMLInputElement>();
-  const onSubmit = useCallback(
-    (event: React.FormEvent) => {
-      event.preventDefault();
-      addMessage(`${prompt} ${command}`);
-      const [base, ...args] = command.trim().split(/ +/);
-      if (!base) {
-        return;
-      }
-      if (base === "ssh") {
-        const [ip, username, password] = args;
-        sendMessage({
-          type: "SSH",
-          payload: {
-            ip,
-            username,
-            password,
-          },
-        });
-      } else {
-        addMessage(`${base}: command not found`);
-      }
-      setCommand("");
-    },
-    [addMessage, command, sendMessage, setCommand],
-  );
+  const onSubmit = useCallback(() => {
+    addMessage(`${prompt} ${command}`);
+    const [base, ...args] = command.trim().split(/ +/);
+    if (!base) {
+      return;
+    }
+    if (base === "ssh") {
+      const [ip, username, password] = args;
+      sendMessage({
+        type: "SSH",
+        payload: {
+          ip,
+          username,
+          password,
+        },
+      });
+    } else {
+      addMessage(`${base}: command not found`);
+    }
+    setCommand("");
+  }, [addMessage, command, sendMessage, setCommand]);
   useEffect(() => {
-    const focusInput = () => {
+    const focusInput = (event: KeyboardEvent) => {
       inputRef.current?.focus();
+      if (event.keyCode === keycode.codes.enter) {
+        onSubmit();
+      }
     };
     document.addEventListener("keypress", focusInput);
 
     return () => {
       document.removeEventListener("keypress", focusInput);
     };
-  }, [inputRef]);
+  }, [inputRef, onSubmit]);
 
   return (
-    <Form display="flex" justifyItems="start" width={1} onSubmit={onSubmit}>
+    <Box width={1}>
       {prompt} {command}█
       <Input
         aria-label="Enter Command"
@@ -68,6 +68,6 @@ export const Prompt = ({ sendMessage }: PromptProps) => {
           outline: none;
         `}
       />
-    </Form>
+    </Box>
   );
 };

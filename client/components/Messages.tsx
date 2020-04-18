@@ -14,6 +14,7 @@ const CommandLink = ({ href, children }: CommandLinkProps) => {
       href={href}
       onClick={(event) => {
         event.preventDefault();
+        event.currentTarget.blur();
         setCommand(`${href} `);
       }}
     >
