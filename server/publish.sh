@@ -1,1 +1,1 @@
-dotnet publish HackThePlanet.Host -c Release
+dotnet publish HackThePlanet.Host --configuration Release --output /usr/local/sbin/hacktheplanet
