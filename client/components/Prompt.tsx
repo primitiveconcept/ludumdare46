@@ -1,33 +1,58 @@
-import React, { useState } from "react";
-import { SendMessage } from "react-use-websocket";
+import React, { createRef, useEffect, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
-import { Input, Form } from ".";
+import { Input, Box } from ".";
+import { CommandContext } from "./CommandContext";
+import { MessageContext } from "./MessageContext";
+import keycode from "keycode";
 
-type PromptProps = {
-  sendMessage: SendMessage;
-};
-export const Prompt = ({ sendMessage }: PromptProps) => {
-  const [text, setText] = useState("");
+const prompt = "threehams@local$";
+
+export const Prompt = () => {
+  const { command, setCommand } = useContext(CommandContext);
+  const { sendMessage, sendLocalMessage } = useContext(MessageContext);
+  const inputRef = createRef<HTMLInputElement>();
+  const onSubmit = useCallback(() => {
+    sendLocalMessage(`${prompt} ${command}`);
+    const [base] = command.trim().split(/ +/);
+    if (base === "ssh") {
+      sendMessage(command);
+    } else {
+      sendLocalMessage(`${base}: command not found`);
+    }
+    setCommand("");
+  }, [command, sendLocalMessage, sendMessage, setCommand]);
+  useEffect(() => {
+    const focusInput = (event: KeyboardEvent) => {
+      inputRef.current?.focus();
+      if (event.keyCode === keycode.codes.enter) {
+        onSubmit();
+      }
+    };
+    document.addEventListener("keypress", focusInput);
+
+    return () => {
+      document.removeEventListener("keypress", focusInput);
+    };
+  }, [inputRef, onSubmit]);
+
   return (
-    <Form
-      display="flex"
-      width={1}
-      onSubmit={(event) => {
-        event.preventDefault();
-        sendMessage(text);
-        setText("");
-      }}
-    >
+    <Box width={1}>
+      {prompt} {command}█
       <Input
-        value={text}
+        aria-label="Enter Command"
+        ref={inputRef}
+        size={command.length || 1}
+        value={command}
         onChange={(event) => {
-          setText(event.target.value);
+          setCommand(event.target.value);
         }}
         type="text"
         css={css`
-          flex: 1 1 auto;
+          opacity: 0.01;
+          position: absolute;
+          outline: none;
         `}
       />
-    </Form>
+    </Box>
   );
 };

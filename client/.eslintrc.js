@@ -6,7 +6,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 6,
     sourceType: "module",
-    project: ["./tsconfig.json"],
+    project: ["./tsconfig.json", "./cypress/tsconfig.json"],
     ecmaFeatures: {
       modules: true,
     },
@@ -27,11 +27,12 @@ module.exports = {
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/no-unused-expressions": warnOnLocal,
     "@typescript-eslint/no-unused-vars": warnOnLocal,
     "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/prefer-function-type": "error",
     "@typescript-eslint/restrict-plus-operands": "error",
-    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "jsx-a11y/accessible-emoji": "error",
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/anchor-has-content": "error",
@@ -70,8 +71,6 @@ module.exports = {
     "mocha/no-exclusive-tests": "error",
     "no-sequences": "error",
     "no-shadow": "error",
-    "no-unused-expressions": warnOnLocal,
-    "no-unused-vars": warnOnLocal,
     "padding-line-between-statements": [
       warnOnLocal,
       {
