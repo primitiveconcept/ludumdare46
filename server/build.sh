@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet build -c Release
+dotnet build HackThePlanet.Host -c Release

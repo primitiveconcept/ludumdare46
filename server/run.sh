@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet run --project ./HackThePlanet.Host
+dotnet run HackThePlanet.Host
