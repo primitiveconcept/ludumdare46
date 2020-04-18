@@ -1,6 +1,6 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
-import { Global, css } from "@emotion/core";
+import { Global } from "@emotion/core";
 import React, { useMemo, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Head from "next/head";
