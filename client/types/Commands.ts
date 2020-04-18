@@ -1,5 +1,5 @@
 export type SshCommand = {
-  type: "ssh";
+  type: "SSH";
   payload: {
     ip: string;
     username: string;
@@ -8,15 +8,25 @@ export type SshCommand = {
 };
 
 export type PortscanCommand = {
-  type: "portscan";
+  type: "PORTSCAN";
   payload: {
     ip: string;
   };
 };
 
 export type SshCrackCommand = {
-  type: "sshCrack";
+  type: "SSH_CRACK";
   payload: {
     ip: string;
   };
 };
+
+export type InitialStateCommand = {
+  type: "INITIAL_STATE";
+};
+
+export type Command =
+  | SshCommand
+  | PortscanCommand
+  | SshCrackCommand
+  | InitialStateCommand;

@@ -1,4 +1,13 @@
-import { Array, Union, Number, Record, String, Null, Literal } from "runtypes";
+import {
+  Array,
+  Union,
+  Number,
+  Record,
+  String,
+  Null,
+  Literal,
+  Partial,
+} from "runtypes";
 
 const Port = Union(Literal(21), Literal(22), Literal(80));
 const Status = Union(
@@ -19,7 +28,11 @@ const InitialStateMessage = Record({
     nodeCount: Number,
     bitcoin: Number,
     availableCommands: Array(Commands),
-  }),
+  }).And(
+    Partial({
+      message: String,
+    }),
+  ),
 });
 
 const PortscanMessage = Record({
@@ -29,7 +42,11 @@ const PortscanMessage = Record({
     status: Status,
     progress: Number,
     ports: Array(Port),
-  }),
+  }).And(
+    Partial({
+      message: String,
+    }),
+  ),
 });
 
 const SshMessage = Record({
@@ -38,7 +55,11 @@ const SshMessage = Record({
     ip: String,
     status: Status,
     permission: Permission,
-  }),
+  }).And(
+    Partial({
+      message: String,
+    }),
+  ),
 });
 
 const SshCrackMessage = Record({
@@ -48,7 +69,11 @@ const SshCrackMessage = Record({
     status: Status,
     progress: Number,
     permission: Permission,
-  }),
+  }).And(
+    Partial({
+      message: String,
+    }),
+  ),
 });
 
 export const MessageData = Union(
@@ -56,11 +81,4 @@ export const MessageData = Union(
   SshCrackMessage,
   SshMessage,
   PortscanMessage,
-);
-
-export const Message = Union(
-  Null,
-  Record({
-    data: MessageData,
-  }),
 );

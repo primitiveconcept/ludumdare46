@@ -26,7 +26,6 @@ export const Input = styled.input<
     OverflowProps
 >`
   background: transparent;
-  color: green;
   border: 0;
   ${alignSelf}
   ${display}
