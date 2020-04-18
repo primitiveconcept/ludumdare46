@@ -9,19 +9,8 @@ namespace HackThePlanet
 	public abstract class Command
 	{
 		public static Dictionary<string, Type> Index;
-
 		private string[] arguments;
 
-		public string GetArgument(int index)
-		{
-			if (this.arguments == null
-				|| index > this.arguments.Length - 1)
-			{
-				return null;
-			}
-
-			return this.arguments[index];
-		}
 
 		#region Constructors
 		protected Command() {}
@@ -45,6 +34,11 @@ namespace HackThePlanet
 				Index.Add(commandAttribute.Name.ToLower(), type);
 			}
 		}
+		#endregion
+
+
+		#region Properties
+		public string Name { get; set; }
 		#endregion
 
 
@@ -75,6 +69,7 @@ namespace HackThePlanet
 			}
 
 			Command command = (Command)Activator.CreateInstance(Index[commandName]);
+			command.Name = commandName;
 			
 			// No arguments.
 			if (parts.Length < 2)
@@ -94,6 +89,18 @@ namespace HackThePlanet
 			command.arguments = arguments;
 			
 			return command;
+		}
+
+
+		public string GetArgument(int index)
+		{
+			if (this.arguments == null
+				|| index > this.arguments.Length - 1)
+			{
+				return null;
+			}
+
+			return this.arguments[index];
 		}
 	}
 }
