@@ -1,10 +1,12 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
-import { Global } from "@emotion/core";
+import { Global, css } from "@emotion/core";
 import React, { useMemo, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Head from "next/head";
 import { useImmer } from "use-immer";
+import { Message } from "../types/Message";
+import { Box, Grid, Messages, Prompt, Status } from "../components";
 
 setAutoFreeze(false);
 
@@ -12,7 +14,7 @@ type Command = {};
 type Area = {};
 type Item = {};
 
-type State = {
+export type State = {
   messages: string[];
   commands: Command[];
   area: Area | null;
@@ -34,10 +36,11 @@ export const Index = () => {
     }),
     [],
   );
-  const [sendMessage, lastMessage, readyState] = useWebSocket(
-    "ws://localhost:31337/linkinpark",
+  const [sendMessage, lastMessageUnsafe, readyState] = useWebSocket(
+    "ws://localhost:31337/echo",
     options,
   );
+  const lastMessage = Message.check(lastMessageUnsafe);
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
       sendMessage("wut");
@@ -52,44 +55,51 @@ export const Index = () => {
   }, [lastMessage, setState]);
 
   return (
-    <>
+    <Grid
+      height="100vh"
+      gridTemplateAreas={`"leftbar main rightbar"
+                      "leftbar prompt rightbar"`}
+      gridTemplateRows="1fr auto"
+      gridTemplateColumns="200px 1fr 200px"
+    >
       <Head>
         <link
-          href="https://fonts.googleapis.com/css?family=Open+Sans"
+          href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap"
           rel="stylesheet"
         />
       </Head>
-      <div>
-        Status:{" "}
-        {readyState === ReadyState.CONNECTING
-          ? "Connecting..."
-          : readyState === ReadyState.CLOSED
-          ? "Closed"
-          : ":shrug:"}
-      </div>
-      <button
-        onClick={() => sendMessage(lastMessage?.data === "Hi" ? "Hello" : "Hi")}
-      >
-        Hello
-      </button>
-
       <Global
         styles={`
           body {
+            background: #111;
+            color: green;
             margin: 0;
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Fira Code', monospace;
           }
-          canvas {
-            display: block;
+          input, button {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
           }
         `}
       />
-      <div>
-        {state.messages.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
-      </div>
-    </>
+      <Box
+        overflow="auto"
+        gridArea="leftbar"
+        borderRight="1px solid green"
+      ></Box>
+      <Box overflow="auto" gridArea="main" paddingLeft={3}>
+        <Status readyState={readyState} />
+        <Messages messages={state.messages} />
+      </Box>
+      <Box
+        overflow="auto"
+        gridArea="rightbar"
+        borderLeft="1px solid green"
+      ></Box>
+      <Box borderTop="1px solid green" overflow="auto" gridArea="prompt">
+        <Prompt sendMessage={sendMessage} />
+      </Box>
+    </Grid>
   );
 };
 
