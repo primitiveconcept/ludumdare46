@@ -3,32 +3,3 @@ node_modules
 .next
 .vscode
 yarn-error.log
-
-# Server
-/*.pidb
-*.pidb.meta
-/*.userprefs
-/*.unityproj
-/*.booproj
-/*.tmp
-/*.svd
-*/*.sln*
-*/.idea
-*/.vs
-*/Logs
-*/Temp
-*/bin
-*/obj
-*/etc
-/Builds
-
-# OS and GIT Generated Files
-.DS_Store*
-Desktop.ini
-Thumbs.db
-Thumbs.db.meta
-*_BACKUP_*
-*_REMOTE_*
-*_LOCAL_*
-*_BASE_*
-*.orig*
