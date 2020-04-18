@@ -12,7 +12,7 @@ export const Status = ({ readyState }: StatusProps) => {
         ? "Connecting..."
         : readyState === ReadyState.CLOSED
         ? "Closed"
-        : ":shrug:"}
+        : "Connected"}
     </div>
   );
 };

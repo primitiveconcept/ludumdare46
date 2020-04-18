@@ -5,18 +5,18 @@ type InventoryProps = {
   inventory: Inventory | null;
 };
 export const InventoryBar = ({ inventory }: InventoryProps) => {
-  if (!inventory) {
-    return null;
-  }
-  const { bitcoin, knownDevices } = inventory;
   return (
     <>
-      <div>Bitcoin: {bitcoin}</div>
+      <div>Bitcoin: {inventory?.bitcoin ?? "?"}</div>
       <br />
       <div>Known devices</div>
       <ul>
-        {knownDevices?.map((node) => {
-          return <li key={node.ip}>{node.ip}</li>;
+        {inventory?.knownDevices?.map((node) => {
+          return (
+            <li key={node.ip}>
+              <button data-test="knownIp">{node.ip}</button>
+            </li>
+          );
         })}
       </ul>
     </>

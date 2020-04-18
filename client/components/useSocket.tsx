@@ -2,6 +2,7 @@ import { useMemo, useCallback, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
 import { Command } from "../types";
+import { camelizeKeys } from "humps";
 
 export const useSocket = (sessionId: string) => {
   const options = useMemo(
@@ -29,7 +30,7 @@ export const useSocket = (sessionId: string) => {
   );
   const lastMessage = useMemo(() => {
     return lastMessageUnsafe
-      ? MessageData.check(JSON.parse(lastMessageUnsafe.data))
+      ? MessageData.check(camelizeKeys(JSON.parse(lastMessageUnsafe.data)))
       : null;
   }, [lastMessageUnsafe]);
   const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
