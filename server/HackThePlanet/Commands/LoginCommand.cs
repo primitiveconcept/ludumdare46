@@ -5,8 +5,8 @@ namespace HackThePlanet
 	{
 		public override string Execute(Game game)
 		{
-			string name = this.Arguments[0];
-			return "Not implemented yet";
+			string name = GetArgument(0);
+			return $"Logged in as {name}";
 		}
 	}
 }

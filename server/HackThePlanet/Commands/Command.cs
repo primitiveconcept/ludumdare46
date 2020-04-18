@@ -10,8 +10,18 @@ namespace HackThePlanet
 	{
 		public static Dictionary<string, Type> Index;
 
-		public string[] Arguments;
+		private string[] arguments;
 
+		public string GetArgument(int index)
+		{
+			if (this.arguments == null
+				|| index > this.arguments.Length - 1)
+			{
+				return null;
+			}
+
+			return this.arguments[index];
+		}
 
 		#region Constructors
 		protected Command() {}
@@ -70,14 +80,19 @@ namespace HackThePlanet
 			if (parts.Length < 2)
 				return command;
 			
+			Console.Out.WriteLine("Parts: " + parts.Length);
 			int numberOfArguments = parts.Length - 1;
 			string[] arguments = new string[numberOfArguments];
+			Console.Out.WriteLine("Arguments: " + arguments.Length);
 			
 			for (int i = 1; i < parts.Length; i++)
 			{
-				arguments[i] = parts[i];
+				Console.Out.WriteLine(i);
+				arguments[i - 1] = parts[i];
 			}
 
+			command.arguments = arguments;
+			
 			return command;
 		}
 	}
