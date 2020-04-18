@@ -1,8 +1,0 @@
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\bin\Debug\netstandard2.1\HackThePlanet.deps.json
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\bin\Debug\netstandard2.1\HackThePlanet.dll
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\bin\Debug\netstandard2.1\HackThePlanet.pdb
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\obj\Debug\netstandard2.1\HackThePlanet.csprojAssemblyReference.cache
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\obj\Debug\netstandard2.1\HackThePlanet.AssemblyInfoInputs.cache
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\obj\Debug\netstandard2.1\HackThePlanet.AssemblyInfo.cs
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\obj\Debug\netstandard2.1\HackThePlanet.dll
-D:\Projects\Games\hack-the-planet\server\HackThePlanet\obj\Debug\netstandard2.1\HackThePlanet.pdb
