@@ -10,13 +10,11 @@ import { Box, Grid, Messages, Prompt, Status } from "../components";
 
 setAutoFreeze(false);
 
-type Command = {};
 type Area = {};
 type Item = {};
 
 export type State = {
   messages: string[];
-  commands: Command[];
   area: Area | null;
   inventory: Item[];
 };
@@ -24,7 +22,6 @@ export type State = {
 export const Index = () => {
   const [state, setState] = useImmer<State>({
     messages: [],
-    commands: [],
     area: null,
     inventory: [],
   });
