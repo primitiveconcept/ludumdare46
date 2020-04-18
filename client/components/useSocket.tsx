@@ -5,6 +5,10 @@ import { Command } from "../types";
 import { camelizeKeys } from "humps";
 
 export const useSocket = (sessionId: string) => {
+  let hostname = "";
+  if (typeof window !== "undefined") {
+    hostname = window.location.hostname;
+  }
   const options = useMemo(
     () => ({
       shouldReconnect: () => true,
@@ -14,7 +18,7 @@ export const useSocket = (sessionId: string) => {
     [],
   );
   const [sendMessageUnsafe, lastMessageUnsafe, readyState] = useWebSocket(
-    "ws://localhost:31337/echo",
+    `ws://${hostname}:31337/echo`,
     options,
   );
   const sendMessage = useCallback(
