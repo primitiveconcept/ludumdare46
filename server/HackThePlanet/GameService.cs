@@ -1,10 +1,16 @@
 namespace HackThePlanet
 {
+	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 
+	/// <summary>
+	/// You can essentially think of this as the starting point of the game.
+	/// Starts and stops the game loop and websocket server.
+	/// You also register endpoints here.
+	/// </summary>
 	public class GameService : ICommonService
 	{
 		private IConfiguration configuration;
@@ -14,6 +20,7 @@ namespace HackThePlanet
 		private GameWebSocket gameWebSocket;
 		private Task gameTask;
 		private CancellationTokenSource gameCancellationTokenSource  = new CancellationTokenSource();
+
 
 		#region Constructors
 		public GameService(
@@ -51,14 +58,19 @@ namespace HackThePlanet
 				action: () => this.game.Start(), 
 				cancellationToken: cancellationToken);
 			
-			this.gameWebSocket = new GameWebSocket(game);
-			this.gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
-			this.gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
+			this.gameWebSocket = new GameWebSocket(this.game);
+			RegisterEndpoints();
 			this.gameWebSocket.Start();
 		}
 
 
-		public void OnStopping()
+		public void OnStopped()
+		{
+			this.Logger.LogInformation("Stopped game service.");
+		}
+
+
+		public async void OnStopping()
 		{
 			this.Logger.LogInformation("Stopping game service.");
 			this.gameWebSocket.Stop();
@@ -70,9 +82,11 @@ namespace HackThePlanet
 		}
 
 
-		public void OnStopped()
+		private void RegisterEndpoints()
 		{
-			this.Logger.LogInformation("Stopped game service.");
+			this.gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
+			this.gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
+			this.gameWebSocket.AddEndpoint<GameEndpoint>("/game");
 		}
 	}
 }
