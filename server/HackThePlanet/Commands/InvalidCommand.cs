@@ -4,7 +4,7 @@ namespace HackThePlanet
 	{
 		public override string Execute(Game game)
 		{
-			return "Not a valid command.";
+			return $"{this.Name}: command not found";
 		}
 	}
 }
