@@ -1,0 +1,26 @@
+# Server
+.idea/
+/*.pidb
+/*.pidb.meta
+/*.userprefs
+/*.tmp
+/*.svd
+/*.sln*
+
+.vs/
+Logs/
+Temp/
+bin/
+obj/
+etc/
+
+# OS and GIT Generated Files
+.DS_Store*
+Desktop.ini
+Thumbs.db
+Thumbs.db.meta
+*_BACKUP_*
+*_REMOTE_*
+*_LOCAL_*
+*_BASE_*
+*.orig*
