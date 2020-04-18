@@ -3,7 +3,7 @@ Description=dotnetcore 2.1 sample service with generic host
   
 [Service]  
 ExecStart=/bin/dotnet/dotnet HackThePlanet.Host.dll  
-WorkingDirectory=/etc/Core.Service.Sample/  
+WorkingDirectory=/usr/local/sbin/hacktheplanet/
 User=dotnetuser  
 Group=dotnetuser  
 Restart=on-failure  
