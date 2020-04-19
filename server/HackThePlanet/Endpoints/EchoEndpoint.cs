@@ -2,9 +2,10 @@ namespace HackThePlanet
 {
   using WebSocketSharp;
   using Newtonsoft.Json;
+  using WebSocketSharp.Server;
 
 
-  public class EchoEndpoint : WebsocketEndpoint
+  public class EchoEndpoint : WebSocketBehavior
   {
     protected override void OnMessage(MessageEventArgs message)
     {

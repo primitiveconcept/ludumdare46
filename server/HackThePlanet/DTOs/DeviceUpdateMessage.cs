@@ -16,7 +16,7 @@ namespace HackThePlanet
             List<Device> devices = new List<Device>();
             foreach (KeyValuePair<int, AccessLevel> entry in networkAccessComponent.KnownEntities)
             {
-                Entity deviceEntity = GameService.GetEntity(entry.Key);
+                Entity deviceEntity = Game.GetEntity(entry.Key);
                 ComputerComponent deviceComputer = deviceEntity.GetComponent<ComputerComponent>();
                 string ip = deviceComputer.IpAddress.ToIPString();
                 
@@ -28,7 +28,7 @@ namespace HackThePlanet
                                       {
                                           $"[Port Scan](portscan|{ip})"
                                       };
-                devices.Add(device);
+                devices.Add(device); 
             }
             
             DeviceUpdateMessage updateMessage = new DeviceUpdateMessage();

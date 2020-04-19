@@ -3,7 +3,7 @@ namespace HackThePlanet
 	[Command("ssh")]
 	public class SshCommand : Command
 	{
-		public override string Execute(WebsocketEndpoint connection)
+		public override string Execute(GameEndpoint connection)
 		{
 			string ip = GetArgument(0);
 			string username = GetArgument(0);

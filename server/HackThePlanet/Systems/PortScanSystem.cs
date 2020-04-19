@@ -16,7 +16,7 @@ namespace HackThePlanet.Systems
         {
             // TODO: Add a delay.
             Entity initiatingEntity = 
-                GameService.Game.EntityWorld.GetEntityById(portScanComponent.InitiatingEntity);
+                Game.World.GetEntityById(portScanComponent.InitiatingEntity);
             PlayerComponent initiatingPlayer = initiatingEntity.GetComponent<PlayerComponent>();
 
             if (computerComponent.OpenPorts.Contains(portScanComponent.CurrentPort))

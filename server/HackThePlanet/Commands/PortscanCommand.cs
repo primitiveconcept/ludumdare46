@@ -6,7 +6,7 @@ namespace HackThePlanet
 	[Command("portscan")]
 	public class PortscanCommand : Command
 	{
-		public override string Execute(WebsocketEndpoint connection)
+		public override string Execute(GameEndpoint connection)
 		{
 			string ipArgument = GetArgument(0);
 			if (ipArgument == null) {
@@ -32,12 +32,9 @@ namespace HackThePlanet
 		}
 
 
-		private bool InitiatePortScan(long ipAddress, WebsocketEndpoint connection)
+		private bool InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
-			
-			GameEndpoint gameEndpoint = connection as GameEndpoint;
-			
-			foreach (Entity entity in connection.Game.EntityWorld.EntityManager.ActiveEntities)
+			foreach (Entity entity in Game.World.EntityManager.ActiveEntities)
 			{
 				ComputerComponent computerComponent = entity.GetComponent<ComputerComponent>();
 				if (computerComponent != null
@@ -46,7 +43,7 @@ namespace HackThePlanet
 					PortScanComponent portScanComponent = new PortScanComponent();
 					
 					// ReSharper disable once PossibleNullReferenceException
-					portScanComponent.InitiatingEntity = gameEndpoint.PlayerEntity.Id;
+					portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
 					entity.AddComponent(portScanComponent);
 					return true;
 				}

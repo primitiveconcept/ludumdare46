@@ -4,15 +4,16 @@ namespace HackThePlanet
 	using Newtonsoft.Json;
 	using PrimitiveEngine;
 	using WebSocketSharp;
+	using WebSocketSharp.Server;
 
 
-	public class BigBrotherEndpoint : WebsocketEndpoint
+	public class BigBrotherEndpoint : WebSocketBehavior
 	{
 		protected override void OnMessage(MessageEventArgs message)
 		{
 			if (message.Data == "players")
 			{
-				var entities = this.Game.EntityWorld.EntityManager
+				Bag<Entity> entities = Game.World.EntityManager
 					.GetEntities(Aspect.One(typeof(PlayerComponent)));
 				StringBuilder response = new StringBuilder();
 				response.AppendLine("Player List:");
