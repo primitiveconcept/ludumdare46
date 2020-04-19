@@ -5,6 +5,7 @@ namespace HackThePlanet
 	using PrimitiveEngine;
 	using WebSocketSharp;
 	using WebSocketSharp.Net;
+  using Newtonsoft.Json;
 
 
 	public class GameEndpoint : WebsocketEndpoint
@@ -27,7 +28,14 @@ namespace HackThePlanet
 
 			if (!string.IsNullOrEmpty(response))
 			{
-				Send(response);
+				var result = new
+				{
+					Update = "Terminal",
+					Payload = new {
+						Message = response,
+					}
+				};
+				Send(JsonConvert.SerializeObject(result));
 			}
 		}
 

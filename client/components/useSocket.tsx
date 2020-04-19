@@ -3,7 +3,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
 import { camelizeKeys } from "humps";
 
-const temp = false;
+const forceProduction = false;
 export const useSocket = (sessionId: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
@@ -18,9 +18,9 @@ export const useSocket = (sessionId: string) => {
     [],
   );
   const [sendMessageUnsafe, lastMessageUnsafe, readyState] = useWebSocket(
-    temp
-      ? `ws://dev.primitiveconcept.com:31337/echo`
-      : `ws://${hostname}:31337/echo`,
+    forceProduction
+      ? `ws://dev.primitiveconcept.com:31337/game`
+      : `ws://${hostname}:31337/game`,
     options,
   );
   const sendMessage = useCallback(
