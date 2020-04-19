@@ -80,7 +80,6 @@ namespace HackThePlanet
 			
 			for (int i = 1; i < parts.Length; i++)
 			{
-				Console.Out.WriteLine(i);
 				arguments[i - 1] = parts[i];
 			}
 

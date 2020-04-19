@@ -14,11 +14,12 @@ namespace HackThePlanet
 	public class GameWebSocket
 	{
 		private static readonly ILogger logger = ApplicationLogging.CreateLogger<GameWebSocket>();
-		
+
 		private Game game;
 		private HttpServer webSocketServer;
-		
-		
+
+
+		#region Constructors
 		public GameWebSocket(Game game)
 		{
 			logger.LogInformation("Creating game web socket server.");
@@ -30,19 +31,15 @@ namespace HackThePlanet
 						KeepClean = false
 					};
 		}
+		#endregion
 
-		public void Start()
+
+		#region Properties
+		public HttpServer WebSocketServer
 		{
-			logger.LogInformation("Starting game web socket server.");
-			this.webSocketServer.Start();
+			get { return this.webSocketServer; }
 		}
-
-
-		public void Stop()
-		{
-			logger.LogInformation("Stopping game web socket server.");
-			this.webSocketServer.Stop();
-		}
+		#endregion
 
 
 		public void AddEndpoint<T>(string endpointPath)
@@ -57,6 +54,20 @@ namespace HackThePlanet
 					service.Game = this.game;
 					return service;
 				});
+		}
+
+
+		public void Start()
+		{
+			logger.LogInformation("Starting game web socket server.");
+			this.webSocketServer.Start();
+		}
+
+
+		public void Stop()
+		{
+			logger.LogInformation("Stopping game web socket server.");
+			this.webSocketServer.Stop();
 		}
 	}
 }

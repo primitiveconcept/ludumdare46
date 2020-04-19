@@ -18,6 +18,7 @@ namespace HackThePlanet
 		public Game()
 		{
 			this.entityWorld = new EntityWorld();
+			this.entityWorld.InitializeAll();
 		}
 		#endregion
 
