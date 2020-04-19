@@ -31,18 +31,19 @@ namespace HackThePlanet
 			this.MessageQueue.Add(JsonConvert.SerializeObject(result));
 		}
 		
+
 		public static Entity CreateNew(GameEndpoint session)
 		{
 			// Add new player entity.
 			// Temporary until we get a proper "login" sequence going.
-			Entity newEntity = session.Game.EntityWorld.CreateEntity();
+			Entity playerEntity = session.Game.EntityWorld.CreateEntity();
 				
 			PlayerComponent playerComponent = new PlayerComponent();
 			playerComponent.Session = session;
 			playerComponent.Id = Guid.NewGuid().ToString();
-			newEntity.AddComponent(playerComponent);
+			playerEntity.AddComponent(playerComponent);
 
-			Index.Add(playerComponent.Id, newEntity);
+			Index.Add(playerComponent.Id, playerEntity);
 			
 			ComputerComponent computerComponent = new ComputerComponent();
 			// TODO: Randomly generate IpAddress.
@@ -51,11 +52,15 @@ namespace HackThePlanet
 			computerComponent.OpenPorts.Add(Port.Ftp);
 			computerComponent.OpenPorts.Add(Port.Http);
 			computerComponent.OpenPorts.Add(Port.Ssl);
-			newEntity.AddComponent(computerComponent);
-
+			playerEntity.AddComponent(computerComponent);
+			
+			NetworkAccessComponent networkAccessComponent = new NetworkAccessComponent();
+			networkAccessComponent.KnownEntities.Add(playerEntity.Id, AccessLevel.Root);
+			playerEntity.AddComponent(networkAccessComponent);
+			
 			Console.Out.WriteLine($"Created new player: {playerComponent.Id}");
 			
-			return newEntity;
+			return playerEntity;
 		}
 
 

@@ -13,6 +13,7 @@ namespace HackThePlanet
 		public Entity PlayerEntity;
 		public PlayerComponent PlayerComponent;
 
+
 		#region Constructors
 		public GameEndpoint()
 			: base()
@@ -56,7 +57,6 @@ namespace HackThePlanet
 			// Cookies found, validate.
 			else
 			{
-				
 				this.PlayerEntity = PlayerComponent.Find(playerIdCookie.Value);
 				
 				// Player found.
