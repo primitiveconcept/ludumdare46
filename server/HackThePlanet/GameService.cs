@@ -1,6 +1,7 @@
 namespace HackThePlanet
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Configuration;
@@ -63,6 +64,21 @@ namespace HackThePlanet
 		public static Entity GetEntity(int entityId)
 		{
 			return Game.EntityWorld.GetEntityById(entityId);
+		}
+
+
+		public static List<Entity> GetEntities(params int[] entityIds)
+		{
+			List<Entity> entities = new List<Entity>();
+			
+			foreach (int entityId in entityIds)
+			{
+				Entity entity = Game.EntityWorld.GetEntityById(entityId);
+				if (entity != null)
+					entities.Add(entity);
+			}
+
+			return entities;
 		}
 
 
