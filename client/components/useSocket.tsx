@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
 import { camelizeKeys } from "humps";
@@ -9,6 +9,10 @@ export const useSocket = () => {
   if (typeof window !== "undefined") {
     hostname = window.location.hostname;
   }
+
+  // Intentionally prevent rerender after changing this
+  // Otherwise we'll ask the server twice for state
+  const initial = useRef<boolean>(false);
   const options = useMemo(
     () => ({
       shouldReconnect: () => true,
@@ -35,7 +39,12 @@ export const useSocket = () => {
   ]);
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
-      sendMessage("internal_login");
+      if (!initial.current) {
+        sendMessage("internal_login");
+        initial.current = true;
+      } else {
+        sendMessage("internal_reconnect");
+      }
     }
   }, [readyState, sendMessage]);
   return result;
