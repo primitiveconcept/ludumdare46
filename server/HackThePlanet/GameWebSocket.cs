@@ -1,8 +1,6 @@
 namespace HackThePlanet
 {
-	using System;
 	using Microsoft.Extensions.Logging;
-	using WebSocketSharp.Net;
 	using WebSocketSharp.Server;
 
 	
@@ -15,15 +13,15 @@ namespace HackThePlanet
 	{
 		private static readonly ILogger logger = ApplicationLogging.CreateLogger<GameWebSocket>();
 
-		private Game game;
+		private GameThread gameThread;
 		private HttpServer webSocketServer;
 
 
 		#region Constructors
-		public GameWebSocket(Game game)
+		public GameWebSocket(GameThread gameThread)
 		{
 			logger.LogInformation("Creating game web socket server.");
-			this.game = game;
+			this.gameThread = gameThread;
 			this.webSocketServer = 
 				new HttpServer(31337) 
 					{ 
@@ -43,7 +41,7 @@ namespace HackThePlanet
 
 
 		public void AddEndpoint<T>(string endpointPath)
-			where T: WebsocketEndpoint, new()
+			where T: WebSocketBehavior, new()
 		{
 			logger.LogInformation($"Adding web socket endpoint {endpointPath}");
 			this.webSocketServer.AddWebSocketService<T>(
@@ -51,7 +49,6 @@ namespace HackThePlanet
 				creator: () =>
 				{
 					T service = new T();
-					service.Game = this.game;
 					return service;
 				});
 		}

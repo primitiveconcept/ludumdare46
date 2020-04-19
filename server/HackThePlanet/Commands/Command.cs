@@ -47,7 +47,7 @@ namespace HackThePlanet
 		/// </summary>
 		/// <param name="connection">Game state object.</param>
 		/// <returns>Data to send back to the client, if any.</returns>
-		public abstract string Execute(WebsocketEndpoint connection);
+		public abstract string Execute(GameEndpoint connection);
 
 
 		/// <summary>

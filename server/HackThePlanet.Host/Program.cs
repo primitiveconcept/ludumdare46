@@ -38,7 +38,7 @@
 						{
 							services.AddLogging();
 							services.AddHostedService<ServiceHost>();
-							services.AddSingleton(typeof(ICommonService), typeof(GameService));
+							services.AddSingleton(typeof(ICommonService), typeof(Game));
 						})
 				.ConfigureLogging(
 					(hostContext, configurationLogging) =>

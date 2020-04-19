@@ -1,9 +1,10 @@
 namespace HackThePlanet
 {
 	using WebSocketSharp;
+	using WebSocketSharp.Server;
 
 
-	public class EmoEndpoint : WebsocketEndpoint
+	public class EmoEndpoint : WebSocketBehavior
 	{
 		private int iteration = 0;
 

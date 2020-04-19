@@ -1,3 +1,5 @@
+#pragma warning disable 0618
+
 namespace HackThePlanet
 {
     using System.Net;
