@@ -9,14 +9,17 @@ namespace HackThePlanet.Systems
     {
         public override void Process(Entity entity, PlayerComponent playerComponent)
         {
-            if (playerComponent.MessageQueue.Count == 0)
+            if (playerComponent.MessageQueue.Count == 0
+                || playerComponent.Session == null)
+            {
                 return;
+            }
 
             foreach (string message in playerComponent.MessageQueue)
             {
                 playerComponent.Session.Send(message);
             }
-            playerComponent.MessageQueue.Clear();
+            playerComponent.MessageQueue.Clear(); 
         }
     }
 }
