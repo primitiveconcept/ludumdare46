@@ -7,12 +7,8 @@ import { useInputFocus } from "./useInputFocus";
 
 type CommandPromptProps = {
   username: string;
-  setUsername: (username: string) => void;
 };
-export const CommandPrompt = ({
-  username,
-  setUsername,
-}: CommandPromptProps) => {
+export const CommandPrompt = ({ username }: CommandPromptProps) => {
   const { command, setCommand } = useContext(CommandContext);
   const { sendMessage, sendLocalMessage } = useContext(MessageContext);
   const inputRef = createRef<HTMLInputElement>();
@@ -23,20 +19,9 @@ export const CommandPrompt = ({
     if (!command.trim()) {
       return;
     }
-    if (!username) {
-      setUsername(command);
-    }
     sendMessage(command);
     setCommand("");
-  }, [
-    command,
-    prompt,
-    sendLocalMessage,
-    sendMessage,
-    setCommand,
-    setUsername,
-    username,
-  ]);
+  }, [command, prompt, sendLocalMessage, sendMessage, setCommand]);
   useInputFocus(onSubmit, inputRef);
 
   return (

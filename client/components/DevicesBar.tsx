@@ -42,8 +42,6 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
   const device = devices.find((dev) => dev.ip === currentIp)!;
   const commands = {
     main: device.commands.filter((command) => {
-      console.log(command);
-      console.log(baseCommand(command));
       return baseCommand(command) !== "install";
     }),
     install: device.commands.filter((command) => {

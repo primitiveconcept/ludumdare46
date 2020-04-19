@@ -6,4 +6,5 @@ export type State = {
   messages: string[];
   devices: Array<Static<typeof Device>>;
   resources: Resources | null;
+  commandHistory: string[];
 };

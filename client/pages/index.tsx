@@ -1,9 +1,8 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global, css } from "@emotion/core";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Head from "next/head";
-import { useImmer } from "use-immer";
 import {
   Box,
   Grid,
@@ -15,40 +14,18 @@ import {
   ResourcesBar,
   DevicesBar,
 } from "../components";
-import { useSocket } from "../components/useSocket";
-import { State } from "../types/State";
 import { CommandContext } from "../components/CommandContext";
 import { MessageContext } from "../components/MessageContext";
 import { useSession } from "../components/useSession";
+import { useStore } from "../components/useStore";
 
 setAutoFreeze(false);
 
 export const Index = () => {
-  const [state, setState] = useImmer<State>({
-    messages: [],
-    devices: [],
-    resources: null,
-  });
   const [username, setUsername] = useSession();
-  const { lastMessage, readyState, sendMessage } = useSocket(username);
+  const { readyState, sendMessage, state, setState } = useStore(username);
   const [command, setCommand] = useState("");
-  useEffect(() => {
-    if (!lastMessage) {
-      return;
-    }
-    if (lastMessage.update === "Terminal") {
-      setState((draft) => {
-        // message.split("\n").forEach((text) => {
-        draft.messages.push(lastMessage.payload.message);
-        // });
-      });
-    }
-    if (lastMessage.update === "Devices") {
-      setState((draft) => {
-        draft.devices = lastMessage.payload.devices;
-      });
-    }
-  }, [lastMessage, setState]);
+
   const commandContextValue = useMemo(
     () => ({
       command,
@@ -56,6 +33,7 @@ export const Index = () => {
     }),
     [command],
   );
+
   const messageContextValue = useMemo(
     () => ({
       sendMessage,
@@ -131,7 +109,7 @@ export const Index = () => {
               <Status readyState={readyState} />
               <Messages messages={state.messages} />
               {username ? (
-                <CommandPrompt username={username} setUsername={setUsername} />
+                <CommandPrompt username={username} />
               ) : (
                 <UsernamePrompt setUsername={setUsername} />
               )}

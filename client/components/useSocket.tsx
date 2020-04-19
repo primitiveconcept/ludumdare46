@@ -1,5 +1,5 @@
-import { useMemo, useEffect, useRef } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useMemo } from "react";
+import useWebSocket from "react-use-websocket";
 import { TerminalMessage, ResourcesMessage } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ enum UpdateTypes {
   Devices = "Devices",
 }
 
-export const useSocket = (username: string) => {
+export const useSocket = () => {
   let hostname = "";
   if (typeof window !== "undefined") {
     hostname = window.location.hostname;
@@ -20,7 +20,6 @@ export const useSocket = (username: string) => {
 
   // Intentionally prevent rerender after changing this
   // Otherwise we'll ask the server twice for state
-  const initial = useRef<boolean>(false);
   const options = useMemo(
     () => ({
       shouldReconnect: () => true,
@@ -63,17 +62,5 @@ export const useSocket = (username: string) => {
     readyState,
     sendMessage,
   ]);
-  useEffect(() => {
-    if (!username) {
-      return;
-    }
-
-    if (readyState === ReadyState.OPEN) {
-      // TODO find way to suppress login message on reconnect using argument:
-      // ${initial.current ? "reconnect" : ""}
-      sendMessage(`internal_login ${username}`);
-      initial.current = true;
-    }
-  }, [readyState, sendMessage, username]);
   return result;
 };
