@@ -8,6 +8,7 @@ namespace HackThePlanet
 	{
 		public override string Execute(GameEndpoint connection)
 		{
+			GameEndpoint gameEndpoint = connection as GameEndpoint;
 			string name = GetArgument(0);
 			
 			// First time login
