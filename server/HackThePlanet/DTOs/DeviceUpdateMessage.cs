@@ -35,12 +35,13 @@ namespace HackThePlanet
             updateMessage.payload = 
                 new 
                     { 
-                        devices = devices, 
+                        devices = devices
                     };
             
             return updateMessage;
         }
-        
+
+
         public static DeviceUpdateMessage Create(ComputerComponent computerComponent)
         {
             return null;
