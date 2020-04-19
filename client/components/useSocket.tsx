@@ -1,10 +1,10 @@
-import { useMemo, useCallback, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
 import { camelizeKeys } from "humps";
 
 const forceProduction = false;
-export const useSocket = (sessionId: string) => {
+export const useSocket = () => {
   let hostname = "";
   if (typeof window !== "undefined") {
     hostname = window.location.hostname;
@@ -17,22 +17,11 @@ export const useSocket = (sessionId: string) => {
     }),
     [],
   );
-  const [sendMessageUnsafe, lastMessageUnsafe, readyState] = useWebSocket(
+  const [sendMessage, lastMessageUnsafe, readyState] = useWebSocket(
     forceProduction
       ? `ws://dev.primitiveconcept.com:31337/game`
       : `ws://${hostname}:31337/game`,
     options,
-  );
-  const sendMessage = useCallback(
-    (command: string) => {
-      sendMessageUnsafe(
-        JSON.stringify({
-          command,
-          sessionId,
-        }),
-      );
-    },
-    [sendMessageUnsafe, sessionId],
   );
   const lastMessage = useMemo(() => {
     return lastMessageUnsafe
@@ -46,7 +35,7 @@ export const useSocket = (sessionId: string) => {
   ]);
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
-      sendMessage("initial");
+      sendMessage("internal_login");
     }
   }, [readyState, sendMessage]);
   return result;

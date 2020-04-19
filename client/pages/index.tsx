@@ -14,7 +14,6 @@ import {
   InventoryBar,
 } from "../components";
 import { useSocket } from "../components/useSocket";
-import { useSession } from "../components/useSession";
 import { State } from "../types/State";
 import { CommandContext } from "../components/CommandContext";
 import { MessageContext } from "../components/MessageContext";
@@ -26,8 +25,7 @@ export const Index = () => {
     messages: [],
     inventory: null,
   });
-  const sessionId = useSession();
-  const { lastMessage, readyState, sendMessage } = useSocket(sessionId);
+  const { lastMessage, readyState, sendMessage } = useSocket();
   const [command, setCommand] = useState("");
   useEffect(() => {
     if (!lastMessage) {

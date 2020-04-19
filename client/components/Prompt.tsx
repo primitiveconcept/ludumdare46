@@ -11,16 +11,16 @@ export const Prompt = () => {
   const { command, setCommand } = useContext(CommandContext);
   const { sendMessage, sendLocalMessage } = useContext(MessageContext);
   const inputRef = createRef<HTMLInputElement>();
+
   const onSubmit = useCallback(() => {
     sendLocalMessage(`${prompt} ${command}`);
-    const [base] = command.trim().split(/ +/);
-    if (base === "ssh") {
-      sendMessage(command);
-    } else {
-      sendLocalMessage(`${base}: command not found`);
+    if (!command.trim()) {
+      return;
     }
+    sendMessage(command);
     setCommand("");
   }, [command, sendLocalMessage, sendMessage, setCommand]);
+
   useEffect(() => {
     const focusInput = (event: KeyboardEvent) => {
       inputRef.current?.focus();
