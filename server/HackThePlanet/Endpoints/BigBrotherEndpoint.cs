@@ -13,13 +13,16 @@ namespace HackThePlanet
 			if (message.Data == "players")
 			{
 				var entities = this.Game.EntityWorld.EntityManager
-					.GetEntities(Aspect.One(typeof(Player)));
+					.GetEntities(Aspect.One(typeof(PlayerComponent)));
 				StringBuilder response = new StringBuilder();
 				response.AppendLine("Player List:");
 				foreach (Entity entity in entities)
 				{
-					string json = JsonConvert.SerializeObject(entity.GetComponent<Player>());
-					response.AppendLine(json);
+					response.Append($"Enity: {entity.Id} -- ");
+					ComputerComponent computerComponent = entity.GetComponent<ComputerComponent>();
+					response.AppendLine(computerComponent.IpAddress.ToIPString());
+					response.AppendLine(JsonConvert.SerializeObject(entity.GetComponent<PlayerComponent>()));
+					response.AppendLine();
 				}
 
 				Send(response.ToString());

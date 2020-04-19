@@ -1,17 +1,18 @@
 namespace HackThePlanet
 {
 	using System;
-	using HackThePlanet;
 	using PrimitiveEngine;
 	using WebSocketSharp;
 	using WebSocketSharp.Net;
-  using Newtonsoft.Json;
+	using Newtonsoft.Json;
 
 
 	public class GameEndpoint : WebsocketEndpoint
 	{
 		public const string CookieKey = "playerId";
-		
+		public Entity PlayerEntity;
+		public PlayerComponent PlayerComponent;
+
 		#region Constructors
 		public GameEndpoint()
 			: base()
@@ -47,30 +48,32 @@ namespace HackThePlanet
 			// No cookies, new player.
 			if (playerIdCookie == null)
 			{
-				Entity newPlayer = Player.CreateNew(this.Game);
-				string newPlayerId = newPlayer.GetComponent<Player>().Id;
-				playerIdCookie = new Cookie(CookieKey, newPlayerId);
+				this.PlayerEntity = PlayerComponent.CreateNew(this);
+				this.PlayerComponent = this.PlayerEntity.GetComponent<PlayerComponent>();
+				playerIdCookie = new Cookie(CookieKey, this.PlayerComponent.Id);
 			}
 			
 			// Cookies found, validate.
 			else
 			{
 				
-				Entity playerEntity = Player.Find(playerIdCookie.Value);
+				this.PlayerEntity = PlayerComponent.Find(playerIdCookie.Value);
 				
 				// Player found.
-				if (playerEntity != null)
+				if (this.PlayerEntity != null)
 				{
+					this.PlayerComponent = this.PlayerEntity.GetComponent<PlayerComponent>();
 					Console.Out.WriteLine($"Found existing player.");
-					// TODO: Login stuff.
+					
+					// TODO: Login stuff?
 				}
 				
 				// Bad cookie, new player.
 				else
 				{
-					Entity newPlayer = Player.CreateNew(this.Game);
-					string newPlayerId = newPlayer.GetComponent<Player>().Id;
-					playerIdCookie.Value = newPlayerId;
+					this.PlayerEntity = PlayerComponent.CreateNew(this);
+					this.PlayerComponent = this.PlayerEntity.GetComponent<PlayerComponent>();
+					playerIdCookie.Value = this.PlayerComponent.Id;
 				}
 			}
 			

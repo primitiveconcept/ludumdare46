@@ -941,7 +941,7 @@ namespace WebSocketSharp.Server
     /// <exception cref="ArgumentException">
     /// <paramref name="data"/> could not be UTF-8-encoded.
     /// </exception>
-    protected void Send (string data)
+    public void Send (string data)
     {
       if (_websocket == null) {
         var msg = "The current state of the connection is not Open.";

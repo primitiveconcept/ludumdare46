@@ -5,6 +5,8 @@ namespace HackThePlanet
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
+	using Newtonsoft.Json;
+
 
 	/// <summary>
 	/// You can essentially think of this as the starting point of the game.
@@ -13,6 +15,8 @@ namespace HackThePlanet
 	/// </summary>
 	public class GameService : ICommonService
 	{
+		private static GameService _instance;
+
 		private IConfiguration configuration;
 		private ILogger<GameService> logger;
 
@@ -27,6 +31,7 @@ namespace HackThePlanet
 			IConfiguration configuration,
 			ILogger<GameService> logger)
 		{
+			_instance = this;
 			this.configuration = configuration;
 			this.logger = logger;
 			logger.LogInformation("Standard service instantiated.");
@@ -35,6 +40,12 @@ namespace HackThePlanet
 
 
 		#region Properties
+		public static Game Game
+		{
+			get { return _instance.game; }
+		}
+
+
 		public IConfiguration Configuration
 		{
 			get { return this.configuration; }
