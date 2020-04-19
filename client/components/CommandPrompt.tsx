@@ -1,39 +1,43 @@
-import React, { createRef, useEffect, useContext, useCallback } from "react";
+import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { MessageContext } from "./MessageContext";
-import keycode from "keycode";
+import { useInputFocus } from "./useInputFocus";
 
-const prompt = "threehams@local$";
-
-export const Prompt = () => {
+type CommandPromptProps = {
+  username: string;
+  setUsername: (username: string) => void;
+};
+export const CommandPrompt = ({
+  username,
+  setUsername,
+}: CommandPromptProps) => {
   const { command, setCommand } = useContext(CommandContext);
   const { sendMessage, sendLocalMessage } = useContext(MessageContext);
   const inputRef = createRef<HTMLInputElement>();
+  const prompt = username ? `${username}@local$` : `username?`;
 
   const onSubmit = useCallback(() => {
     sendLocalMessage(`${prompt} ${command}`);
     if (!command.trim()) {
       return;
     }
+    if (!username) {
+      setUsername(command);
+    }
     sendMessage(command);
     setCommand("");
-  }, [command, sendLocalMessage, sendMessage, setCommand]);
-
-  useEffect(() => {
-    const focusInput = (event: KeyboardEvent) => {
-      inputRef.current?.focus();
-      if (event.keyCode === keycode.codes.enter) {
-        onSubmit();
-      }
-    };
-    document.addEventListener("keypress", focusInput);
-
-    return () => {
-      document.removeEventListener("keypress", focusInput);
-    };
-  }, [inputRef, onSubmit]);
+  }, [
+    command,
+    prompt,
+    sendLocalMessage,
+    sendMessage,
+    setCommand,
+    setUsername,
+    username,
+  ]);
+  useInputFocus(onSubmit, inputRef);
 
   return (
     <Box width={1}>
