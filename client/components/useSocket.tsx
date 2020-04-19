@@ -2,13 +2,16 @@ import { useMemo, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { TerminalMessage, ResourcesMessage } from "../types/Message";
 import { camelizeKeys } from "humps";
+import { useRouter } from "next/router";
 
-const forceProduction = false;
 export const useSocket = (username: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
     hostname = window.location.hostname;
   }
+  const router = useRouter();
+  const forceLocal = router.query.forceLocal;
+  const forceProduction = router.query.forceProduction;
 
   // Intentionally prevent rerender after changing this
   // Otherwise we'll ask the server twice for state
@@ -21,10 +24,17 @@ export const useSocket = (username: string) => {
     }),
     [],
   );
+
+  let url;
+  if (forceLocal) {
+    url = "ws://localhost:31337/game";
+  } else if (forceProduction) {
+    url = "ws://dev.primitiveconcept.com:31337/game";
+  } else {
+    url = `ws://${hostname}:31337/game`;
+  }
   const [sendMessage, lastMessageUnsafe, readyState] = useWebSocket(
-    forceProduction
-      ? `ws://dev.primitiveconcept.com:31337/game`
-      : `ws://${hostname}:31337/game`,
+    url,
     options,
   );
   const lastMessage = useMemo(() => {
@@ -34,7 +44,7 @@ export const useSocket = (username: string) => {
     const data: any = camelizeKeys(JSON.parse(lastMessageUnsafe.data));
     if (data?.update === "Terminal") {
       return TerminalMessage.check(data);
-    } else if (data?.update === "Resources") {
+    } else if (data?.update === "Devices") {
       return ResourcesMessage.check(data);
     }
     throw new Error(`Unsupported message: ${JSON.stringify(data)}`);
