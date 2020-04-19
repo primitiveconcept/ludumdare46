@@ -1,6 +1,8 @@
 namespace HackThePlanet
 {
 	using System;
+	using HackThePlanet;
+	using PrimitiveEngine;
 	using WebSocketSharp;
 	using WebSocketSharp.Net;
   using Newtonsoft.Json;
@@ -8,12 +10,13 @@ namespace HackThePlanet
 
 	public class GameEndpoint : WebsocketEndpoint
 	{
+		public const string CookieKey = "playerId";
+		
 		#region Constructors
 		public GameEndpoint()
 			: base()
 		{
-			this.CookiesValidator =
-				ValidateCookies;
+			this.CookiesValidator = ValidateCookies;
 		}
 		#endregion
 
@@ -39,19 +42,39 @@ namespace HackThePlanet
 
 		private bool ValidateCookies(CookieCollection requestCookies, CookieCollection responseCookies)
 		{
-			if (requestCookies.Count < 1)
+			Cookie playerIdCookie = requestCookies[CookieKey];
+			
+			// No cookies, new player.
+			if (playerIdCookie == null)
 			{
-				responseCookies.Add(new Cookie("uuid", Guid.NewGuid().ToString()));
+				Entity newPlayer = Player.CreateNew(this.Game);
+				string newPlayerId = newPlayer.GetComponent<Player>().Id;
+				playerIdCookie = new Cookie(CookieKey, newPlayerId);
 			}
+			
+			// Cookies found, validate.
 			else
 			{
-				foreach (Cookie cookie in requestCookies)
+				
+				Entity playerEntity = Player.Find(playerIdCookie.Value);
+				
+				// Player found.
+				if (playerEntity != null)
 				{
-					if (cookie.Name == "uuid")
-					{
-					}
+					Console.Out.WriteLine($"Found existing player.");
+					// TODO: Login stuff.
+				}
+				
+				// Bad cookie, new player.
+				else
+				{
+					Entity newPlayer = Player.CreateNew(this.Game);
+					string newPlayerId = newPlayer.GetComponent<Player>().Id;
+					playerIdCookie.Value = newPlayerId;
 				}
 			}
+			
+			responseCookies.Add(playerIdCookie);
 
 			return true;
 		}
