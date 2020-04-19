@@ -16,7 +16,11 @@ Install the latest stable version of node.js. Best done with NVM (node version m
 
 `$ npm install` to install all dependencies
 `$ npm run dev` to start and open a dev server
-`$ npm run cy:open` to run Cypress (browser) tests
+
+## Tests
+
+`$ npm run cy:open` to run Cypress (browser) tests against an existing server
+`$ npm run cy:dev` to start a dev server and Cypress together (convenience!)
 
 # Continuous Integration
 
