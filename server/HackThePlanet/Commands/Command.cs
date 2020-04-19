@@ -65,7 +65,7 @@ namespace HackThePlanet
 			string commandName = parts[0].ToLower();
 			if (!Index.ContainsKey(commandName))
 			{
-				return new InvalidCommand();
+				return new InvalidCommand() { Name = commandName };
 			}
 
 			Command command = (Command)Activator.CreateInstance(Index[commandName]);
