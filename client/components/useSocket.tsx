@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { MessageData } from "../types/Message";
+import { TerminalMessage, ResourcesMessage } from "../types/Message";
 import { camelizeKeys } from "humps";
 
 const forceProduction = false;
@@ -28,9 +28,16 @@ export const useSocket = (username: string) => {
     options,
   );
   const lastMessage = useMemo(() => {
-    return lastMessageUnsafe
-      ? MessageData.check(camelizeKeys(JSON.parse(lastMessageUnsafe.data)))
-      : null;
+    if (!lastMessageUnsafe) {
+      return null;
+    }
+    const data: any = camelizeKeys(JSON.parse(lastMessageUnsafe.data));
+    if (data?.update === "Terminal") {
+      return TerminalMessage.check(data);
+    } else if (data?.update === "Resources") {
+      return ResourcesMessage.check(data);
+    }
+    throw new Error(`Unsupported message: ${JSON.stringify(data)}`);
   }, [lastMessageUnsafe]);
   const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
     lastMessage,

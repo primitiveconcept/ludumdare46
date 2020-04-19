@@ -1,6 +1,9 @@
-import { Inventory } from "./Inventory";
+import { Resources } from "./Resources";
+import { Device } from "./Device";
+import { Static } from "runtypes";
 
 export type State = {
   messages: string[];
-  inventory: Inventory | null;
+  devices: Array<Static<typeof Device>>;
+  resources: Resources | null;
 };

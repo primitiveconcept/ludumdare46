@@ -1,24 +1,16 @@
 import { Array, Union, Record, String, Literal } from "runtypes";
+import { Device } from "./Device";
 
-const Status = String;
-
-export const Device = Record({
-  ip: String,
-  status: Status,
-  commands: Array(String),
-});
-
-const TerminalMessage = Record({
+export const TerminalMessage = Record({
   update: Literal("Terminal"),
   payload: Record({
     message: String,
   }),
 });
 
-const ResourcesMessage = Record({
-  update: Literal("Resources"),
+export const ResourcesMessage = Record({
+  update: Literal("Devices"),
   payload: Record({
-    bitcoin: String,
     devices: Array(Device),
   }),
 });

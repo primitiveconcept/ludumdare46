@@ -11,8 +11,9 @@ import {
   CommandPrompt,
   Status,
   Terminal,
-  InventoryBar,
   UsernamePrompt,
+  ResourcesBar,
+  DevicesBar,
 } from "../components";
 import { useSocket } from "../components/useSocket";
 import { State } from "../types/State";
@@ -25,7 +26,8 @@ setAutoFreeze(false);
 export const Index = () => {
   const [state, setState] = useImmer<State>({
     messages: [],
-    inventory: null,
+    devices: [],
+    resources: null,
   });
   const [username, setUsername] = useSession();
   const { lastMessage, readyState, sendMessage } = useSocket(username);
@@ -41,9 +43,9 @@ export const Index = () => {
         // });
       });
     }
-    if (lastMessage.update === "Resources") {
+    if (lastMessage.update === "Devices") {
       setState((draft) => {
-        draft.inventory = lastMessage.payload;
+        draft.devices = lastMessage.payload.devices;
       });
     }
   }, [lastMessage, setState]);
@@ -122,7 +124,8 @@ export const Index = () => {
               `}
             />
             <Box overflow="auto" gridArea="leftbar" padding={4}>
-              {state.inventory && <InventoryBar inventory={state.inventory} />}
+              {state.resources && <ResourcesBar resources={state.resources} />}
+              {state.devices && <DevicesBar devices={state.devices} />}
             </Box>
             <Box overflow="auto" gridArea="main" padding={4}>
               <Status readyState={readyState} />
