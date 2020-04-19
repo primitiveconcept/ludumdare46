@@ -14,23 +14,10 @@ namespace HackThePlanet
 
 		public string Id;
 		public string Name;
+		public List<string> MessageQueue = new List<string>();
 
 		[JsonIgnore] public GameEndpoint Session;
-		[JsonIgnore] public List<string> MessageQueue = new List<string>();
 
-
-		public void AddTerminalMessage(string message)
-		{
-			var result = new
-							{
-								Update = "Terminal",
-								Payload = new {
-													Message = message,
-												}
-							};
-			this.MessageQueue.Add(JsonConvert.SerializeObject(result));
-		}
-		
 
 		public static Entity CreateNew(GameEndpoint session)
 		{
@@ -39,7 +26,6 @@ namespace HackThePlanet
 			Entity playerEntity = session.Game.EntityWorld.CreateEntity();
 				
 			PlayerComponent playerComponent = new PlayerComponent();
-			playerComponent.Session = session;
 			playerComponent.Id = Guid.NewGuid().ToString();
 			playerEntity.AddComponent(playerComponent);
 
@@ -69,6 +55,19 @@ namespace HackThePlanet
 			return Index.ContainsKey(playerId) 
 						? Index[playerId] 
 						: null;
+		}
+
+
+		public void AddTerminalMessage(string message)
+		{
+			var result = new
+							{
+								Update = "Terminal",
+								Payload = new {
+													Message = message,
+												}
+							};
+			this.MessageQueue.Add(JsonConvert.SerializeObject(result));
 		}
 	}
 }

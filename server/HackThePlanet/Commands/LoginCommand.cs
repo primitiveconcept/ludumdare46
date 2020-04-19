@@ -16,15 +16,24 @@ namespace HackThePlanet
 			{
 				// Must provide a name the first time.
 				if (string.IsNullOrEmpty(name))
-					return $"Invalid login attempt";
+					return $"Login requires a username";
 				
 				// Set player name.
 				else
 					gameEndpoint.PlayerComponent.Name = name;
 			}
+			else
+			{
+				if (!string.IsNullOrEmpty(name)
+					&& gameEndpoint.PlayerComponent.Name != name)
+				{
+					return "Authenticating with public key \"imported-133+ssh-key\"\n" 
+							+ $"Invalid username [{name}] -- attempt has been logged";
+				}
+			}
 			
 			GetDeviceStates(gameEndpoint);
-			return $"Authenticating with public key \"imported-133+ssh-key\"\n"
+			return "Authenticating with public key \"imported-133+ssh-key\"\n"
 					+ $"Logged in as {name}";
 		}
 

@@ -23,6 +23,12 @@ namespace HackThePlanet
 		#endregion
 
 
+		protected override void OnClose(CloseEventArgs e)
+		{
+			this.PlayerComponent.Session = null;
+		}
+
+
 		protected override void OnMessage(MessageEventArgs message)
 		{
 			Command command = Command.ParseCommand(message.Data);
@@ -77,6 +83,7 @@ namespace HackThePlanet
 				}
 			}
 			
+			this.PlayerComponent.Session = this;
 			responseCookies.Add(playerIdCookie);
 
 			return true;
