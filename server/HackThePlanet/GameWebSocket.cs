@@ -1,6 +1,8 @@
 namespace HackThePlanet
 {
+	using System;
 	using Microsoft.Extensions.Logging;
+	using WebSocketSharp.Net;
 	using WebSocketSharp.Server;
 
 	
@@ -24,7 +26,8 @@ namespace HackThePlanet
 			this.webSocketServer = 
 				new HttpServer(31337) 
 					{ 
-						ReuseAddress = true 
+						ReuseAddress = true,
+						KeepClean = false
 					};
 		}
 

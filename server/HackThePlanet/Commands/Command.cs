@@ -45,9 +45,9 @@ namespace HackThePlanet
 		/// <summary>
 		/// Executes the command upon Game state.
 		/// </summary>
-		/// <param name="game">Game state object.</param>
+		/// <param name="connection">Game state object.</param>
 		/// <returns>Data to send back to the client, if any.</returns>
-		public abstract string Execute(Game game);
+		public abstract string Execute(WebsocketEndpoint connection);
 
 
 		/// <summary>
@@ -75,10 +75,8 @@ namespace HackThePlanet
 			if (parts.Length < 2)
 				return command;
 			
-			Console.Out.WriteLine("Parts: " + parts.Length);
 			int numberOfArguments = parts.Length - 1;
 			string[] arguments = new string[numberOfArguments];
-			Console.Out.WriteLine("Arguments: " + arguments.Length);
 			
 			for (int i = 1; i < parts.Length; i++)
 			{
