@@ -1,12 +1,5 @@
 import { Array, Union, Record, String, Literal } from "runtypes";
-
-const Status = String;
-
-export const Device = Record({
-  ip: String,
-  status: Status,
-  commands: Array(String),
-});
+import { Device } from "./Device";
 
 export const TerminalMessage = Record({
   update: Literal("Terminal"),

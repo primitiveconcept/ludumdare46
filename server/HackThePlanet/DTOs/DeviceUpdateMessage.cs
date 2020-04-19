@@ -7,7 +7,7 @@ namespace HackThePlanet
 
     public class DeviceUpdateMessage
     {
-        public readonly string update = "devices";
+        public readonly string update = "Devices";
         public object payload;
 
 

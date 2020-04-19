@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { Inventory } from "../types";
 import { Markdown } from "./Markdown";
+import { State } from "../types/State";
 
-type InventoryProps = {
-  inventory: Inventory;
+type DevicesBarProps = {
+  devices: State["devices"];
 };
-export const InventoryBar = ({ inventory }: InventoryProps) => {
+export const DevicesBar = ({ devices }: DevicesBarProps) => {
   const [currentIp, setCurrentIp] = useState<string | null>(null);
-  const { bitcoin, devices } = inventory;
-  const money = <div>Money: {bitcoin}₿</div>;
+  if (!devices.length) {
+    return null;
+  }
   if (!currentIp) {
     return (
       <>
-        {money}
-        <br />
         <div>Known devices</div>
         <ul>
           {devices.map((device) => {
@@ -42,8 +41,6 @@ export const InventoryBar = ({ inventory }: InventoryProps) => {
   const device = devices.find((dev) => dev.ip === currentIp)!;
   return (
     <>
-      {money}
-      <br />
       <div>{device.ip}</div>
       <ul>
         {device.commands.map((command) => {
