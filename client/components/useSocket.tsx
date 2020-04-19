@@ -3,7 +3,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { MessageData } from "../types/Message";
 import { camelizeKeys } from "humps";
 
-const forceProduction = true;
+const forceProduction = false;
 export const useSocket = (username: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
