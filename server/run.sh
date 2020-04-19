@@ -1,4 +1,4 @@
 #!/bin/bash
 
-dotnet run HackThePlanet.Host
+dotnet watch -p HackThePlanet.sln run -p HackThePlanet.Host
 

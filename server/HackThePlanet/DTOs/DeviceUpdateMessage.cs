@@ -7,8 +7,8 @@ namespace HackThePlanet
 
     public class DeviceUpdateMessage
     {
-        public readonly string Update = "devices";
-        public object Payload;
+        public readonly string update = "devices";
+        public object payload;
 
 
         public static DeviceUpdateMessage Create(NetworkAccessComponent networkAccessComponent)
@@ -21,10 +21,10 @@ namespace HackThePlanet
                 string ip = deviceComputer.IpAddress.ToIPString();
                 
                 Device device = new Device();
-                device.Status = "idle"; // TODO
-                device.IP = ip;
+                device.status = "idle"; // TODO
+                device.ip = ip;
                 // TODO
-                device.Commands = new[]
+                device.commands = new[]
                                       {
                                           $"[Port Scan](portscan|{ip})"
                                       };
@@ -32,7 +32,7 @@ namespace HackThePlanet
             }
             
             DeviceUpdateMessage updateMessage = new DeviceUpdateMessage();
-            updateMessage.Payload = 
+            updateMessage.payload = 
                 new 
                     { 
                         devices = devices, 
@@ -55,9 +55,9 @@ namespace HackThePlanet
 
         private class Device
         {
-            public string IP;
-            public string Status;
-            public string[] Commands;
+            public string ip;
+            public string status;
+            public string[] commands;
         }
     }
 }
