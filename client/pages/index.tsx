@@ -8,15 +8,17 @@ import {
   Box,
   Grid,
   Messages,
-  Prompt,
+  CommandPrompt,
   Status,
   Terminal,
   InventoryBar,
+  UsernamePrompt,
 } from "../components";
 import { useSocket } from "../components/useSocket";
 import { State } from "../types/State";
 import { CommandContext } from "../components/CommandContext";
 import { MessageContext } from "../components/MessageContext";
+import { useSession } from "../components/useSession";
 
 setAutoFreeze(false);
 
@@ -25,7 +27,8 @@ export const Index = () => {
     messages: [],
     inventory: null,
   });
-  const { lastMessage, readyState, sendMessage } = useSocket();
+  const [username, setUsername] = useSession();
+  const { lastMessage, readyState, sendMessage } = useSocket(username);
   const [command, setCommand] = useState("");
   useEffect(() => {
     if (!lastMessage) {
@@ -124,7 +127,11 @@ export const Index = () => {
             <Box overflow="auto" gridArea="main" padding={4}>
               <Status readyState={readyState} />
               <Messages messages={state.messages} />
-              <Prompt />
+              {username ? (
+                <CommandPrompt username={username} setUsername={setUsername} />
+              ) : (
+                <UsernamePrompt setUsername={setUsername} />
+              )}
             </Box>
           </Grid>
         </Terminal>

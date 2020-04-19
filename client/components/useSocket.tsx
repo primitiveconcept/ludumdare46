@@ -4,7 +4,7 @@ import { MessageData } from "../types/Message";
 import { camelizeKeys } from "humps";
 
 const forceProduction = false;
-export const useSocket = () => {
+export const useSocket = (username: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
     hostname = window.location.hostname;
@@ -38,14 +38,18 @@ export const useSocket = () => {
     sendMessage,
   ]);
   useEffect(() => {
+    if (!username) {
+      return;
+    }
+
     if (readyState === ReadyState.OPEN) {
       if (!initial.current) {
-        sendMessage("internal_login");
+        sendMessage(`internal_login ${username}`);
         initial.current = true;
       } else {
         sendMessage("internal_reconnect");
       }
     }
-  }, [readyState, sendMessage]);
+  }, [readyState, sendMessage, username]);
   return result;
 };

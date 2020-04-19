@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { MessageContext } from "./MessageContext";
 
 const prompt = "threehams@local$";
+const SPACE_CHARACTER = "|";
 
 type CommandLinkProps = {
   children: string;
@@ -11,7 +12,7 @@ type CommandLinkProps = {
 };
 const CommandLink = ({ href: hrefProp, children }: CommandLinkProps) => {
   const { sendLocalMessage, sendMessage } = useContext(MessageContext);
-  const href = hrefProp.replace("|", " ");
+  const href = hrefProp.replace(SPACE_CHARACTER, " ");
 
   return (
     <a
