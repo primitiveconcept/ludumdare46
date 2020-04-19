@@ -69,12 +69,10 @@ export const useSocket = (username: string) => {
     }
 
     if (readyState === ReadyState.OPEN) {
-      if (!initial.current) {
-        sendMessage(`internal_login ${username}`);
-        initial.current = true;
-      } else {
-        sendMessage("internal_reconnect");
-      }
+      // TODO find way to suppress login message on reconnect using argument:
+      // ${initial.current ? "reconnect" : ""}
+      sendMessage(`internal_login ${username}`);
+      initial.current = true;
     }
   }, [readyState, sendMessage, username]);
   return result;

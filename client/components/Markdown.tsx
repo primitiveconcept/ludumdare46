@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { MessageContext } from "./MessageContext";
 
 const prompt = "threehams@local$";
-const SPACE_CHARACTER = "|";
+const SPACE_CHARACTER = new RegExp("\\|", "g");
 
 type CommandLinkProps = {
   children: string;
