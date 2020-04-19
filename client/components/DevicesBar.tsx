@@ -13,7 +13,7 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
   if (!currentIp) {
     return (
       <>
-        <div>Known devices</div>
+        <div>Known Devices</div>
         <ul>
           {devices.map((device) => {
             return (
