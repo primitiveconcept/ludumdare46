@@ -1,4 +1,4 @@
-namespace HackThePlanet.Components
+namespace HackThePlanet
 {
 	using System;
 	using System.Collections.Generic;

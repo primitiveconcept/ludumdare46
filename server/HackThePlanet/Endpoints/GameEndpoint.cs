@@ -1,7 +1,7 @@
 namespace HackThePlanet
 {
 	using System;
-	using HackThePlanet.Components;
+	using HackThePlanet;
 	using PrimitiveEngine;
 	using WebSocketSharp;
 	using WebSocketSharp.Net;

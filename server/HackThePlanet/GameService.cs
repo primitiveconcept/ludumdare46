@@ -87,6 +87,7 @@ namespace HackThePlanet
 			this.gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
 			this.gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
 			this.gameWebSocket.AddEndpoint<GameEndpoint>("/game");
+			this.gameWebSocket.AddEndpoint<BigBrotherEndpoint>("/bigbrother");
 		}
 	}
 }
