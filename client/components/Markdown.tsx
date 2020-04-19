@@ -1,9 +1,8 @@
 import React from "react";
 import ReactMarkdown from "markdown-to-jsx";
 import { useContext } from "react";
-import { MessageContext } from "./MessageContext";
+import { CommandContext } from "./CommandContext";
 
-const prompt = "threehams@local$";
 const SPACE_CHARACTER = new RegExp("\\|", "g");
 
 type CommandLinkProps = {
@@ -11,7 +10,7 @@ type CommandLinkProps = {
   href: string;
 };
 const CommandLink = ({ href: hrefProp, children }: CommandLinkProps) => {
-  const { sendLocalMessage, sendMessage } = useContext(MessageContext);
+  const { sendCommand } = useContext(CommandContext);
   const href = hrefProp.replace(SPACE_CHARACTER, " ");
 
   return (
@@ -20,8 +19,7 @@ const CommandLink = ({ href: hrefProp, children }: CommandLinkProps) => {
       onClick={(event) => {
         event.preventDefault();
         event.currentTarget.blur();
-        sendLocalMessage(`${prompt} ${href} `);
-        sendMessage(href);
+        sendCommand(href);
       }}
     >
       {children}

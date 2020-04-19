@@ -12,11 +12,7 @@ export const useStore = (username: string) => {
     resources: null,
     commandHistory: [],
   });
-  const {
-    lastMessage,
-    readyState,
-    sendMessage: socketSendMessage,
-  } = useSocket();
+  const { lastMessage, readyState, sendMessage } = useSocket();
 
   useEffect(() => {
     if (!username) {
@@ -24,28 +20,19 @@ export const useStore = (username: string) => {
     }
 
     if (readyState === ReadyState.OPEN) {
-      socketSendMessage(`internal_login ${username}`);
+      sendMessage(`internal_login ${username}`);
       if (!initial.current) {
         setState((draft) => {
           draft.messages.push(
             `Authenticating with public key "imported-133+ssh-key"`,
           );
-          draft.messages.push(`Logged in as ${username}`);
+          draft.messages.push(`Logged in as ${username}  \n`);
         });
       }
       initial.current = true;
     }
-  }, [readyState, setState, socketSendMessage, username]);
+  }, [readyState, setState, sendMessage, username]);
 
-  const sendMessage = useCallback(
-    (command: string) => {
-      setState((draft) => {
-        draft.commandHistory.push(command);
-      });
-      socketSendMessage(command);
-    },
-    [setState, socketSendMessage],
-  );
   useEffect(() => {
     if (!lastMessage) {
       return;
@@ -62,5 +49,21 @@ export const useStore = (username: string) => {
     }
   }, [lastMessage, setState]);
 
-  return { lastMessage, readyState, sendMessage, state, setState };
+  const sendCommand = useCallback(
+    (command: string) => {
+      if (!command.trim()) {
+        return;
+      }
+      setState((draft) => {
+        draft.messages.push(`${username}@local$ ${command}`);
+      });
+      setState((draft) => {
+        draft.commandHistory.push(command);
+      });
+      sendMessage(command);
+    },
+    [setState, sendMessage, username],
+  );
+
+  return { readyState, sendCommand, state, setState };
 };

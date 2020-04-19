@@ -2,26 +2,20 @@ import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
-import { MessageContext } from "./MessageContext";
 import { useInputFocus } from "./useInputFocus";
 
 type CommandPromptProps = {
   username: string;
 };
 export const CommandPrompt = ({ username }: CommandPromptProps) => {
-  const { command, setCommand } = useContext(CommandContext);
-  const { sendMessage, sendLocalMessage } = useContext(MessageContext);
+  const { command, setCommand, sendCommand } = useContext(CommandContext);
   const inputRef = createRef<HTMLInputElement>();
   const prompt = username ? `${username}@local$` : `username?`;
 
   const onSubmit = useCallback(() => {
-    sendLocalMessage(`${prompt} ${command}`);
-    if (!command.trim()) {
-      return;
-    }
-    sendMessage(command);
+    sendCommand(command);
     setCommand("");
-  }, [command, prompt, sendLocalMessage, sendMessage, setCommand]);
+  }, [command, sendCommand, setCommand]);
   useInputFocus(onSubmit, inputRef);
 
   return (

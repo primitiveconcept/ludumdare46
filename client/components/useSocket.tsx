@@ -9,6 +9,8 @@ enum UpdateTypes {
   Devices = "Devices",
 }
 
+// Controls connect, reconnect, and validation of messages
+// Does nothing with state
 export const useSocket = () => {
   let hostname = "";
   if (typeof window !== "undefined") {
