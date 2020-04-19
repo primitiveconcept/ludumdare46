@@ -7,7 +7,7 @@ type MessagesProps = {
 };
 export const Messages = ({ messages }: MessagesProps) => {
   return (
-    <div>
+    <div data-test="messages">
       {messages.map((message, index) => (
         <div key={index}>
           <Markdown>{message}</Markdown>
