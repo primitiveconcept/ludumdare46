@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+	using System.Threading;
 	using Microsoft.Extensions.Logging;
 	using PrimitiveEngine;
 
@@ -34,6 +35,7 @@ namespace HackThePlanet
 		public override void Update(long deltaTime)
 		{
 			this.entityWorld.FixedUpdate(deltaTime);
+			Thread.Sleep(15); // Fuck it, let's not get fancy here.
 		}
 	}
 }

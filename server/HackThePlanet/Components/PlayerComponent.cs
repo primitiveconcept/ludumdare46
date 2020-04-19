@@ -48,6 +48,9 @@ namespace HackThePlanet
 			// TODO: Randomly generate IpAddress.
 			computerComponent.IpAddress = IPAddress.Parse("127.0.0.1").Address;
 			computerComponent.OpenPorts.Add(Port.Ssh);
+			computerComponent.OpenPorts.Add(Port.Ftp);
+			computerComponent.OpenPorts.Add(Port.Http);
+			computerComponent.OpenPorts.Add(Port.Ssl);
 			newEntity.AddComponent(computerComponent);
 
 			Console.Out.WriteLine($"Created new player: {playerComponent.Id}");

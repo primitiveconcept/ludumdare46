@@ -24,9 +24,11 @@ namespace HackThePlanet.Systems
                 initiatingPlayer.AddTerminalMessage($"Found open port: {portScanComponent.CurrentPort}");
             }
 
-            portScanComponent.CurrentPort++;
-
-            if (portScanComponent.CurrentPort > MaxPort)
+            if (portScanComponent.CurrentPort != EnumExtensions.GetLast<Port>())
+            {
+                portScanComponent.CurrentPort++;
+            }
+            else
             {
                 initiatingPlayer.AddTerminalMessage($"Finished port scan of {computerComponent.IpAddress.ToIPString()}");
                 entity.RemoveComponent<PortScanComponent>();
