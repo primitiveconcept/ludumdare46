@@ -6,6 +6,7 @@ namespace HackThePlanet
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 	using Newtonsoft.Json;
+	using PrimitiveEngine;
 
 
 	/// <summary>
@@ -57,6 +58,12 @@ namespace HackThePlanet
 			get { return this.logger; }
 		}
 		#endregion
+
+
+		public static Entity GetEntity(int entityId)
+		{
+			return Game.EntityWorld.GetEntityById(entityId);
+		}
 
 
 		public void OnStart()

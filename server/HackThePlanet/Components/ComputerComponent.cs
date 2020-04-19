@@ -13,6 +13,6 @@ namespace HackThePlanet
 		public byte MaxRam;
 		public byte UsedRam;
 
-		public List<int> OpenPorts = new List<int>();
+		public List<Port> OpenPorts = new List<Port>();
 	}
 }

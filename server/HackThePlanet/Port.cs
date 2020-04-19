@@ -1,7 +1,10 @@
 namespace HackThePlanet
 {
-    public static class Port
+    public enum Port : int
     {
-        public const int Ssh = 22;
+        Ftp = 21,
+        Ssh = 22,
+        Http = 80,
+        Ssl = 443
     }
 }
