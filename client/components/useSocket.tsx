@@ -4,6 +4,11 @@ import { TerminalMessage, ResourcesMessage } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
 
+enum UpdateTypes {
+  Terminal = "Terminal",
+  Devices = "Devices",
+}
+
 export const useSocket = (username: string) => {
   let hostname = "";
   if (typeof window !== "undefined") {
@@ -42,12 +47,16 @@ export const useSocket = (username: string) => {
       return null;
     }
     const data: any = camelizeKeys(JSON.parse(lastMessageUnsafe.data));
-    if (data?.update === "Terminal") {
+    if (data?.update === UpdateTypes.Terminal) {
       return TerminalMessage.check(data);
-    } else if (data?.update === "Devices") {
+    } else if (data?.update === UpdateTypes.Devices) {
       return ResourcesMessage.check(data);
     }
-    throw new Error(`Unsupported message: ${JSON.stringify(data)}`);
+    throw new Error(
+      `Unsupported update: ${data?.update}. Valid updates are ${JSON.stringify(
+        Object.values(UpdateTypes),
+      )}. Message: ${JSON.stringify(data)}.`,
+    );
   }, [lastMessageUnsafe]);
   const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
     lastMessage,
