@@ -1,7 +1,7 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global, css } from "@emotion/core";
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -21,51 +21,11 @@ import { useCommandHistory } from "../components/useCommandHistory";
 import { useSteppedScroll } from "../components/useSteppedScroll";
 import { TerminalOverlay } from "../components/TerminalOverlay";
 import { EmailPanel } from "../components/EmailPanel";
-import { helpCommand } from "../commands/helpCommand";
 import { MailProgram } from "../components/MailProgram";
 import { Program } from "../types";
+import { useLocalCommands } from "../components/UseLocalCommands";
 
 setAutoFreeze(false);
-
-type UseLocalCommands = {
-  sendServerCommand: (command: string) => void;
-  setOpenProgram: (program: Program | null) => void;
-  addMessage: (message: string) => void;
-  username: string;
-};
-
-const useLocalCommands = ({
-  sendServerCommand,
-  setOpenProgram,
-  addMessage,
-  username,
-}: UseLocalCommands) => {
-  const sendCommand = useCallback(
-    (command: string): void => {
-      if (!command.trim()) {
-        return;
-      }
-      addMessage(`${username}@local$ ${command}`);
-
-      const [baseCommand, ...args] = command.split(/ +/);
-      if (baseCommand === "help") {
-        addMessage(helpCommand(args));
-        return;
-      }
-      if (baseCommand === "mail") {
-        setOpenProgram("mail");
-        return;
-      }
-      if (baseCommand === "close") {
-        setOpenProgram(null);
-        return;
-      }
-      sendServerCommand(command);
-    },
-    [addMessage, sendServerCommand, setOpenProgram, username],
-  );
-  return sendCommand;
-};
 
 export const Index = () => {
   const [username, setUsername] = useSession();
@@ -128,6 +88,12 @@ export const Index = () => {
             font-size: 20px;
             margin: 0;
             font-family: "Fira Code", monospace;
+          }
+
+          pre {
+            font-size: inherit;
+            font-family: "Fira Code", monospace;
+            margin: 0;
           }
 
           ul {
