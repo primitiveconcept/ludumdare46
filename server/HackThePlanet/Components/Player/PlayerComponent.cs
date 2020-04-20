@@ -16,7 +16,7 @@ namespace HackThePlanet
 		[JsonIgnore] public GameEndpoint Session;
 
 
-		public void QueueDeviceUpdate(Device device)
+		public void QueueDeviceUpdate(DeviceState device)
 		{
 			DeviceUpdateMessage deviceUpdateMessage = new DeviceUpdateMessage();
 			deviceUpdateMessage.payload =
@@ -27,15 +27,32 @@ namespace HackThePlanet
 
 			this.MessageQueue.Add(deviceUpdateMessage.ToJson());
 		}
-		
+
+
+		public void QueueProcessUpdate(ComputerComponent computer)
+		{
+			Dictionary<string, Process>.ValueCollection processes = computer.RunningProcesses.Values;
+			var result = new
+							{
+								Update = "Processes",
+								Payload = new
+											{
+												Processes = processes
+											}
+							};
+			this.MessageQueue.Add(JsonConvert.SerializeObject(result));
+		}
+
+
 		public void QueueTerminalMessage(string message)
 		{
 			var result = new
 							{
 								Update = "Terminal",
-								Payload = new {
-													Message = message,
-												}
+								Payload = new 
+											{ 
+												Message = message 
+											}
 							};
 			this.MessageQueue.Add(JsonConvert.SerializeObject(result));
 		}

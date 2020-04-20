@@ -49,7 +49,7 @@ namespace HackThePlanet.Systems
             // Done port scanning.
             else
             {
-                Device device = new Device();
+                DeviceState device = new DeviceState();
                 device.ip = targetComputer.IpAddress.ToIPString();
                 device.status = "idle";
                 device.commands = initiatingEntity.NetworkAccessComponent().GetAvailableCommands(targetEntity);

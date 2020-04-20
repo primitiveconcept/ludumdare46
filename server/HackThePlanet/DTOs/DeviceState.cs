@@ -3,7 +3,7 @@ namespace HackThePlanet
     using System.Collections.Generic;
 
 
-    public class Device
+    public class DeviceState
     {
         public string ip;
         public string status;

@@ -14,7 +14,7 @@ namespace HackThePlanet
 
         public static DeviceUpdateMessage Create(NetworkAccessComponent networkAccessComponent)
         {
-            List<Device> devices = new List<Device>();
+            List<DeviceState> devices = new List<DeviceState>();
             foreach (KeyValuePair<int, AccessOptions> entry in networkAccessComponent.AccessOptions)
             {
                 GetDeviceState(entry: entry, devices: devices);
@@ -31,13 +31,13 @@ namespace HackThePlanet
         }
 
 
-        private static void GetDeviceState(KeyValuePair<int, AccessOptions> entry, List<Device> devices)
+        private static void GetDeviceState(KeyValuePair<int, AccessOptions> entry, List<DeviceState> devices)
         {
             Entity deviceEntity = Game.GetEntity(entry.Key);
             ComputerComponent deviceComputer = deviceEntity.GetComponent<ComputerComponent>();
             string ip = deviceComputer.IpAddress.ToIPString();
 
-            Device device = new Device();
+            DeviceState device = new DeviceState();
             device.status = "idle"; // TODO
             device.ip = ip;
             // TODO

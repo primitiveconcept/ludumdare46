@@ -39,7 +39,8 @@ namespace HackThePlanet
 			
 			Entity targetEntity = targetComputer.GetEntity();
 			
-			Device targetDevice = new Device();
+			
+			DeviceState targetDevice = new DeviceState();
 			targetDevice.ip = ipAddress.ToIPString();
 			targetDevice.status = "sshcrack (0%)";
 			targetDevice.commands = new string[0];

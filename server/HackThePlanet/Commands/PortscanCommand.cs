@@ -11,7 +11,7 @@ namespace HackThePlanet
 		{
 			string ipArgument = GetArgument(0);
 			if (ipArgument == null) {
-				return "usage: portscan [ip_address]";
+				return $"Usage: {this.Name} [ip_address]";
 			}
 			
 			// Locate computer with given IP address.
@@ -22,44 +22,52 @@ namespace HackThePlanet
 			}
 			catch
 			{
-				return "invalid IP address format";
+				return "Invalid IP address format";
 			}
-			
-			
-			if (!InitiatePortScan(ipAddress, session))
-				return "could not locate provided IP address";
-			
-			return $"[{ipArgument}] portscan started...";
+
+			return InitiatePortScan(ipAddress, session);
 		}
 
 
-		private static bool InitiatePortScan(long ipAddress, GameEndpoint connection)
+		private string InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
 			ComputerComponent targetComputer = Computer.Find(ipAddress);
 			if (targetComputer == null)
-				return false;
+				return $"[{ipAddress.ToIPString()}] Could not locate";
 
 			Entity targetEntity = targetComputer.GetEntity();
+			Entity playerEntity = connection.PlayerEntity;
 			 
-			NetworkAccessComponent playerAccess = connection.PlayerEntity.NetworkAccessComponent();
-			playerAccess.AccessOptions[targetEntity.Id].PortAccessability = 
+			NetworkAccessComponent playerAccess = playerEntity.NetworkAccessComponent();
+			AccessOptions accessOptions = playerAccess.AccessOptions[targetEntity.Id];
+			if (accessOptions.PortAccessability.Keys.Count > 0)
+				return $"[{ipAddress.ToIPString()}] Already been portscanned";  
+			
+			accessOptions.PortAccessability = 
 				new Dictionary<Port, AccessLevel>();
 					
 			Entity portscanEntity = Game.World.CreateEntity();
 			PortScanComponent portScanComponent = new PortScanComponent();
 			// ReSharper disable once PossibleNullReferenceException
-			portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
-			portScanComponent.TargetEntity = targetEntity.Id;
+			portScanComponent.InitiatingEntity = playerEntity.Id;
+			portScanComponent.TargetEntity = targetEntity.Id; 
 			portscanEntity.AddComponent(portScanComponent);
 
-			Device targetDevice = new Device();
+			DeviceState targetDevice = new DeviceState();
 			targetDevice.ip = ipAddress.ToIPString();
 			targetDevice.status = "portscanning";
 			targetDevice.commands = new string[0];
 
-			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);
+			Process process = new Process();
+			process.Command = this.Name;
+			process.Ram = 1;
+			process.Status = "portscanning";
+			playerEntity.GetComponent<ComputerComponent>().AddProcess(process);
 
-			return true;
+			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);
+			connection.PlayerComponent.QueueProcessUpdate(targetComputer);
+
+			return $"[{ipAddress.ToIPString()}] {this.Name} started..."; 
 		}
 	}
 }
