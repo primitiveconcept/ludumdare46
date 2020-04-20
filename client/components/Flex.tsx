@@ -22,6 +22,8 @@ import {
   SpaceProps,
   WidthProps,
   width,
+  HeightProps,
+  height,
 } from "styled-system";
 
 export const Flex = styled.div<
@@ -32,6 +34,7 @@ export const Flex = styled.div<
     FlexBasisProps &
     FlexDirectionProps &
     FlexWrapProps &
+    HeightProps &
     JustifyContentProps &
     MaxWidthProps &
     SpaceProps &
@@ -44,6 +47,7 @@ export const Flex = styled.div<
   ${flexBasis}
   ${flexDirection}
   ${flexWrap}
+  ${height}
   ${justifyContent}
   ${maxWidth}
   ${space}
