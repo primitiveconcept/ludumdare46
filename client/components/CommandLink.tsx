@@ -6,6 +6,7 @@ import { SPACE_CHARACTER } from "./Markdown";
 type CommandLinkProps = {
   children: string;
   href: string;
+  highlightFocus?: boolean;
 };
 export const CommandLink = ({ href: hrefProp, children }: CommandLinkProps) => {
   const { sendCommand } = useContext(CommandContext);
