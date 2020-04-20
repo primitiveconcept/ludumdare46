@@ -17,8 +17,10 @@ describe("adjustments", () => {
       cy.findByText("Known Devices");
       cy.getId({ name: "knownIp", index: 0 }).click();
       cy.findByText("Known Devices").should("not.exist");
-      cy.findByText("Port Scan").click();
-      cy.findByText("Found open port: Ssh");
+      cy.findByText("portscan").click();
+      cy.getId("messages").should("contain.text", "Found open port: ssh", {
+        timeout: 10000,
+      });
       cy.findByText("Back").click();
     });
 
@@ -31,14 +33,16 @@ describe("adjustments", () => {
         })
         .as("ip");
       cy.findByText("Known Devices").should("not.exist");
-      cy.findByText("Port Scan").click();
-      cy.findByText("Port Scan").should("not.exist");
+      cy.findByText("portscan").click();
+      cy.findByText("portscan").should("not.exist");
       cy.get("@ip").then((ip) => {
         cy.getId("messages").should(
           "contain.text",
           `threehams@local$ portscan ${ip}`,
         );
-        cy.findByText("Found open port: Ssh");
+        cy.getId("messages").should("contain.text", "Found open port: ssh", {
+		  timeout: 10000,
+		});
         cy.findByText("sshcrack").click();
         cy.findByText("sshcrack").should("not.exist");
         cy.getId("messages").should(
@@ -49,7 +53,7 @@ describe("adjustments", () => {
           "contain.text",
           `Found user/pass match for ${ip}: admin/admin`,
         );
-        cy.findByText("Install Malware").click();
+        cy.findByText("install malware").click();
         cy.findByText("keylogger").click();
       });
     });
