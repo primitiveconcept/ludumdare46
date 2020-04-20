@@ -32,18 +32,24 @@ namespace HackThePlanet
 
 		protected override void OnMessage(MessageEventArgs message)
 		{
+			Game.GameThread.QueueProcess(() => ParseCommands(message));
+		}
+
+
+		private void ParseCommands(MessageEventArgs message)
+		{
 			Command command = Command.ParseCommand(message.Data);
 			string response = command.Execute(this);
 
 			if (!string.IsNullOrEmpty(response))
 			{
 				var result = new
-				{
-					Update = "Terminal",
-					Payload = new {
-						Message = response,
-					}
-				};
+								{
+									Update = "Terminal",
+									Payload = new {
+														Message = response,
+													}
+								};
 				Send(JsonConvert.SerializeObject(result));
 			}
 		}

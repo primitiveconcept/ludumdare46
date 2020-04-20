@@ -68,6 +68,11 @@ namespace HackThePlanet
 		#endregion
 
 
+		public static GameThread GameThread
+		{
+			get { return _instance.gameThread; }
+		}
+		
 		public static IEnumerable<T> GetComponents<T>()
 			where T: IEntityComponent
 		{
