@@ -35,7 +35,7 @@ namespace HackThePlanet
 
 		private bool InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
-			foreach (Entity entity in Game.World.EntityManager.ActiveEntities)
+			foreach (Entity entity in Game.World.EntityManager.GetEntities(Aspect.One(typeof(ComputerComponent))))
 			{
 				ComputerComponent computerComponent = entity.GetComponent<ComputerComponent>();
 				if (computerComponent != null

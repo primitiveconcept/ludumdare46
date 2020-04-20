@@ -26,7 +26,9 @@ namespace HackThePlanet
 			
             ComputerComponent computerComponent = new ComputerComponent();
             // TODO: Randomly generate IpAddress.
-            computerComponent.IpAddress = IPAddress.Parse("127.0.0.1").Address;
+            byte[] randomIpBytes = new byte[4];
+            new Random().NextBytes(randomIpBytes);
+            computerComponent.IpAddress = new IPAddress(randomIpBytes).Address;
             computerComponent.OpenPorts.Add(Port.Ssh);
             computerComponent.OpenPorts.Add(Port.Ftp);
             computerComponent.OpenPorts.Add(Port.Http);
