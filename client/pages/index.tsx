@@ -8,7 +8,6 @@ import {
   Messages,
   CommandPrompt,
   Status,
-  Terminal,
   UsernamePrompt,
   ResourcesBar,
   DevicesBar,
@@ -74,24 +73,18 @@ export const Index = () => {
             margin: 0;
             font-family: "Fira Code", monospace;
           }
-          button {
-            padding: 0;
-            border: 0;
-            background-color: transparent;
-            font-size: 20px;
-            margin: 0;
-            font-family: "Fira Code", monospace;
-          }
+
           ul {
             margin-top: 0;
             margin-bottom: 0;
             padding-left: 0;
           }
+
           li {
             list-style-type: none;
           }
-          a,
-          button {
+
+          a {
             color: #bff3b8;
             text-decoration: none;
             &:hover {

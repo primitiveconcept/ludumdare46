@@ -8,5 +8,4 @@ export * from "./ResourcesBar";
 export * from "./Messages";
 export * from "./CommandPrompt";
 export * from "./Status";
-export * from "./Terminal";
 export * from "./UsernamePrompt";
