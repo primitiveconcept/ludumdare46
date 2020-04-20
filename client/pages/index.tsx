@@ -8,7 +8,6 @@ import {
   Messages,
   CommandPrompt,
   Status,
-  Terminal,
   UsernamePrompt,
   ResourcesBar,
   DevicesBar,
@@ -27,7 +26,6 @@ export const Index = () => {
   const [username, setUsername] = useSession();
   const { readyState, sendCommand, state } = useStore(username);
   const [command, setCommand] = useState("");
-  // const scrollRef = createRef<HTMLDivElement>();
   const { setPrevCommand, setNextCommand } = useCommandHistory(
     state.commandHistory,
     setCommand,
@@ -61,6 +59,11 @@ export const Index = () => {
         styles={css`
           body {
             margin: 0;
+            text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5),
+              -0.02956275843481219px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            background-color: black;
+            background-image: radial-gradient(#111, #181818 120%);
+            min-height: 100vh;
           }
 
           body,
@@ -70,24 +73,18 @@ export const Index = () => {
             margin: 0;
             font-family: "Fira Code", monospace;
           }
-          button {
-            padding: 0;
-            border: 0;
-            background-color: transparent;
-            font-size: 20px;
-            margin: 0;
-            font-family: "Fira Code", monospace;
-          }
+
           ul {
             margin-top: 0;
             margin-bottom: 0;
             padding-left: 0;
           }
+
           li {
             list-style-type: none;
           }
-          a,
-          button {
+
+          a {
             color: #bff3b8;
             text-decoration: none;
             &:hover {
@@ -97,34 +94,34 @@ export const Index = () => {
         `}
       />
       <TerminalOverlay />
-      <Terminal>
-        <Flex
+      <Flex
+        alignItems="start"
+        css={css`
+          min-height: 100vh;
+        `}
+      >
+        <Box
+          width={200}
+          gridArea="leftbar"
+          padding={4}
           css={css`
-            min-height: 100vh;
+            position: sticky;
+            top: 0;
           `}
         >
-          <Box
-            width={200}
-            gridArea="leftbar"
-            padding={4}
-            css={css`
-              position: sticky;
-            `}
-          >
-            {state.resources && <ResourcesBar resources={state.resources} />}
-            {state.devices && <DevicesBar devices={state.devices} />}
-          </Box>
-          <Box gridArea="main" padding={4}>
-            <Status readyState={readyState} />
-            <Messages messages={state.messages} />
-            {username ? (
-              <CommandPrompt username={username} />
-            ) : (
-              <UsernamePrompt setUsername={setUsername} />
-            )}
-          </Box>
-        </Flex>
-      </Terminal>
+          {state.resources && <ResourcesBar resources={state.resources} />}
+          {state.devices && <DevicesBar devices={state.devices} />}
+        </Box>
+        <Box gridArea="main" padding={4}>
+          <Status readyState={readyState} />
+          <Messages messages={state.messages} />
+          {username ? (
+            <CommandPrompt username={username} />
+          ) : (
+            <UsernamePrompt setUsername={setUsername} />
+          )}
+        </Box>
+      </Flex>
     </CommandContext.Provider>
   );
 };
