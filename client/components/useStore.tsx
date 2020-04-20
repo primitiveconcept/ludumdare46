@@ -3,7 +3,6 @@ import { State } from "../types/State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { ReadyState } from "react-use-websocket";
-import { commands } from "../commands";
 
 export const useStore = (username: string) => {
   const initial = useRef<boolean>(false);
@@ -12,6 +11,8 @@ export const useStore = (username: string) => {
     devices: [],
     resources: null,
     commandHistory: [],
+    processes: [],
+    emails: [],
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 
@@ -51,6 +52,16 @@ export const useStore = (username: string) => {
         draft.devices = lastMessage.payload.devices;
       });
     }
+    if (lastMessage.update === "Processes") {
+      setState((draft) => {
+        draft.processes = lastMessage.payload.processes;
+      });
+    }
+    if (lastMessage.update === "Emails") {
+      setState((draft) => {
+        draft.emails = lastMessage.payload.emails;
+      });
+    }
   }, [lastMessage, setState]);
 
   const sendCommand = useCallback(
@@ -64,16 +75,6 @@ export const useStore = (username: string) => {
       setState((draft) => {
         draft.commandHistory.push(command);
       });
-
-      // local commands
-      const [baseCommand, ...args] = command.split(/ +/);
-      const handler = commands[baseCommand];
-      if (handler) {
-        setState((draft) => {
-          draft.messages.push(handler(args));
-        });
-        return;
-      }
 
       // remote commands
       sendMessage(command);

@@ -1,7 +1,7 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global, css } from "@emotion/core";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   ResourcesBar,
   DevicesBar,
   Flex,
+  ProcessesPanel,
 } from "../components";
 import { CommandContext } from "../components/CommandContext";
 import { useSession } from "../components/useSession";
@@ -19,18 +20,50 @@ import { useStore } from "../components/useStore";
 import { useCommandHistory } from "../components/useCommandHistory";
 import { useSteppedScroll } from "../components/useSteppedScroll";
 import { TerminalOverlay } from "../components/TerminalOverlay";
+import { EmailPanel } from "../components/EmailPanel";
+import { helpCommand } from "../commands/helpCommand";
 
 setAutoFreeze(false);
 
+type UseLocalCommands = {
+  sendServerCommand: (command: string) => void;
+  setOpenProgram: (program: Program) => void;
+};
+
+const useLocalCommands = ({
+  sendServerCommand,
+  setOpenProgram,
+}: UseLocalCommands) => {
+  const sendCommand = useCallback(
+    (command: string) => {
+      const [baseCommand, ...args] = command.split(/ +/);
+      if (baseCommand === "help") {
+        helpCommand(args);
+      }
+      if (baseCommand === "mail") {
+        setOpenProgram("mail");
+      }
+      return sendServerCommand(command);
+    },
+    [sendServerCommand, setOpenProgram],
+  );
+  return sendCommand;
+};
+
+type Program = "mail";
+
 export const Index = () => {
   const [username, setUsername] = useSession();
-  const { readyState, sendCommand, state } = useStore(username);
+  const [openProgram, setOpenProgram] = useState<Program | null>(null);
+  const { readyState, sendCommand: sendServerCommand, state } = useStore(
+    username,
+  );
   const [command, setCommand] = useState("");
   const { setPrevCommand, setNextCommand } = useCommandHistory(
     state.commandHistory,
     setCommand,
   );
-
+  const sendCommand = useLocalCommands({ sendServerCommand, setOpenProgram });
   const scrollToBottom = useSteppedScroll();
 
   useEffect(() => {
@@ -111,15 +144,22 @@ export const Index = () => {
         >
           {state.resources && <ResourcesBar resources={state.resources} />}
           {state.devices && <DevicesBar devices={state.devices} />}
+          {state.emails && <EmailPanel emails={state.emails} />}
+          {state.processes && <ProcessesPanel processes={state.processes} />}
         </Box>
         <Box gridArea="main" padding={4}>
-          <Status readyState={readyState} />
-          <Messages messages={state.messages} />
-          {username ? (
-            <CommandPrompt username={username} />
-          ) : (
-            <UsernamePrompt setUsername={setUsername} />
+          {!openProgram && (
+            <>
+              <Status readyState={readyState} />
+              <Messages messages={state.messages} />
+              {username ? (
+                <CommandPrompt username={username} />
+              ) : (
+                <UsernamePrompt setUsername={setUsername} />
+              )}
+            </>
           )}
+          {openProgram === "mail" && <div />}
         </Box>
       </Flex>
     </CommandContext.Provider>
