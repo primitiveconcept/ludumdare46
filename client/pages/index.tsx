@@ -33,15 +33,6 @@ export const Index = () => {
     setCommand,
   );
 
-  // trapped in command loop send he;lp
-  useEffect(() => {
-    sendCommand("help");
-    sendCommand("help");
-    sendCommand("help");
-    sendCommand("help");
-    sendCommand("help");
-  }, [sendCommand]);
-
   const scrollToBottom = useSteppedScroll();
 
   useEffect(() => {
