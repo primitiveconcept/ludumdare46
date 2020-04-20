@@ -17,6 +17,8 @@ import {
 import { CommandContext } from "../components/CommandContext";
 import { useSession } from "../components/useSession";
 import { useStore } from "../components/useStore";
+import { debounce } from "lodash";
+import { useCommandHistory } from "../components/useCommandHistory";
 
 setAutoFreeze(false);
 
@@ -25,6 +27,10 @@ export const Index = () => {
   const { readyState, sendCommand, state } = useStore(username);
   const [command, setCommand] = useState("");
   const scrollRef = createRef<HTMLDivElement>();
+  const { setPrevCommand, setNextCommand } = useCommandHistory(
+    state.commandHistory,
+    setCommand,
+  );
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -32,14 +38,33 @@ export const Index = () => {
     }
   }, [scrollRef, state.messages]);
 
-  const commandContextValue = useMemo(
-    () => ({
+  useEffect(() => {
+    const element = scrollRef.current;
+    const onScroll = debounce(() => {
+      console.log("scroll");
+    }, 500);
+
+    // never scrolljack. unless it's for aesthetic, then it's perfectly fine
+    if (element) {
+      element.addEventListener("scroll", onScroll);
+    }
+
+    return () => {
+      if (element) {
+        element.removeEventListener("scroll", onScroll);
+      }
+    };
+  }, [scrollRef]);
+
+  const commandContextValue = useMemo(() => {
+    return {
       command,
       setCommand,
       sendCommand,
-    }),
-    [command, sendCommand],
-  );
+      setPrevCommand,
+      setNextCommand,
+    };
+  }, [command, sendCommand, setNextCommand, setPrevCommand]);
 
   return (
     <CommandContext.Provider value={commandContextValue}>
@@ -61,8 +86,6 @@ export const Index = () => {
             styles={css`
               body {
                 margin: 0;
-                /* don't know what causes extra area, but let's brute-force remove it */
-                overflow: hidden;
               }
 
               body,
