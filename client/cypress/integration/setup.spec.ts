@@ -18,9 +18,9 @@ describe("adjustments", () => {
       cy.getId({ name: "knownIp", index: 0 }).click();
       cy.findByText("Known Devices").should("not.exist");
       cy.findByText("portscan").click();
-      cy.getId("messages").should("contain.text", "Found open port: ssh", {
-        timeout: 10000,
-      });
+      cy.getId("messages", {
+        timeout: 20000,
+      }).should("contain.text", "Found open port: ssh");
       cy.findByText("Back").click();
     });
 
@@ -40,9 +40,9 @@ describe("adjustments", () => {
           "contain.text",
           `threehams@local$ portscan ${ip}`,
         );
-        cy.getId("messages").should("contain.text", "Found open port: ssh", {
-		  timeout: 10000,
-		});
+        cy.getId("messages", {
+          timeout: 20000,
+        }).should("contain.text", "Found open port: ssh");
         cy.findByText("sshcrack").click();
         cy.findByText("sshcrack").should("not.exist");
         cy.getId("messages").should(
