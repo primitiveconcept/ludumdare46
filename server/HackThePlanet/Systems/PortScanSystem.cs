@@ -4,16 +4,19 @@ namespace HackThePlanet.Systems
 
     
     [EntitySystem(UpdateType = UpdateType.FixedUpdate)]
-    public class PortScanSystem : EntityComponentProcessingSystem<PortScanComponent, ComputerComponent>
+    public class PortScanSystem : EntityComponentProcessingSystem<PortScanComponent>
     {
         private const long Delay = 20000;
         
         
         public override void Process(
-            Entity targetEntity, 
-            PortScanComponent portScanComponent, 
-            ComputerComponent computerComponent)
+            Entity portscanEntity, 
+            PortScanComponent portScanComponent)
         {
+            Entity initiatingEntity = Game.GetEntity(portScanComponent.InitiatingEntity);
+            Entity targetEntity = Game.GetEntity(portScanComponent.TargetEntity);
+            ComputerComponent targetComputer = targetEntity.GetComponent<ComputerComponent>();
+            
             if (portScanComponent.elapsedTime < Delay)
             {
                 portScanComponent.elapsedTime += Game.Time.ElapsedTime;
@@ -22,11 +25,10 @@ namespace HackThePlanet.Systems
 
             portScanComponent.elapsedTime = 0;
 
-            Entity initiatingEntity = Game.GetEntity(portScanComponent.InitiatingEntity);
             PlayerComponent initiatingPlayer = initiatingEntity.GetComponent<PlayerComponent>();
 
             // Found an open port.
-            if (computerComponent.OpenPorts.Contains(portScanComponent.CurrentPort))
+            if (targetComputer.OpenPorts.Contains(portScanComponent.CurrentPort))
             {
                 NetworkAccessComponent networkAccessComponent = 
                     initiatingEntity.GetComponent<NetworkAccessComponent>();
@@ -34,7 +36,7 @@ namespace HackThePlanet.Systems
                     .PortAccessability[portScanComponent.CurrentPort] = AccessLevel.Known;
                 
                 initiatingPlayer.QueueTerminalMessage(
-                    $"[{computerComponent.IpAddress.ToIPString()}] Found open port: "
+                    $"[{targetComputer.IpAddress.ToIPString()}] Found open port: "
                     + $"{portScanComponent.CurrentPort.ToString().ToLower()}");
             }
 
@@ -48,14 +50,14 @@ namespace HackThePlanet.Systems
             else
             {
                 Device device = new Device();
-                device.ip = computerComponent.IpAddress.ToIPString();
+                device.ip = targetComputer.IpAddress.ToIPString();
                 device.status = "idle";
                 device.commands = initiatingEntity.NetworkAccessComponent().GetAvailableCommands(targetEntity);
                 
                 initiatingPlayer.QueueDeviceUpdate(device);
-                initiatingPlayer.QueueTerminalMessage($"[{computerComponent.IpAddress.ToIPString()}] Finished port scan");
+                initiatingPlayer.QueueTerminalMessage($"[{targetComputer.IpAddress.ToIPString()}] Finished port scan");
                 
-                targetEntity.RemoveComponent<PortScanComponent>();
+                Game.World.DeleteEntity(portscanEntity);
             }
         }
     }

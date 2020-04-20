@@ -1,5 +1,8 @@
 namespace HackThePlanet
 {
+	using PrimitiveEngine;
+
+
 	[Command("sshcrack")]
 	public class SshCrackCommand : Command
 	{
@@ -10,8 +13,40 @@ namespace HackThePlanet
 				return "usage: sshcrack [ip_address]";
 			}
 			
+			// Locate computer with given IP address.
+			long ipAddress;
+			try
+			{
+				ipAddress = ipArgument.ToIPLong();
+			}
+			catch
+			{
+				return "invalid IP address format";
+			}
 			
-			return null;
+			if (!InitiateSshCrack(ipAddress, session))
+				return "could not locate provided IP address";
+			
+			return $"[{ipAddress}] Running sshcrack algorithms...";
+		}
+
+
+		private static bool InitiateSshCrack(long ipAddress, GameEndpoint connection)
+		{
+			ComputerComponent targetComputer = Computer.Find(ipAddress);
+			if (targetComputer == null)
+				return false;
+			
+			Entity targetEntity = targetComputer.GetEntity();
+			
+			Device targetDevice = new Device();
+			targetDevice.ip = ipAddress.ToIPString();
+			targetDevice.status = "sshcrack (0%)";
+			targetDevice.commands = new string[0];
+			
+			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);
+
+			return true;
 		}
 	}
 }

@@ -29,26 +29,28 @@ namespace HackThePlanet
 			if (!InitiatePortScan(ipAddress, session))
 				return "could not locate provided IP address";
 			
-			return $"[{ipAddress}] Scanning ports...";
+			return $"[{ipArgument}] portscan started...";
 		}
 
 
 		private static bool InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
-			ComputerComponent computerComponent = Computer.Find(ipAddress);
-			if (computerComponent == null)
+			ComputerComponent targetComputer = Computer.Find(ipAddress);
+			if (targetComputer == null)
 				return false;
 
-			Entity entity = computerComponent.GetEntity();
-			
-			NetworkAccessComponent networkAccessComponent = connection.PlayerEntity.NetworkAccessComponent();
-			Dictionary<Port, AccessLevel> portAccessibility = new Dictionary<Port, AccessLevel>();
-			networkAccessComponent.AccessOptions[entity.Id].PortAccessability = portAccessibility;
+			Entity targetEntity = targetComputer.GetEntity();
+			 
+			NetworkAccessComponent playerAccess = connection.PlayerEntity.NetworkAccessComponent();
+			playerAccess.AccessOptions[targetEntity.Id].PortAccessability = 
+				new Dictionary<Port, AccessLevel>();
 					
+			Entity portscanEntity = Game.World.CreateEntity();
 			PortScanComponent portScanComponent = new PortScanComponent();
 			// ReSharper disable once PossibleNullReferenceException
 			portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
-			entity.AddComponent(portScanComponent);
+			portScanComponent.TargetEntity = targetEntity.Id;
+			portscanEntity.AddComponent(portScanComponent);
 
 			Device targetDevice = new Device();
 			targetDevice.ip = ipAddress.ToIPString();

@@ -17,16 +17,7 @@ namespace HackThePlanet
             List<Device> devices = new List<Device>();
             foreach (KeyValuePair<int, AccessOptions> entry in networkAccessComponent.AccessOptions)
             {
-                Entity deviceEntity = Game.GetEntity(entry.Key);
-                ComputerComponent deviceComputer = deviceEntity.GetComponent<ComputerComponent>();
-                string ip = deviceComputer.IpAddress.ToIPString();
-                
-                Device device = new Device();
-                device.status = "idle"; // TODO
-                device.ip = ip;
-                // TODO
-                device.commands = entry.Value.GetAccessOptions(ip);
-                devices.Add(device); 
+                GetDeviceState(entry: entry, devices: devices);
             }
             
             DeviceUpdateMessage updateMessage = new DeviceUpdateMessage();
@@ -39,7 +30,22 @@ namespace HackThePlanet
             return updateMessage;
         }
 
-        
+
+        private static void GetDeviceState(KeyValuePair<int, AccessOptions> entry, List<Device> devices)
+        {
+            Entity deviceEntity = Game.GetEntity(entry.Key);
+            ComputerComponent deviceComputer = deviceEntity.GetComponent<ComputerComponent>();
+            string ip = deviceComputer.IpAddress.ToIPString();
+
+            Device device = new Device();
+            device.status = "idle"; // TODO
+            device.ip = ip;
+            // TODO
+            device.commands = entry.Value.GetAccessOptions(ip);
+            devices.Add(device);
+        }
+
+
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this);
