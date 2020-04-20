@@ -1,7 +1,7 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global, css } from "@emotion/core";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, createRef, useEffect } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -17,6 +17,8 @@ import {
 import { CommandContext } from "../components/CommandContext";
 import { useSession } from "../components/useSession";
 import { useStore } from "../components/useStore";
+import { debounce } from "lodash";
+import { useCommandHistory } from "../components/useCommandHistory";
 
 setAutoFreeze(false);
 
@@ -24,15 +26,45 @@ export const Index = () => {
   const [username, setUsername] = useSession();
   const { readyState, sendCommand, state } = useStore(username);
   const [command, setCommand] = useState("");
+  const scrollRef = createRef<HTMLDivElement>();
+  const { setPrevCommand, setNextCommand } = useCommandHistory(
+    state.commandHistory,
+    setCommand,
+  );
 
-  const commandContextValue = useMemo(
-    () => ({
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [scrollRef, state.messages]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    const onScroll = debounce(() => {
+      console.log("scroll");
+    }, 500);
+
+    // never scrolljack. unless it's for aesthetic, then it's perfectly fine
+    if (element) {
+      element.addEventListener("scroll", onScroll);
+    }
+
+    return () => {
+      if (element) {
+        element.removeEventListener("scroll", onScroll);
+      }
+    };
+  }, [scrollRef]);
+
+  const commandContextValue = useMemo(() => {
+    return {
       command,
       setCommand,
       sendCommand,
-    }),
-    [command, sendCommand],
-  );
+      setPrevCommand,
+      setNextCommand,
+    };
+  }, [command, sendCommand, setNextCommand, setPrevCommand]);
 
   return (
     <CommandContext.Provider value={commandContextValue}>
@@ -89,11 +121,18 @@ export const Index = () => {
               }
             `}
           />
-          <Box overflow="auto" gridArea="leftbar" padding={4}>
+          <Box gridArea="leftbar" padding={4}>
             {state.resources && <ResourcesBar resources={state.resources} />}
             {state.devices && <DevicesBar devices={state.devices} />}
           </Box>
-          <Box overflow="auto" gridArea="main" padding={4}>
+          <Box
+            ref={scrollRef}
+            css={css`
+              overflow-y: scroll;
+            `}
+            gridArea="main"
+            padding={4}
+          >
             <Status readyState={readyState} />
             <Messages messages={state.messages} />
             {username ? (

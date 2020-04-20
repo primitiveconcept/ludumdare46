@@ -3,6 +3,7 @@ import { State } from "../types/State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { ReadyState } from "react-use-websocket";
+import { commands } from "../commands";
 
 export const useStore = (username: string) => {
   const initial = useRef<boolean>(false);
@@ -26,7 +27,10 @@ export const useStore = (username: string) => {
           draft.messages.push(
             `Authenticating with public key "imported-133+ssh-key"`,
           );
-          draft.messages.push(`Logged in as ${username}  \n`);
+          draft.messages.push(`Logged in as ${username}`);
+          draft.messages.push(
+            `Type or click [help](help) for a list of commands.`,
+          );
         });
       }
       initial.current = true;
@@ -60,6 +64,18 @@ export const useStore = (username: string) => {
       setState((draft) => {
         draft.commandHistory.push(command);
       });
+
+      // local commands
+      const [baseCommand, ...args] = command.split(/ +/);
+      const handler = commands[baseCommand];
+      if (handler) {
+        setState((draft) => {
+          draft.messages.push(handler(args));
+        });
+        return;
+      }
+
+      // remote commands
       sendMessage(command);
     },
     [setState, sendMessage, username],
