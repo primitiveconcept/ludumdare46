@@ -27,7 +27,6 @@ export const Index = () => {
   const [username, setUsername] = useSession();
   const { readyState, sendCommand, state } = useStore(username);
   const [command, setCommand] = useState("");
-  // const scrollRef = createRef<HTMLDivElement>();
   const { setPrevCommand, setNextCommand } = useCommandHistory(
     state.commandHistory,
     setCommand,
@@ -61,6 +60,11 @@ export const Index = () => {
         styles={css`
           body {
             margin: 0;
+            text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5),
+              -0.02956275843481219px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            background-color: black;
+            background-image: radial-gradient(#111, #181818 120%);
+            min-height: 100vh;
           }
 
           body,
@@ -97,34 +101,34 @@ export const Index = () => {
         `}
       />
       <TerminalOverlay />
-      <Terminal>
-        <Flex
+      <Flex
+        alignItems="start"
+        css={css`
+          min-height: 100vh;
+        `}
+      >
+        <Box
+          width={200}
+          gridArea="leftbar"
+          padding={4}
           css={css`
-            min-height: 100vh;
+            position: sticky;
+            top: 0;
           `}
         >
-          <Box
-            width={200}
-            gridArea="leftbar"
-            padding={4}
-            css={css`
-              position: sticky;
-            `}
-          >
-            {state.resources && <ResourcesBar resources={state.resources} />}
-            {state.devices && <DevicesBar devices={state.devices} />}
-          </Box>
-          <Box gridArea="main" padding={4}>
-            <Status readyState={readyState} />
-            <Messages messages={state.messages} />
-            {username ? (
-              <CommandPrompt username={username} />
-            ) : (
-              <UsernamePrompt setUsername={setUsername} />
-            )}
-          </Box>
-        </Flex>
-      </Terminal>
+          {state.resources && <ResourcesBar resources={state.resources} />}
+          {state.devices && <DevicesBar devices={state.devices} />}
+        </Box>
+        <Box gridArea="main" padding={4}>
+          <Status readyState={readyState} />
+          <Messages messages={state.messages} />
+          {username ? (
+            <CommandPrompt username={username} />
+          ) : (
+            <UsernamePrompt setUsername={setUsername} />
+          )}
+        </Box>
+      </Flex>
     </CommandContext.Provider>
   );
 };
