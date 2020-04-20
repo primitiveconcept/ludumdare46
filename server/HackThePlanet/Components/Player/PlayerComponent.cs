@@ -14,8 +14,21 @@ namespace HackThePlanet
 		public List<string> MessageQueue = new List<string>();
 
 		[JsonIgnore] public GameEndpoint Session;
+
+
+		public void QueueDeviceUpdate(Device device)
+		{
+			DeviceUpdateMessage deviceUpdateMessage = new DeviceUpdateMessage();
+			deviceUpdateMessage.payload =
+				new
+					{
+						devices = new[] { device }
+					};
+
+			this.MessageQueue.Add(deviceUpdateMessage.ToJson());
+		}
 		
-		public void AddTerminalMessage(string message)
+		public void QueueTerminalMessage(string message)
 		{
 			var result = new
 							{

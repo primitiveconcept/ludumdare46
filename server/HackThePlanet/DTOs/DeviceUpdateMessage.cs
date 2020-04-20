@@ -6,7 +6,7 @@ namespace HackThePlanet
     using PrimitiveEngine;
 
 
-    public class DeviceUpdateMessage
+    public partial class DeviceUpdateMessage
     {
         public readonly string update = "Devices";
         public object payload;
@@ -39,30 +39,10 @@ namespace HackThePlanet
             return updateMessage;
         }
 
-
-        public static DeviceUpdateMessage Create(string ip, Device device)
-        {
-            DeviceUpdateMessage deviceUpdateMessage = new DeviceUpdateMessage();
-            deviceUpdateMessage.payload =
-                new
-                    {
-                        devices = new[] { device }
-                    };
-            return deviceUpdateMessage;
-        }
-
-
+        
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this);
-        }
-
-
-        public class Device
-        {
-            public string ip;
-            public string status;
-            public IEnumerable<string> commands;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace HackThePlanet.Systems
                 networkAccessComponent.AccessOptions[targetEntity.Id]
                     .PortAccessability[portScanComponent.CurrentPort] = AccessLevel.Known;
                 
-                initiatingPlayer.AddTerminalMessage(
+                initiatingPlayer.QueueTerminalMessage(
                     $"[{computerComponent.IpAddress.ToIPString()}] Found open port: "
                     + $"{portScanComponent.CurrentPort.ToString().ToLower()}");
             }
@@ -47,12 +47,14 @@ namespace HackThePlanet.Systems
             // Done port scanning.
             else
             {
-                DeviceUpdateMessage.Device device = new DeviceUpdateMessage.Device();
+                Device device = new Device();
                 device.ip = computerComponent.IpAddress.ToIPString();
                 device.status = "idle";
-                device.commands = initiatingEntity.GetComponent<NetworkAccessComponent>().GetAvailableCommands(targetEntity.Id);
-                initiatingPlayer.MessageQueue.Add(DeviceUpdateMessage.Create(device.ip, device).ToJson());
-                initiatingPlayer.AddTerminalMessage($"[{computerComponent.IpAddress.ToIPString()}] Finished port scan");
+                device.commands = initiatingEntity.NetworkAccessComponent().GetAvailableCommands(targetEntity);
+                
+                initiatingPlayer.QueueDeviceUpdate(device);
+                initiatingPlayer.QueueTerminalMessage($"[{computerComponent.IpAddress.ToIPString()}] Finished port scan");
+                
                 targetEntity.RemoveComponent<PortScanComponent>();
             }
         }

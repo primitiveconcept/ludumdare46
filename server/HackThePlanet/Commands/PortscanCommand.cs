@@ -29,7 +29,7 @@ namespace HackThePlanet
 			if (!InitiatePortScan(ipAddress, session))
 				return "could not locate provided IP address";
 			
-			return null;
+			return $"[{ipAddress}] Scanning ports...";
 		}
 
 
@@ -50,14 +50,13 @@ namespace HackThePlanet
 			portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
 			entity.AddComponent(portScanComponent);
 
-			DeviceUpdateMessage.Device targetDevice = new DeviceUpdateMessage.Device();
+			Device targetDevice = new Device();
 			targetDevice.ip = ipAddress.ToIPString();
 			targetDevice.status = "portscanning";
 			targetDevice.commands = new string[0];
-					
-			connection.PlayerComponent.MessageQueue.Add(
-				DeviceUpdateMessage.Create(ipAddress.ToIPString(), targetDevice).ToJson());
-			
+
+			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);
+
 			return true;
 		}
 	}

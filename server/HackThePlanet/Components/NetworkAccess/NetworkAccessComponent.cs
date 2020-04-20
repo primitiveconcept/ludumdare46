@@ -13,10 +13,15 @@ namespace HackThePlanet
 
         public List<string> GetAvailableCommands(int entityId)
         {
+            return GetAvailableCommands(Game.GetEntity(entityId));
+        }
+
+
+        public List<string> GetAvailableCommands(Entity entity)
+        {
             List<string> commands = new List<string>();
-            Entity targetEntity = Game.GetEntity(entityId);
-            ComputerComponent targetComputer = targetEntity.GetComponent<ComputerComponent>();
-            return this.AccessOptions[entityId].GetAccessOptions(targetComputer.IpAddress.ToIPString());
+            ComputerComponent targetComputer = entity.GetComponent<ComputerComponent>();
+            return this.AccessOptions[entity.Id].GetAccessOptions(targetComputer.IpAddress.ToIPString());
         }
     }
 }
