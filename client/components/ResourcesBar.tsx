@@ -6,5 +6,9 @@ type ResourcesBarProps = {
 };
 export const ResourcesBar = ({ resources }: ResourcesBarProps) => {
   const { bitcoin } = resources;
-  return <div>Money: {bitcoin}₿</div>;
+  return (
+    <div>
+      <div>Bitcoins: {bitcoin}₿</div>
+    </div>
+  );
 };

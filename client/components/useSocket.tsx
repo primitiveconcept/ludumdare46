@@ -1,12 +1,19 @@
 import { useMemo } from "react";
 import useWebSocket from "react-use-websocket";
-import { TerminalMessage, ResourcesMessage } from "../types/Message";
+import {
+  TerminalMessage,
+  ResourcesMessage,
+  ProcessesMessage,
+  EmailsMessage,
+} from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
 
 enum UpdateTypes {
   Terminal = "Terminal",
   Devices = "Devices",
+  Processes = "Processes",
+  Emails = "Emails",
 }
 
 // Controls connect, reconnect, and validation of messages
@@ -47,11 +54,16 @@ export const useSocket = () => {
     if (!lastMessageUnsafe) {
       return null;
     }
+
     const data: any = camelizeKeys(JSON.parse(lastMessageUnsafe.data));
     if (data?.update === UpdateTypes.Terminal) {
       return TerminalMessage.check(data);
     } else if (data?.update === UpdateTypes.Devices) {
       return ResourcesMessage.check(data);
+    } else if (data?.update === UpdateTypes.Processes) {
+      return ProcessesMessage.check(data);
+    } else if (data?.update === UpdateTypes.Emails) {
+      return EmailsMessage.check(data);
     }
     throw new Error(
       `Unsupported update: ${data?.update}. Valid updates are ${JSON.stringify(
