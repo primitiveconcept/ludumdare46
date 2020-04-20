@@ -1,6 +1,9 @@
 namespace HackThePlanet
 {
+	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Runtime.CompilerServices;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Configuration;
@@ -63,6 +66,13 @@ namespace HackThePlanet
 			get { return this.logger; }
 		}
 		#endregion
+
+
+		public static IEnumerable<T> GetComponents<T>()
+			where T: IEntityComponent
+		{
+			return World.EntityManager.GetComponents<T>().Cast<T>();
+		}
 
 
 		public static List<Entity> GetEntities(params int[] entityIds)

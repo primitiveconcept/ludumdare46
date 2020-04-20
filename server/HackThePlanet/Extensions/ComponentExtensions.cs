@@ -5,10 +5,10 @@ namespace HackThePlanet
 
     public static class ComponentExtensions
     {
-        public static Entity GetEntity(this IEntityComponent component)
+        public static Entity GetEntity<T>(this T component)
+            where T: IEntityComponent
         {
-            // TODO
-            return null;
+            return Game.World.EntityManager.GetComponentEntity(component);
         }
     }
 }

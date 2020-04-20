@@ -3,12 +3,14 @@ namespace HackThePlanet
 	[Command("sshcrack")]
 	public class SshCrackCommand : Command
 	{
-		public override string Execute(GameEndpoint connection)
+		public override string Execute(GameEndpoint session)
 		{
-			string ip = GetArgument(0);
-			if (ip == null) {
+			string ipArgument = GetArgument(0);
+			if (ipArgument == null) {
 				return "usage: sshcrack [ip_address]";
 			}
+			
+			
 			return null;
 		}
 	}

@@ -6,13 +6,13 @@ namespace HackThePlanet
 	[Command("internal_login")]
 	public class LoginCommand : Command
 	{
-		public override string Execute(GameEndpoint connection)
+		public override string Execute(GameEndpoint session)
 		{
-			GameEndpoint gameEndpoint = connection as GameEndpoint;
+			GameEndpoint gameEndpoint = session as GameEndpoint;
 			string name = GetArgument(0);
 			
 			// First time login
-			if (string.IsNullOrEmpty(connection.PlayerComponent.Name))
+			if (string.IsNullOrEmpty(session.PlayerComponent.Name))
 			{
 				// Must provide a name the first time.
 				if (string.IsNullOrEmpty(name))
@@ -23,7 +23,7 @@ namespace HackThePlanet
 				return null;
 			}
 			
-			GetDeviceStates(connection);
+			GetDeviceStates(session);
 			return null;
 		}
 

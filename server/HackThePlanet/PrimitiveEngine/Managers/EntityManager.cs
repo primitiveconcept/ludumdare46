@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using HackThePlanet;
 
 
     /// <summary>
@@ -122,6 +123,25 @@
 
 
         /// <summary>
+        /// Get the Entity a component is attached to.
+        /// </summary>
+        /// <param name="entityComponent">IEntityComponent to get the Entity of.</param>
+        /// <typeparam name="T">Type of the IEntityComponent.</typeparam>
+        /// <returns>Entity the component is attached to.</returns>
+        public Entity GetComponentEntity<T>(T entityComponent)
+            where T: IEntityComponent
+        {
+            Bag<IEntityComponent> components = GetComponents<T>();
+            Game.LogInfo($"Found Components for {typeof(T).Name}: {components.Count}");
+            //ComponentType type = ComponentType<T>.CType;
+            //Bag<IEntityComponent> components = this.componentsByType.Get(type.Id);
+            int entityIndex = components.IndexOf(entityComponent);
+            
+            return GetEntityByIndex(entityIndex);
+        }
+
+
+        /// <summary>
         /// Get all components assigned to an entity.
         /// </summary>
         /// <param name="entity">Entity for which you want the components.</param>
@@ -146,6 +166,16 @@
             }
 
             return entityComponents;
+        }
+
+
+        public Bag<IEntityComponent> GetComponents<T>()
+            where T: IEntityComponent
+        {
+            ComponentType componentType = ComponentType<T>.CType;
+            return componentType.Id >= this.componentsByType.Capacity 
+                       ? null 
+                       : this.componentsByType.Get(componentType.Id);
         }
 
 

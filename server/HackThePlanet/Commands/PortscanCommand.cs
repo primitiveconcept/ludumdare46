@@ -7,7 +7,7 @@ namespace HackThePlanet
 	[Command("portscan")]
 	public class PortscanCommand : Command
 	{
-		public override string Execute(GameEndpoint connection)
+		public override string Execute(GameEndpoint session)
 		{
 			string ipArgument = GetArgument(0);
 			if (ipArgument == null) {
@@ -26,42 +26,39 @@ namespace HackThePlanet
 			}
 			
 			
-			if (!InitiatePortScan(ipAddress, connection))
+			if (!InitiatePortScan(ipAddress, session))
 				return "could not locate provided IP address";
 			
 			return null;
 		}
 
 
-		private bool InitiatePortScan(long ipAddress, GameEndpoint connection)
+		private static bool InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
-			foreach (Entity entity in Game.World.EntityManager.GetEntities(Aspect.One(typeof(ComputerComponent))))
-			{
-				ComputerComponent computerComponent = entity.GetComponent<ComputerComponent>();
-				if (computerComponent != null
-					&& computerComponent.IpAddress == ipAddress)
-				{
-					NetworkAccessComponent networkAccessComponent = connection.PlayerEntity.NetworkAccessComponent();
-					var portAccessibility = new Dictionary<Port, AccessLevel>();
-					networkAccessComponent.AccessOptions[entity.Id].PortAccessability = portAccessibility;
-					
-					PortScanComponent portScanComponent = new PortScanComponent();
-					// ReSharper disable once PossibleNullReferenceException
-					portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
-					entity.AddComponent(portScanComponent);
+			ComputerComponent computerComponent = Computer.Find(ipAddress);
+			if (computerComponent == null)
+				return false;
 
-					DeviceUpdateMessage.Device targetDevice = new DeviceUpdateMessage.Device();
-					targetDevice.ip = ipAddress.ToIPString();
-					targetDevice.status = "Port Scanning";
-					targetDevice.commands = new string[0];
+			Entity entity = computerComponent.GetEntity();
+			
+			NetworkAccessComponent networkAccessComponent = connection.PlayerEntity.NetworkAccessComponent();
+			Dictionary<Port, AccessLevel> portAccessibility = new Dictionary<Port, AccessLevel>();
+			networkAccessComponent.AccessOptions[entity.Id].PortAccessability = portAccessibility;
 					
-					connection.PlayerComponent.MessageQueue.Add(
-						DeviceUpdateMessage.Create(ipAddress.ToIPString(), targetDevice).ToJson());
-					return true;
-				}
-			}
+			PortScanComponent portScanComponent = new PortScanComponent();
+			// ReSharper disable once PossibleNullReferenceException
+			portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
+			entity.AddComponent(portScanComponent);
 
-			return false;
+			DeviceUpdateMessage.Device targetDevice = new DeviceUpdateMessage.Device();
+			targetDevice.ip = ipAddress.ToIPString();
+			targetDevice.status = "portscanning";
+			targetDevice.commands = new string[0];
+					
+			connection.PlayerComponent.MessageQueue.Add(
+				DeviceUpdateMessage.Create(ipAddress.ToIPString(), targetDevice).ToJson());
+			
+			return true;
 		}
 	}
 }

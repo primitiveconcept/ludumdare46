@@ -154,6 +154,23 @@ namespace PrimitiveEngine
 
 
 		/// <summary>
+		/// Returns the index of a component in the collection.
+		/// </summary>
+		/// <param name="element">Element to search for.</param>
+		/// <returns>Index of component, or -1 if not found.</returns>
+		public int IndexOf(T element)
+		{
+			for (int index = this.Count - 1; index >= 0; --index)
+			{
+				if (element.Equals(this.elements[index]))
+					return index;
+			}
+
+			return -1;
+		}
+
+
+		/// <summary>
 		/// Removes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>

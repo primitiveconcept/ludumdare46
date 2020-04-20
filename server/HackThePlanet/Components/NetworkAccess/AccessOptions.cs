@@ -15,7 +15,7 @@ namespace HackThePlanet
             List<string> commands = new List<string>();
             if (this.PortAccessability.Count == 0)
             {
-                commands.Add($"[Port Scan](portscan|{ip})");
+                commands.Add($"[portscan](portscan|{ip})");
                 return commands;
             }
 
