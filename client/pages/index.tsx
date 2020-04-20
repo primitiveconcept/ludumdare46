@@ -1,7 +1,7 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
 import { Global, css } from "@emotion/core";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, createRef, useEffect } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -24,6 +24,13 @@ export const Index = () => {
   const [username, setUsername] = useSession();
   const { readyState, sendCommand, state } = useStore(username);
   const [command, setCommand] = useState("");
+  const scrollRef = createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [scrollRef, state.messages]);
 
   const commandContextValue = useMemo(
     () => ({
@@ -54,6 +61,8 @@ export const Index = () => {
             styles={css`
               body {
                 margin: 0;
+                /* don't know what causes extra area, but let's brute-force remove it */
+                overflow: hidden;
               }
 
               body,
@@ -89,11 +98,18 @@ export const Index = () => {
               }
             `}
           />
-          <Box overflow="auto" gridArea="leftbar" padding={4}>
+          <Box gridArea="leftbar" padding={4}>
             {state.resources && <ResourcesBar resources={state.resources} />}
             {state.devices && <DevicesBar devices={state.devices} />}
           </Box>
-          <Box overflow="auto" gridArea="main" padding={4}>
+          <Box
+            ref={scrollRef}
+            css={css`
+              overflow-y: scroll;
+            `}
+            gridArea="main"
+            padding={4}
+          >
             <Status readyState={readyState} />
             <Messages messages={state.messages} />
             {username ? (

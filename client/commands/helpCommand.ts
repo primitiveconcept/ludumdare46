@@ -1,6 +1,7 @@
 const helpText = `Type [help](help) to see this list.
 
-* [portscan](help|portscan) Scan a remote machine for open ports. Once found, ports can be attacked with [utilities](help|utilties) to gain access.
+* [portscan](help|portscan) Scan a remote machine for open ports. Once found, ports can be [attacked](help|attacks)
+  to gain access.
 * [attacks](help|attacks) Gain access to remote machines using exploits or brute-force attacks.
 * [install](help|install) Install programs on devices to use their network, CPU, and memory for your benefit.
 `;
