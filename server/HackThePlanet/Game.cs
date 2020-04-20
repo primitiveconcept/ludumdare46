@@ -40,6 +40,12 @@ namespace HackThePlanet
 
 
 		#region Properties
+		public static GameTime Time
+		{
+			get { return _instance.gameThread.GameTime; }
+		}
+
+
 		public static EntityWorld World
 		{
 			get { return _instance.gameThread.EntityWorld; }

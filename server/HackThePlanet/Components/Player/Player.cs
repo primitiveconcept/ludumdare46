@@ -34,7 +34,7 @@ namespace HackThePlanet
             playerEntity.AddComponent(computerComponent);
 			
             NetworkAccessComponent networkAccessComponent = new NetworkAccessComponent();
-            networkAccessComponent.KnownEntities.Add(playerEntity.Id, AccessLevel.Root);
+            networkAccessComponent.AccessOptions.Add(playerEntity.Id, new AccessOptions());
             playerEntity.AddComponent(networkAccessComponent);
 			
             Console.Out.WriteLine($"Created new player: {playerComponent.Id}");

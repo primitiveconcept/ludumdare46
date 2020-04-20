@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+    using System.Collections;
     using System.Collections.Generic;
     using Newtonsoft.Json;
     using PrimitiveEngine;
@@ -14,7 +15,7 @@ namespace HackThePlanet
         public static DeviceUpdateMessage Create(NetworkAccessComponent networkAccessComponent)
         {
             List<Device> devices = new List<Device>();
-            foreach (KeyValuePair<int, AccessLevel> entry in networkAccessComponent.KnownEntities)
+            foreach (KeyValuePair<int, AccessOptions> entry in networkAccessComponent.AccessOptions)
             {
                 Entity deviceEntity = Game.GetEntity(entry.Key);
                 ComputerComponent deviceComputer = deviceEntity.GetComponent<ComputerComponent>();
@@ -24,10 +25,7 @@ namespace HackThePlanet
                 device.status = "idle"; // TODO
                 device.ip = ip;
                 // TODO
-                device.commands = new[]
-                                      {
-                                          $"[Port Scan](portscan|{ip})"
-                                      };
+                device.commands = entry.Value.GetAccessOptions(ip);
                 devices.Add(device); 
             }
             
@@ -42,23 +40,29 @@ namespace HackThePlanet
         }
 
 
-        public static DeviceUpdateMessage Create(ComputerComponent computerComponent)
+        public static DeviceUpdateMessage Create(string ip, Device device)
         {
-            return null;
+            DeviceUpdateMessage deviceUpdateMessage = new DeviceUpdateMessage();
+            deviceUpdateMessage.payload =
+                new
+                    {
+                        devices = new[] { device }
+                    };
+            return deviceUpdateMessage;
         }
 
 
-        public override string ToString()
+        public string ToJson()
         {
             return JsonConvert.SerializeObject(this);
         }
 
 
-        private class Device
+        public class Device
         {
             public string ip;
             public string status;
-            public string[] commands;
+            public IEnumerable<string> commands;
         }
     }
 }

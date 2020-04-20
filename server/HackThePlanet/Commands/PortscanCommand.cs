@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+	using System.Collections.Generic;
 	using PrimitiveEngine;
 
 
@@ -40,11 +41,22 @@ namespace HackThePlanet
 				if (computerComponent != null
 					&& computerComponent.IpAddress == ipAddress)
 				{
-					PortScanComponent portScanComponent = new PortScanComponent();
+					NetworkAccessComponent networkAccessComponent = connection.PlayerEntity.NetworkAccessComponent();
+					var portAccessibility = new Dictionary<Port, AccessLevel>();
+					networkAccessComponent.AccessOptions[entity.Id].PortAccessability = portAccessibility;
 					
+					PortScanComponent portScanComponent = new PortScanComponent();
 					// ReSharper disable once PossibleNullReferenceException
 					portScanComponent.InitiatingEntity = connection.PlayerEntity.Id;
 					entity.AddComponent(portScanComponent);
+
+					DeviceUpdateMessage.Device targetDevice = new DeviceUpdateMessage.Device();
+					targetDevice.ip = ipAddress.ToIPString();
+					targetDevice.status = "Port Scanning";
+					targetDevice.commands = new string[0];
+					
+					connection.PlayerComponent.MessageQueue.Add(
+						DeviceUpdateMessage.Create(ipAddress.ToIPString(), targetDevice).ToJson());
 					return true;
 				}
 			}

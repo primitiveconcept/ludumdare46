@@ -2,7 +2,6 @@ namespace HackThePlanet
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Net;
 	using PrimitiveEngine;
 
 
@@ -10,8 +9,7 @@ namespace HackThePlanet
 	public class ComputerComponent : IEntityComponent
 	{
 		public long IpAddress;
-		public byte MaxRam;
-		public byte UsedRam;
+		public byte Ram;
 
 		public List<Port> OpenPorts = new List<Port>();
 	}
