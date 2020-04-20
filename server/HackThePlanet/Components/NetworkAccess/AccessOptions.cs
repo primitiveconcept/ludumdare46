@@ -27,7 +27,7 @@ namespace HackThePlanet
                         switch (entry.Value)
                         {
                             case AccessLevel.Known:
-                                commands.Add("[sshcrack](sshcrack|{ip})");
+                                commands.Add($"[sshcrack](sshcrack|{ip})");
                                 break;
                             case AccessLevel.User:
                                 // TODO
