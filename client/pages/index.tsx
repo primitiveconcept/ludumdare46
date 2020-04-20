@@ -22,48 +22,71 @@ import { useSteppedScroll } from "../components/useSteppedScroll";
 import { TerminalOverlay } from "../components/TerminalOverlay";
 import { EmailPanel } from "../components/EmailPanel";
 import { helpCommand } from "../commands/helpCommand";
+import { MailProgram } from "../components/MailProgram";
+import { Program } from "../types";
 
 setAutoFreeze(false);
 
 type UseLocalCommands = {
   sendServerCommand: (command: string) => void;
-  setOpenProgram: (program: Program) => void;
+  setOpenProgram: (program: Program | null) => void;
+  addMessage: (message: string) => void;
+  username: string;
 };
 
 const useLocalCommands = ({
   sendServerCommand,
   setOpenProgram,
+  addMessage,
+  username,
 }: UseLocalCommands) => {
   const sendCommand = useCallback(
-    (command: string) => {
+    (command: string): void => {
+      if (!command.trim()) {
+        return;
+      }
+      addMessage(`${username}@local$ ${command}`);
+
       const [baseCommand, ...args] = command.split(/ +/);
       if (baseCommand === "help") {
-        helpCommand(args);
+        addMessage(helpCommand(args));
+        return;
       }
       if (baseCommand === "mail") {
         setOpenProgram("mail");
+        return;
       }
-      return sendServerCommand(command);
+      if (baseCommand === "close") {
+        setOpenProgram(null);
+        return;
+      }
+      sendServerCommand(command);
     },
-    [sendServerCommand, setOpenProgram],
+    [addMessage, sendServerCommand, setOpenProgram, username],
   );
   return sendCommand;
 };
 
-type Program = "mail";
-
 export const Index = () => {
   const [username, setUsername] = useSession();
   const [openProgram, setOpenProgram] = useState<Program | null>(null);
-  const { readyState, sendCommand: sendServerCommand, state } = useStore(
-    username,
-  );
+  const {
+    addMessage,
+    readyState,
+    sendCommand: sendServerCommand,
+    state,
+  } = useStore(username);
   const [command, setCommand] = useState("");
   const { setPrevCommand, setNextCommand } = useCommandHistory(
     state.commandHistory,
     setCommand,
   );
-  const sendCommand = useLocalCommands({ sendServerCommand, setOpenProgram });
+  const sendCommand = useLocalCommands({
+    username,
+    sendServerCommand,
+    setOpenProgram,
+    addMessage,
+  });
   const scrollToBottom = useSteppedScroll();
 
   useEffect(() => {
@@ -159,7 +182,7 @@ export const Index = () => {
               )}
             </>
           )}
-          {openProgram === "mail" && <div />}
+          {openProgram === "mail" && <MailProgram emails={state.emails} />}
         </Box>
       </Flex>
     </CommandContext.Provider>

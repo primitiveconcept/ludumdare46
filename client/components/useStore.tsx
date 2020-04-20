@@ -66,12 +66,6 @@ export const useStore = (username: string) => {
 
   const sendCommand = useCallback(
     (command: string) => {
-      if (!command.trim()) {
-        return;
-      }
-      setState((draft) => {
-        draft.messages.push(`${username}@local$ ${command}`);
-      });
       setState((draft) => {
         draft.commandHistory.push(command);
       });
@@ -79,8 +73,16 @@ export const useStore = (username: string) => {
       // remote commands
       sendMessage(command);
     },
-    [setState, sendMessage, username],
+    [setState, sendMessage],
+  );
+  const addMessage = useCallback(
+    (message: string) => {
+      setState((draft) => {
+        draft.messages.push(message);
+      });
+    },
+    [setState],
   );
 
-  return { readyState, sendCommand, state, setState };
+  return { addMessage, readyState, sendCommand, state, setState };
 };
