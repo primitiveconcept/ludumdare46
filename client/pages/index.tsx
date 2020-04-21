@@ -76,13 +76,13 @@ export const Index = () => {
       </Head>
       <GlobalStyles />
       <TerminalOverlay />
-      <Flex
-        alignItems="start"
+      <Box
         css={css`
           min-height: 100vh;
         `}
       >
         <Box
+          display="inline-block"
           width={220}
           gridArea="leftbar"
           paddingLeft={4}
@@ -99,7 +99,12 @@ export const Index = () => {
             <ProcessesPanel processes={state.processes} />
           )}
         </Box>
-        <Box gridArea="main" padding={4} width={`calc(100% - 220px)`}>
+        <Box
+          display="inline-block"
+          gridArea="main"
+          padding={4}
+          width={`calc(100% - 220px)`}
+        >
           {!openProgram && (
             <>
               <Status readyState={readyState} />
@@ -113,7 +118,7 @@ export const Index = () => {
           )}
           {openProgram === "mail" && <MailProgram emails={state.emails} />}
         </Box>
-      </Flex>
+      </Box>
     </CommandContext.Provider>
   );
 };

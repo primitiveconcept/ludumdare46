@@ -5,6 +5,15 @@ export const GlobalStyles = () => {
   return (
     <Global
       styles={css`
+        html {
+          box-sizing: border-box;
+        }
+        *,
+        *:before,
+        *:after {
+          box-sizing: inherit;
+        }
+
         body {
           margin: 0;
           text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5),
