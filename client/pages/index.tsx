@@ -83,9 +83,10 @@ export const Index = () => {
         `}
       >
         <Box
-          width={200}
+          width={220}
           gridArea="leftbar"
-          padding={4}
+          paddingLeft={4}
+          paddingTop={4}
           css={css`
             position: sticky;
             top: 0;
@@ -98,7 +99,7 @@ export const Index = () => {
             <ProcessesPanel processes={state.processes} />
           )}
         </Box>
-        <Box gridArea="main" padding={4} width={`calc(100% - 200px)`}>
+        <Box gridArea="main" padding={4} width={`calc(100% - 220px)`}>
           {!openProgram && (
             <>
               <Status readyState={readyState} />
