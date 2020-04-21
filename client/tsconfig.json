@@ -9,7 +9,7 @@
     "noEmit": true,
     "preserveConstEnums": true,
     "removeComments": false,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
@@ -20,5 +20,5 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules", "./cypress/**/*.ts", "./cypress/**/*.tsx"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./typings/**/*.d.ts"]
 }

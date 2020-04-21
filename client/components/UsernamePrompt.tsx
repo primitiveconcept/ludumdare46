@@ -1,5 +1,5 @@
 import React, { createRef, useContext, useCallback } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
@@ -23,7 +23,11 @@ export const UsernamePrompt = ({ setUsername }: UsernamePromptProps) => {
   useInputFocus(onSubmit, inputRef);
 
   return (
-    <Box width={1}>
+    <Box
+      css={css`
+        width: 100%;
+      `}
+    >
       username? {command}
       {CURSOR}
       <Input

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Markdown } from "../library/Markdown";
 import { State } from "../../types/State";
+import { Link } from "../library/Link";
+import { Box } from "..";
 
 type Category = "install";
 type DevicesPanelProps = {
@@ -15,24 +17,21 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
   if (!currentIp) {
     return (
       <>
-        <div>Known Devices</div>
-        <br />
+        <Box marginBottom={1}>Known Devices</Box>
         {devices.map((device) => {
           return (
-            <div key={device.ip}>
-              <a
+            <Box key={device.ip} paddingBottom={1}>
+              <Link
                 href={device.ip}
                 data-test="knownIp"
-                onClick={(event) => {
-                  event.preventDefault();
+                onClick={() => {
                   setCurrentIp(device.ip);
                 }}
               >
                 {device.ip}
-              </a>
-              <div>&nbsp;{device.status}</div>
-              <div>&nbsp;</div>
-            </div>
+              </Link>
+              <Box paddingLeft={1}>{device.status}</Box>
+            </Box>
           );
         })}
       </>
@@ -52,70 +51,63 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
   if (currentCategory) {
     return (
       <>
-        <div>Known Devices</div>
-        <br />
+        <Box marginBottom={1}>Known Devices</Box>
         <div>{device.ip}</div>
         {commands[currentCategory].map((command) => {
           return (
-            <div key={command}>
-              &nbsp;<Markdown>{command}</Markdown>
-            </div>
+            <Box key={command} paddingLeft={1}>
+              <Markdown>{command}</Markdown>
+            </Box>
           );
         })}
         <div>
-          <a
+          <Link
             href="back"
-            onClick={(event) => {
-              event.preventDefault();
+            onClick={() => {
               setCurrentCategory(null);
             }}
           >
             Back
-          </a>
+          </Link>
         </div>
       </>
     );
   }
 
   return (
-    <>
-      <div>Known Devices</div>
-      <br />
+    <Box paddingBottom={1}>
+      <Box marginBottom={1}>Known Devices</Box>
       <div>{device.ip}</div>
       {commands.main.map((command) => {
         return (
-          <div key={command}>
-            &nbsp;<Markdown>{command}</Markdown>
-          </div>
+          <Box key={command} paddingLeft={1}>
+            <Markdown>{command}</Markdown>
+          </Box>
         );
       })}
       {!!commands.install.length && (
         <div>
-          <a
+          <Link
             href="install"
-            onClick={(event) => {
-              event.preventDefault();
+            onClick={() => {
               setCurrentCategory("install");
             }}
           >
             Install Malware
-          </a>
+          </Link>
         </div>
       )}
-      <div>
-        &nbsp;
-        <a
+      <Box paddingLeft={1}>
+        <Link
           href="back"
-          onClick={(event) => {
-            event.preventDefault();
+          onClick={() => {
             setCurrentIp(null);
           }}
         >
           Back
-        </a>
-      </div>
-      <br />
-    </>
+        </Link>
+      </Box>
+    </Box>
   );
 };
 

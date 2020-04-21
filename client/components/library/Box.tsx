@@ -1,71 +1,70 @@
 import styled from "@emotion/styled";
-import {
-  alignSelf,
-  AlignSelfProps,
-  background,
-  BackgroundProps,
-  display,
-  DisplayProps,
-  gridArea,
-  GridAreaProps,
-  height,
-  HeightProps,
-  justifySelf,
-  JustifySelfProps,
-  maxWidth,
-  MaxWidthProps,
-  overflow,
-  OverflowProps,
-  space,
-  SpaceProps,
-  width,
-  WidthProps,
-  BorderProps,
-  border,
-  BorderLeftProps,
-  BorderRightProps,
-  BorderTopProps,
-  BorderBottomProps,
-  borderLeft,
-  borderRight,
-  borderTop,
-  borderBottom,
-  PositionProps,
-  position,
-} from "styled-system";
 
-export const Box = styled.div<
-  BackgroundProps &
-    DisplayProps &
-    SpaceProps &
-    MaxWidthProps &
-    AlignSelfProps &
-    JustifySelfProps &
-    GridAreaProps &
-    HeightProps &
-    OverflowProps &
-    WidthProps &
-    BorderProps &
-    BorderLeftProps &
-    BorderRightProps &
-    BorderTopProps &
-    BorderBottomProps &
-    PositionProps
->`
-  ${alignSelf}
-  ${background}
-  ${border}
-  ${borderLeft}
-  ${borderRight}
-  ${borderTop}
-  ${borderBottom}
-  ${display}
-  ${gridArea}
-  ${height}
-  ${justifySelf}
-  ${maxWidth}
-  ${overflow}
-  ${position}
-  ${space}
-  ${width}
+export const Box = styled.div<{
+  marginLeft?: number;
+  marginRight?: number;
+  marginTop?: number;
+  marginBottom?: number;
+  marginX?: number;
+  marginY?: number;
+  margin?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
+  paddingTop?: number;
+  paddingBottom?: number;
+  paddingX?: number;
+  paddingY?: number;
+  padding?: number;
+}>`
+  ${(props) =>
+    props.paddingRight &&
+    `padding-right: ${props.theme.spaceX[props.paddingRight]}px;`}
+  ${(props) =>
+    props.paddingLeft &&
+    `padding-left: ${props.theme.spaceX[props.paddingLeft]}px;`}
+  ${(props) =>
+    props.paddingTop &&
+    `padding-top: ${props.theme.spaceY[props.paddingTop]}px;`}
+  ${(props) =>
+    props.paddingBottom &&
+    `padding-bottom: ${props.theme.spaceY[props.paddingBottom]}px;`}
+  ${(props) =>
+    props.paddingX &&
+    `padding-right: ${props.theme.spaceX[props.paddingX]}px;
+    padding-left: ${props.theme.spaceX[props.paddingX]}px;`}
+  ${(props) =>
+    props.paddingY &&
+    `padding-top: ${props.theme.spaceY[props.paddingY]}px;
+    padding-bottom: ${props.theme.spaceY[props.paddingY]}px;`}
+  ${(props) =>
+    props.padding &&
+    `padding-right: ${props.theme.spaceX[props.padding]}px;
+    padding-left: ${props.theme.spaceX[props.padding]}px;
+    padding-top: ${props.theme.spaceY[props.padding]}px;
+    padding-bottom: ${props.theme.spaceY[props.padding]}px;`}
+  ${(props) =>
+    props.marginRight &&
+    `margin-right: ${props.theme.spaceX[props.marginRight]}px;`}
+  ${(props) =>
+    props.marginLeft &&
+    `margin-left: ${props.theme.spaceX[props.marginLeft]}px;`}
+  ${(props) =>
+    props.marginTop && `margin-top: ${props.theme.spaceY[props.marginTop]}px;`}
+  ${(props) =>
+    props.marginBottom &&
+    `margin-bottom: ${props.theme.spaceY[props.marginBottom]}px;`}
+  ${(props) =>
+    props.marginX &&
+    `margin-right: ${props.theme.spaceX[props.marginX]}px;
+    margin-left: ${props.theme.spaceX[props.marginX]}px;`}
+  ${(props) =>
+    props.marginY &&
+    `margin-top: ${props.theme.spaceY[props.marginY]}px;
+    margin-bottom: ${props.theme.spaceY[props.marginY]}px;`}
+  ${(props) =>
+    props.margin &&
+    `margin-right: ${props.theme.spaceX[props.margin]}px;
+    margin-left: ${props.theme.spaceX[props.margin]}px;
+    margin-top: ${props.theme.spaceY[props.margin]}px;
+    margin-bottom: ${props.theme.spaceY[props.margin]}px;`}
 `;

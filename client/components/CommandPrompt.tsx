@@ -1,5 +1,5 @@
 import React, { createRef, useContext, useCallback } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
@@ -19,7 +19,12 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
   useInputFocus(onSubmit, inputRef);
 
   return (
-    <Box width={1} position="relative">
+    <Box
+      css={css`
+        position: relative;
+        width: 100%;
+      `}
+    >
       {prompt} {command}█
       <Input
         aria-label="Enter Command"

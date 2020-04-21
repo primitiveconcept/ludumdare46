@@ -4,7 +4,8 @@ import { Static } from "runtypes";
 import { Markdown } from "../library/Markdown";
 import { CommandLink } from "../library/CommandLink";
 import { Link } from "../library/Link";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
+import { Box } from "..";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;
@@ -29,8 +30,7 @@ export const MailProgram = ({}: MailProgramProps) => {
       <div>
         <div>From: {email.from}</div>
         <div>To: {email.to}</div>
-        <div>Subject: {email.subject}</div>
-        <br />
+        <Box marginBottom={1}>Subject: {email.subject}</Box>
         <Markdown>{email.body}</Markdown>
       </div>
     );
@@ -63,7 +63,7 @@ export const MailProgram = ({}: MailProgramProps) => {
   }
   return (
     <div>
-      <div>
+      <Box marginBottom={1}>
         {!selectedId && (
           <CommandLink href="close" highlightFocus>
             Close
@@ -80,8 +80,7 @@ export const MailProgram = ({}: MailProgramProps) => {
             Back
           </Link>
         )}
-      </div>
-      <br />
+      </Box>
       {body}
     </div>
   );
