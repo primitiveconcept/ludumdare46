@@ -1,6 +1,6 @@
 import "core-js/stable";
 import { setAutoFreeze } from "immer";
-import { css, ThemeProvider, useTheme } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React, { useMemo, useState, useEffect } from "react";
 import Head from "next/head";
 import {
@@ -24,7 +24,6 @@ import { MailProgram } from "../components/Programs/MailProgram";
 import { Program } from "../types";
 import { useLocalCommands } from "../hooks/useLocalCommands";
 import { GlobalStyles } from "../components/GlobalStyles";
-import { range } from "lodash";
 
 setAutoFreeze(false);
 
