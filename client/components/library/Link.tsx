@@ -1,5 +1,6 @@
 import React from "react";
 import { SPACE_CHARACTER } from "./Markdown";
+import { Anchor } from "./Anchor";
 
 type LinkProps = {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ type LinkProps = {
 export const Link = ({ href: hrefProp, onClick, children }: LinkProps) => {
   const href = hrefProp.replace(SPACE_CHARACTER, " ");
   return (
-    <a
+    <Anchor
       href={href}
       onClick={(event) => {
         event.preventDefault();
@@ -18,6 +19,6 @@ export const Link = ({ href: hrefProp, onClick, children }: LinkProps) => {
       }}
     >
       {children}
-    </a>
+    </Anchor>
   );
 };

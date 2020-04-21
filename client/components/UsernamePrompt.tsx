@@ -1,6 +1,6 @@
 import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/react";
-import { Input, Box } from ".";
+import { Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
 
@@ -30,7 +30,7 @@ export const UsernamePrompt = ({ setUsername }: UsernamePromptProps) => {
     >
       username? {command}
       {CURSOR}
-      <Input
+      <input
         aria-label="Enter Username"
         ref={inputRef}
         size={command.length || 1}

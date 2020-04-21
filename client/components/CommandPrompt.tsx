@@ -1,6 +1,6 @@
 import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/react";
-import { Input, Box } from ".";
+import { Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
 
@@ -26,7 +26,7 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
       `}
     >
       {prompt} {command}█
-      <Input
+      <input
         aria-label="Enter Command"
         ref={inputRef}
         size={1}
