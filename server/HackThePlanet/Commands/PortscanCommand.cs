@@ -49,7 +49,8 @@ namespace HackThePlanet
 			PortScanComponent portScanComponent = new PortScanComponent();
 			// ReSharper disable once PossibleNullReferenceException
 			portScanComponent.InitiatingEntity = playerEntity.Id;
-			portScanComponent.TargetEntity = targetEntity.Id; 
+			portScanComponent.TargetEntity = targetEntity.Id;
+			portScanComponent.Status = "portscanning";
 			portscanEntity.AddComponent(portScanComponent);
 
 			DeviceState targetDevice = new DeviceState();
@@ -57,10 +58,9 @@ namespace HackThePlanet
 			targetDevice.status = "portscanning";
 			targetDevice.commands = new string[0];
 
-			Process process = new Process();
-			process.Command = this.Name;
-			process.Ram = 1;
-			process.Status = "portscanning";
+			ComponentReference<IProcess> process = new ComponentReference<IProcess>(
+				portscanEntity.Id, 
+				portScanComponent);
 			playerEntity.GetComponent<ComputerComponent>().AddProcess(process);
 
 			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);

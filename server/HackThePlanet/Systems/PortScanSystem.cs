@@ -17,13 +17,13 @@ namespace HackThePlanet.Systems
             Entity targetEntity = Game.GetEntity(portScanComponent.TargetEntity);
             ComputerComponent targetComputer = targetEntity.GetComponent<ComputerComponent>();
             
-            if (portScanComponent.elapsedTime < Delay)
+            if (portScanComponent.TicksSinceLastUpdate < Delay)
             {
-                portScanComponent.elapsedTime += Game.Time.ElapsedTime;
+                portScanComponent.TicksSinceLastUpdate += Game.Time.ElapsedTime;
                 return;
             }
 
-            portScanComponent.elapsedTime = 0;
+            portScanComponent.TicksSinceLastUpdate = 0;
 
             PlayerComponent initiatingPlayer = initiatingEntity.GetComponent<PlayerComponent>();
 

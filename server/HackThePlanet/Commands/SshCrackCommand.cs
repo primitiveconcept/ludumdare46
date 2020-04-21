@@ -76,10 +76,9 @@ namespace HackThePlanet
 			targetDevice.status = "sshcrack (0%)";
 			targetDevice.commands = new string[0];
 
-			Process process = new Process();
-			process.Command = this.Name;
-			process.Ram = 1;
-			process.Status = "cracking"; 
+			ComponentReference<IProcess> process = new ComponentReference<IProcess>(
+				sshCrackEntity.Id,
+				sshCrackComponent);
 			playerEntity.GetComponent<ComputerComponent>().AddProcess(process);
 
 			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);

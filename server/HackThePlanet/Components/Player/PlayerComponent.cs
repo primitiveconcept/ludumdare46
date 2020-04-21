@@ -31,7 +31,8 @@ namespace HackThePlanet
 
 		public void QueueProcessUpdate(ComputerComponent computer)
 		{
-			Dictionary<string, Process>.ValueCollection processes = computer.RunningProcesses.Values;
+			var processes = computer.RunningProcesses.ToComponentCollection();
+			
 			var result = new
 							{
 								Update = "Processes",

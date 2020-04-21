@@ -2,33 +2,35 @@ namespace HackThePlanet
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using PrimitiveEngine;
 
 
 	[Serializable]
 	public class ComputerComponent : IEntityComponent
 	{
-		// TODO: Temporary, needs to wrap a procedural seed field.
-		public string Identity { get; } = "Random";
-
 		public long IpAddress;
 		public byte Ram;
 
 		public List<Port> OpenPorts = new List<Port>();
-		public Dictionary<string, Process> RunningProcesses = new Dictionary<string, Process>();
 		public List<long> Inbox = new List<long>();
 		public List<long> Outbox = new List<long>();
+		public List<ComponentReference<IProcess>> RunningProcesses = new List<ComponentReference<IProcess>>();
 
 
 		#region Properties
+		// TODO: Temporary, needs to wrap a procedural seed field.
+		public string Identity { get; } = "Random";
+
+
 		public byte UsedRam
 		{
 			get
 			{
 				byte usedRam = 0;
-				foreach (Process process in this.RunningProcesses.Values)
+				foreach (ComponentReference<IProcess> process in this.RunningProcesses)
 				{
-					usedRam += process.Ram;
+					usedRam += process.Component.RamUse;
 				}
 
 				return usedRam;
@@ -37,12 +39,19 @@ namespace HackThePlanet
 		#endregion
 
 
-		public bool AddProcess(Process process)
+		public bool AddProcess(IProcess process)
 		{
-			if (this.RunningProcesses.ContainsKey(process.Command))
+			ComponentReference<IProcess> componentReference = new ComponentReference<IProcess>(process);
+			return AddProcess(componentReference);
+		}
+
+
+		public bool AddProcess(ComponentReference<IProcess> process)
+		{
+			if (this.RunningProcesses.Contains(process))
 				return false;
 			
-			this.RunningProcesses.Add(process.Command, process);
+			this.RunningProcesses.Add(process);
 			return true;
 		}
 
@@ -71,18 +80,19 @@ namespace HackThePlanet
 		}
 
 
-		public bool RemoveProcess(Process process)
+		public bool RemoveProcess(IProcess process)
 		{
-			return RemoveProcess(process.Command);
+			ComponentReference<IProcess> componentReference = new ComponentReference<IProcess>(process);
+			return RemoveProcess(componentReference);
 		}
 
 
-		public bool RemoveProcess(string processCommand)
+		public bool RemoveProcess(ComponentReference<IProcess> process)
 		{
-			if (this.RunningProcesses.ContainsKey(processCommand))
+			if (!this.RunningProcesses.Contains(process))
 				return false;
 			
-			this.RunningProcesses.Remove(processCommand);
+			this.RunningProcesses.Remove(process);
 			return true;
 		}
 	}
