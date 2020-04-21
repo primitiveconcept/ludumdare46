@@ -25,14 +25,13 @@ namespace HackThePlanet
             Index.Add(playerComponent.Id, playerEntity);
 			
             ComputerComponent computerComponent = new ComputerComponent();
-            // TODO: Randomly generate IpAddress.
-            byte[] randomIpBytes = new byte[4];
-            new Random().NextBytes(randomIpBytes);
-            computerComponent.IpAddress = new IPAddress(randomIpBytes).Address;
+            computerComponent.IpAddress = IPExtensions.Generate();
             computerComponent.OpenPorts.Add(Port.Ssh);
             computerComponent.OpenPorts.Add(Port.Ftp);
             computerComponent.OpenPorts.Add(Port.Http);
             computerComponent.OpenPorts.Add(Port.Ssl);
+            computerComponent.OpenPorts.Add(Port.Smtp);
+            computerComponent.OpenPorts.Add(Port.Imap);
             playerEntity.AddComponent(computerComponent);
 			
             NetworkAccessComponent networkAccessComponent = new NetworkAccessComponent();

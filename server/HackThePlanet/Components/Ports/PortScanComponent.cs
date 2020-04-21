@@ -8,8 +8,9 @@ namespace HackThePlanet
     {
         public int InitiatingEntity;
         public int TargetEntity;
-        public List<int> OpenPorts;
-        public Port CurrentPort;
         public long elapsedTime = 0;
+        
+        public Port CurrentPort;
+        public List<int> OpenPorts;
     }
 }

@@ -13,7 +13,7 @@ namespace HackThePlanet
 			if (ipArgument == null) {
 				return $"Usage: {this.Name} [ip_address]";
 			}
-			
+
 			// Locate computer with given IP address.
 			long ipAddress;
 			try
@@ -27,7 +27,6 @@ namespace HackThePlanet
 
 			return InitiatePortScan(ipAddress, session);
 		}
-
 
 		private string InitiatePortScan(long ipAddress, GameEndpoint connection)
 		{
