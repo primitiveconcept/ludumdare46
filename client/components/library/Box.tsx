@@ -30,6 +30,8 @@ import {
   borderRight,
   borderTop,
   borderBottom,
+  PositionProps,
+  position,
 } from "styled-system";
 
 export const Box = styled.div<
@@ -47,7 +49,8 @@ export const Box = styled.div<
     BorderLeftProps &
     BorderRightProps &
     BorderTopProps &
-    BorderBottomProps
+    BorderBottomProps &
+    PositionProps
 >`
   ${alignSelf}
   ${background}
@@ -62,6 +65,7 @@ export const Box = styled.div<
   ${justifySelf}
   ${maxWidth}
   ${overflow}
+  ${position}
   ${space}
   ${width}
 `;

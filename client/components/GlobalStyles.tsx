@@ -16,6 +16,7 @@ export const GlobalStyles = () => {
 
         body,
         input {
+          word-break: break-all;
           color: #43d731;
           font-size: 20px;
           margin: 0;

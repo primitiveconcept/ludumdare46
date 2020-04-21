@@ -19,12 +19,12 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
   useInputFocus(onSubmit, inputRef);
 
   return (
-    <Box width={1}>
+    <Box width={1} position="relative">
       {prompt} {command}█
       <Input
         aria-label="Enter Command"
         ref={inputRef}
-        size={command.length || 1}
+        size={1}
         value={command}
         onChange={(event) => {
           setCommand(event.target.value);
@@ -33,6 +33,7 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
         css={css`
           opacity: 0.01;
           position: absolute;
+          left: 0;
           outline: none;
         `}
       />

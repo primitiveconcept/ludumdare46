@@ -33,6 +33,7 @@ export const Index = () => {
   const [openProgram, setOpenProgram] = useState<Program | null>(null);
   const {
     addMessage,
+    addHistory,
     readyState,
     sendCommand: sendServerCommand,
     state,
@@ -44,9 +45,10 @@ export const Index = () => {
   );
   const sendCommand = useLocalCommands({
     username,
-    sendServerCommand,
+    sendCommand: sendServerCommand,
     setOpenProgram,
     addMessage,
+    addHistory,
   });
   const scrollToBottom = useSteppedScroll();
 
@@ -96,7 +98,7 @@ export const Index = () => {
             <ProcessesPanel processes={state.processes} />
           )}
         </Box>
-        <Box gridArea="main" padding={4}>
+        <Box gridArea="main" padding={4} width={`calc(100% - 200px)`}>
           {!openProgram && (
             <>
               <Status readyState={readyState} />

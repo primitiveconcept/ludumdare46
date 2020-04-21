@@ -3,22 +3,25 @@ import { helpCommand } from "../commands/helpCommand";
 import { Program } from "../types";
 
 type UseLocalCommands = {
-  sendServerCommand: (command: string) => void;
+  sendCommand: (command: string) => void;
   setOpenProgram: (program: Program | null) => void;
   addMessage: (message: string) => void;
   username: string;
+  addHistory: (command: string) => void;
 };
 export const useLocalCommands = ({
-  sendServerCommand,
+  sendCommand: sendCommandProp,
   setOpenProgram,
   addMessage,
   username,
+  addHistory,
 }: UseLocalCommands) => {
   const sendCommand = useCallback(
     (command: string): void => {
       if (!command.trim()) {
         return;
       }
+      addHistory(command);
       const [baseCommand, ...args] = command.split(/ +/);
       if (baseCommand === "help") {
         addMessage(`${username}@local$ ${command}`);
@@ -34,9 +37,10 @@ export const useLocalCommands = ({
         setOpenProgram(null);
         return;
       }
-      sendServerCommand(command);
+      addMessage(`${username}@local$ ${command}`);
+      sendCommandProp(command);
     },
-    [addMessage, sendServerCommand, setOpenProgram, username],
+    [addHistory, addMessage, sendCommandProp, setOpenProgram, username],
   );
   return sendCommand;
 };
