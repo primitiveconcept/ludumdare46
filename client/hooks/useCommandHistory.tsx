@@ -23,9 +23,13 @@ export const useCommandHistory = (
     if (!history.length) {
       return;
     }
-    const newCurrent = Math.min(0, current - 1);
-    setCommand(history[newCurrent]);
-    setCurrent(newCurrent);
+    if (current === history.length - 1) {
+      setCommand("");
+    } else {
+      const newCurrent = Math.min(history.length - 1, current + 1);
+      setCommand(history[newCurrent]);
+      setCurrent(newCurrent);
+    }
   }, [current, history, setCommand]);
 
   return { setPrevCommand, setNextCommand };

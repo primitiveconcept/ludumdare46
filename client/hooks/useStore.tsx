@@ -66,14 +66,10 @@ export const useStore = (username: string) => {
 
   const sendCommand = useCallback(
     (command: string) => {
-      setState((draft) => {
-        draft.commandHistory.push(command);
-      });
-
       // remote commands
       sendMessage(command);
     },
-    [setState, sendMessage],
+    [sendMessage],
   );
   const addMessage = useCallback(
     (message: string) => {
@@ -83,6 +79,14 @@ export const useStore = (username: string) => {
     },
     [setState],
   );
+  const addHistory = useCallback(
+    (message: string) => {
+      setState((draft) => {
+        draft.commandHistory.push(message);
+      });
+    },
+    [setState],
+  );
 
-  return { addMessage, readyState, sendCommand, state, setState };
+  return { addHistory, addMessage, readyState, sendCommand, state, setState };
 };

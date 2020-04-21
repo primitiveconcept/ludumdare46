@@ -1,5 +1,5 @@
 import React from "react";
-import { Process } from "../types/Process";
+import { Process } from "../../types/Process";
 import { Static } from "runtypes";
 
 type ProcessesPanelProps = {

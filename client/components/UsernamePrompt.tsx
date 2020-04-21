@@ -2,7 +2,9 @@ import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
-import { useInputFocus } from "./useInputFocus";
+import { useInputFocus } from "../hooks/useInputFocus";
+
+const CURSOR = "█";
 
 type UsernamePromptProps = {
   setUsername: (username: string) => void;
@@ -22,7 +24,8 @@ export const UsernamePrompt = ({ setUsername }: UsernamePromptProps) => {
 
   return (
     <Box width={1}>
-      username? {command}█
+      username? {command}
+      {CURSOR}
       <Input
         aria-label="Enter Username"
         ref={inputRef}

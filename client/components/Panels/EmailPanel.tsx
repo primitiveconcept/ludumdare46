@@ -1,7 +1,7 @@
 import React from "react";
-import { Email } from "../types";
+import { Email } from "../../types";
 import { Static } from "runtypes";
-import { CommandLink } from "./CommandLink";
+import { CommandLink } from "../library/CommandLink";
 
 type EmailPanelProps = {
   emails: Array<Static<typeof Email>>;

@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 import keycode from "keycode";
-import { CommandContext } from "./CommandContext";
+import { CommandContext } from "../components/CommandContext";
 
 export const useInputFocus = (
   onSubmit: () => void,

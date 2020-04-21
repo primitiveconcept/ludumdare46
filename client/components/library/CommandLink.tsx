@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { CommandContext } from "./CommandContext";
+import { CommandContext } from "../CommandContext";
 import { SPACE_CHARACTER } from "./Markdown";
 
 type CommandLinkProps = {
