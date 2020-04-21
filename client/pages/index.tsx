@@ -82,15 +82,16 @@ export const Index = () => {
         `}
       >
         <Box
-          display="inline-block"
-          width={220}
-          gridArea="leftbar"
-          paddingLeft={4}
-          paddingTop={4}
           css={css`
+            display: inline-block;
+            width: 220px;
+            grid-area: "leftbar";
             position: sticky;
             top: 0;
+            vertical-align: top;
           `}
+          paddingLeft={3}
+          paddingTop={3}
         >
           {!!state.resources && <ResourcesPanel resources={state.resources} />}
           {!!state.devices.length && <DevicesPanel devices={state.devices} />}
@@ -100,10 +101,12 @@ export const Index = () => {
           )}
         </Box>
         <Box
-          display="inline-block"
-          gridArea="main"
-          padding={4}
-          width={`calc(100% - 220px)`}
+          css={css`
+            display: inline-block;
+            grid-area: "main";
+            width: calc(100% - 220px);
+          `}
+          padding={3}
         >
           {!openProgram && (
             <>
