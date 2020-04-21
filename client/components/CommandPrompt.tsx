@@ -2,7 +2,7 @@ import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/core";
 import { Input, Box } from ".";
 import { CommandContext } from "./CommandContext";
-import { useInputFocus } from "./useInputFocus";
+import { useInputFocus } from "../hooks/useInputFocus";
 
 type CommandPromptProps = {
   username: string;

@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { Email } from "../types";
+import { Email } from "../../types";
 import { Static } from "runtypes";
-import { Markdown } from "./Markdown";
-import { CommandLink } from "./CommandLink";
-import { Link } from "./Link";
+import { Markdown } from "../library/Markdown";
+import { CommandLink } from "../library/CommandLink";
+import { Link } from "../library/Link";
 import { css } from "@emotion/core";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;
 };
-export const MailProgram = ({ emails }: MailProgramProps) => {
+export const MailProgram = ({}: MailProgramProps) => {
+  const emails = [
+    {
+      id: "1",
+      from: "me <me@example.com>",
+      to: "you <you@example.com>",
+      subject: "check this out",
+      body: "want to grow your member size? [click here](portscan|8.8.8.8)",
+    },
+  ];
   const [selectedId, setSelectedId] = useState<string | null>(null);
   let body;
   if (!emails.length) {

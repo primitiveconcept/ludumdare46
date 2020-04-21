@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Markdown } from "./Markdown";
-import { State } from "../types/State";
+import { Markdown } from "../library/Markdown";
+import { State } from "../../types/State";
 
 type Category = "install";
-type DevicesBarProps = {
+type DevicesPanelProps = {
   devices: State["devices"];
 };
-export const DevicesBar = ({ devices }: DevicesBarProps) => {
+export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
   const [currentIp, setCurrentIp] = useState<string | null>(null);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   if (!devices.length) {
@@ -52,11 +52,13 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
   if (currentCategory) {
     return (
       <>
+        <div>Known Devices</div>
+        <br />
         <div>{device.ip}</div>
         {commands[currentCategory].map((command) => {
           return (
             <div key={command}>
-              <Markdown>{command}</Markdown>
+              &nbsp;<Markdown>{command}</Markdown>
             </div>
           );
         })}
@@ -77,11 +79,13 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
 
   return (
     <>
+      <div>Known Devices</div>
+      <br />
       <div>{device.ip}</div>
       {commands.main.map((command) => {
         return (
           <div key={command}>
-            <Markdown>{command}</Markdown>
+            &nbsp;<Markdown>{command}</Markdown>
           </div>
         );
       })}
@@ -99,6 +103,7 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
         </div>
       )}
       <div>
+        &nbsp;
         <a
           href="back"
           onClick={(event) => {
@@ -109,6 +114,7 @@ export const DevicesBar = ({ devices }: DevicesBarProps) => {
           Back
         </a>
       </div>
+      <br />
     </>
   );
 };

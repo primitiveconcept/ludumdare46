@@ -13,17 +13,6 @@ describe("adjustments", () => {
       });
     });
 
-    it("logs in and shows a device list", () => {
-      cy.findByText("Known Devices");
-      cy.getId({ name: "knownIp", index: 0 }).click();
-      cy.findByText("Known Devices").should("not.exist");
-      cy.findByText("portscan").click();
-      cy.getId("messages", {
-        timeout: 20000,
-      }).should("contain.text", "Found open port: ssh");
-      cy.findByText("Back").click();
-    });
-
     it("can crack into a device and install a keylogger", () => {
       cy.findByText("Known Devices");
       cy.getId({ name: "knownIp", index: 0 })
@@ -32,7 +21,6 @@ describe("adjustments", () => {
           return element.text();
         })
         .as("ip");
-      cy.findByText("Known Devices").should("not.exist");
       cy.findByText("portscan").click();
       cy.findByText("portscan").should("not.exist");
       cy.get("@ip").then((ip) => {
