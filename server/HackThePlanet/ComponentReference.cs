@@ -1,4 +1,10 @@
 #nullable enable
+#pragma warning disable 8600
+#pragma warning disable 8602
+#pragma warning disable 8603
+#pragma warning disable 8605
+#pragma warning disable 8618
+
 namespace HackThePlanet
 {
     using System;
@@ -12,7 +18,8 @@ namespace HackThePlanet
     /// </summary>
     /// <typeparam name="T">Concrete type of the component referenced.</typeparam>
     [JsonConverter(typeof(ComponentReferenceSerialization))]
-    public sealed class ComponentReference<T> : ComponentReference
+    public sealed class ComponentReference<T> : ComponentReference,
+                                                IEquatable<ComponentReference<T>>
         where T: class, IEntityComponent
     {
         #region Constructors
@@ -21,6 +28,7 @@ namespace HackThePlanet
          }
 
 
+        [JsonConstructor]
         public ComponentReference(int entityId) : base(entityId)
          {
          }
@@ -63,32 +71,58 @@ namespace HackThePlanet
         {
             return reference.GetEntity();
         }
+
+
+        public static bool operator ==(ComponentReference<T> left, ComponentReference right)
+        {
+            return Equals(left, right);
+        }
+
+
+        public static bool operator !=(ComponentReference<T> left, ComponentReference right)
+        {
+            return !Equals(left, right);
+        }
         #endregion
+
+
+        public bool Equals(ComponentReference<T> other)
+        {
+            if (ReferenceEquals(null, other))
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+            return this.EntityId == other.EntityId && this.component.Equals(other.component);
+        }
 
 
         public override bool Equals(object obj)
         {
-            ComponentReference<T> componentReference = obj as ComponentReference<T>;
-            if (componentReference != null)
-            {
-                return componentReference.EntityId == this.EntityId
-                       && componentReference.Component == this.component;
-            }
+            if (ReferenceEquals(null, obj))
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((ComponentReference)obj);
+        }
 
-            return false;
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.EntityId, this.component);
         }
     }
     
     
     /// <summary>
     /// WARNING: DO NO USE THIS DIRECTLY.
-    /// Loose base type for ComponentReference<T>.
-    /// Used only for serialization/deserialization purposes.
+    /// Loose base for typed ComponentReference, used only for serialization/deserialization purposes.
     /// </summary>
     [JsonConverter(typeof(ComponentReferenceSerialization))]
-    public class ComponentReference
+    public class ComponentReference : IEquatable<ComponentReference>
     {
-        public int EntityId;
+        public readonly int EntityId;
         protected IEntityComponent component;
 
 
@@ -100,6 +134,7 @@ namespace HackThePlanet
         }
 
 
+        [JsonConstructor]
         public ComponentReference(int entityId)
         {
             this.EntityId = entityId;
@@ -127,25 +162,52 @@ namespace HackThePlanet
         {
             return reference.GetEntity();
         }
+
+
+        public static bool operator ==(ComponentReference left, ComponentReference right)
+        {
+            return Equals(left, right);
+        }
+
+
+        public static bool operator !=(ComponentReference left, ComponentReference right)
+        {
+            return !Equals(left, right);
+        }
         #endregion
+
+
+        public bool Equals(ComponentReference other)
+        {
+            if (ReferenceEquals(null, other))
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+            return this.EntityId == other.EntityId && this.component.Equals(other.component);
+        }
 
 
         public override bool Equals(object obj)
         {
-            ComponentReference componentReference = obj as ComponentReference;
-            if (componentReference != null)
-            {
-                return componentReference.EntityId == this.EntityId
-                       && componentReference.component == this.component;
-            }
-
-            return false;
+            if (ReferenceEquals(null, obj))
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((ComponentReference)obj);
         }
 
 
         public Entity GetEntity()
         {
             return Game.World.GetEntityById(this.EntityId);
+        }
+
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.EntityId, this.component);
         }
     }
     
@@ -171,5 +233,10 @@ namespace HackThePlanet
             ComponentReference componentReference = (ComponentReference)value;
             writer.WriteValue(componentReference.EntityId);
         }
-    }
+    } 
 }
+#pragma warning restore 8600
+#pragma warning restore 8602
+#pragma warning restore 8603
+#pragma warning restore 8605
+#pragma warning restore 8618 

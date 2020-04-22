@@ -19,7 +19,7 @@ namespace HackThePlanet
         }
 
 
-        public byte RamUse
+        public ushort RamUse
         {
             get { return 1; }
         }

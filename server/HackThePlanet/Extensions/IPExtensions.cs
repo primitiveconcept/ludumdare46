@@ -56,3 +56,4 @@ namespace HackThePlanet
         }
     }
 }
+#pragma warning restore 0618

@@ -6,7 +6,7 @@ namespace HackThePlanet
     public interface IProcess : IEntityComponent
     {
         string Command { get; }
-        byte RamUse { get; }
+        ushort RamUse { get; }
         string Status { get; set; }
     }
 }

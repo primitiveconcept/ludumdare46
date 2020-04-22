@@ -10,8 +10,9 @@ namespace HackThePlanet
 	public class ComputerComponent : IEntityComponent
 	{
 		public long IpAddress;
-		public byte Ram;
-
+		public ushort Ram; // Measured in megabytes.
+		
+		
 		public List<Port> OpenPorts = new List<Port>();
 		public List<long> Inbox = new List<long>();
 		public List<long> Outbox = new List<long>();
@@ -23,11 +24,11 @@ namespace HackThePlanet
 		public string Identity { get; } = "Random";
 
 
-		public byte UsedRam
+		public ushort UsedRam
 		{
 			get
 			{
-				byte usedRam = 0;
+				ushort usedRam = 0;
 				foreach (ComponentReference<IProcess> process in this.RunningProcesses)
 				{
 					usedRam += process.Component.RamUse;

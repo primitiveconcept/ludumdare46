@@ -1,3 +1,5 @@
+#pragma warning disable CS0618
+
 namespace HackThePlanet.Host
 {
 	using System.Threading;
@@ -9,7 +11,7 @@ namespace HackThePlanet.Host
 
 	public class ServiceHost : IHostedService
 	{
-		#pragma warning disable CS0618
+		
 		
 		private readonly IApplicationLifetime appLifetime;
 		private readonly ILogger<ServiceHost> logger;
@@ -72,3 +74,4 @@ namespace HackThePlanet.Host
 		}
 	}
 }
+#pragma warning restore CS0618
