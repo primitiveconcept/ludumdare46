@@ -1,31 +1,26 @@
-import "core-js/stable";
-import { setAutoFreeze } from "immer";
 import { css, useTheme } from "@emotion/react";
-import React, { useMemo, useState, useEffect } from "react";
-import Head from "next/head";
+import "core-js/stable";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
-  MessagesProgram,
   CommandPrompt,
+  DevicesPanel,
+  MessagesProgram,
+  ProcessesPanel,
+  ResourcesPanel,
   Status,
   UsernamePrompt,
-  ResourcesPanel,
-  DevicesPanel,
-  ProcessesPanel,
 } from "../components";
 import { CommandContext } from "../components/CommandContext";
-import { useSession } from "../hooks/useSession";
-import { useStore } from "../hooks/useStore";
-import { useCommandHistory } from "../hooks/useCommandHistory";
-import { useSteppedScroll } from "../hooks/useSteppedScroll";
-import { TerminalOverlay } from "../components/TerminalOverlay";
 import { EmailPanel } from "../components/Panels/EmailPanel";
 import { MailProgram } from "../components/Programs/MailProgram";
-import { Program } from "../types";
+import { TerminalOverlay } from "../components/TerminalOverlay";
+import { useCommandHistory } from "../hooks/useCommandHistory";
 import { useLocalCommands } from "../hooks/useLocalCommands";
-import { GlobalStyles } from "../components/GlobalStyles";
-
-setAutoFreeze(false);
+import { useSession } from "../hooks/useSession";
+import { useSteppedScroll } from "../hooks/useSteppedScroll";
+import { useStore } from "../hooks/useStore";
+import { Program } from "../types";
 
 export const Index = () => {
   const [username, setUsername] = useSession();
@@ -68,13 +63,6 @@ export const Index = () => {
 
   return (
     <CommandContext.Provider value={commandContextValue}>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <GlobalStyles />
       <TerminalOverlay />
       <Box
         css={css`
@@ -84,7 +72,7 @@ export const Index = () => {
         <Box
           css={css`
             display: inline-block;
-            width: ${theme.tileWidth * 18}px;
+            width: ${theme.tileWidth * 24}px;
             position: sticky;
             top: 0;
             vertical-align: top;
@@ -102,7 +90,7 @@ export const Index = () => {
         <Box
           css={css`
             display: inline-block;
-            width: calc(100% - ${theme.tileWidth * 18}px);
+            width: calc(100% - ${theme.tileWidth * 24}px);
           `}
           paddingX={1}
           paddingY={1}

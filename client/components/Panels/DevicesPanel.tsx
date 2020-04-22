@@ -1,44 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Markdown } from "../library/Markdown";
-import { State } from "../../types/State";
 import { Link } from "../library/Link";
 import { Box } from "..";
+import { Device } from "../../types";
 
 type Category = "install";
 type DevicesPanelProps = {
-  devices: State["devices"];
+  devices: Device[];
 };
 export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
   const [currentIp, setCurrentIp] = useState<string | null>(null);
-  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
-  if (!devices.length) {
-    return null;
-  }
-  if (!currentIp) {
+  const device = devices.find((dev) => dev.ip === currentIp);
+
+  if (device) {
     return (
-      <>
-        <Box marginBottom={1}>Known Devices</Box>
-        {devices.map((device) => {
-          return (
-            <Box key={device.ip} paddingBottom={1}>
-              <Link
-                href={device.ip}
-                data-test="knownIp"
-                onClick={() => {
-                  setCurrentIp(device.ip);
-                }}
-              >
-                {device.ip}
-              </Link>
-              <Box paddingLeft={1}>{device.status}</Box>
-            </Box>
-          );
-        })}
-      </>
+      <Box paddingBottom={1}>
+        <Box marginBottom={1}>Detail</Box>
+        <div>{device.ip}</div>
+        <Box paddingLeft={1}>{device.status}</Box>
+        <Box paddingLeft={1}>
+          <DeviceDetail
+            device={device}
+            onClose={() => {
+              setCurrentIp(null);
+            }}
+          />
+        </Box>
+      </Box>
     );
   }
+  return (
+    <Box paddingBottom={1}>
+      <Box marginBottom={1}>Known Devices</Box>
+      {devices.map((dev) => {
+        return (
+          <>
+            <Link
+              href={dev.ip}
+              data-test="knownIp"
+              onClick={() => {
+                setCurrentIp(dev.ip);
+              }}
+            >
+              {dev.ip}
+            </Link>
+            <Box paddingLeft={1}>{dev.status}</Box>
+          </>
+        );
+      })}
+    </Box>
+  );
+};
 
-  const device = devices.find((dev) => dev.ip === currentIp)!;
+type DeviceDetailProps = {
+  device: Device;
+  onClose: () => void;
+};
+const DeviceDetail = ({ device, onClose }: DeviceDetailProps) => {
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const commands = {
     main: device.commands.filter((command) => {
       return baseCommand(command) !== "install";
@@ -47,67 +66,61 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
       return baseCommand(command) === "install";
     }),
   };
+  const onBack = () => {
+    if (currentCategory) {
+      setCurrentCategory(null);
+    } else {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (currentCategory === "install" && !commands.install.length) {
+      setCurrentCategory(null);
+    }
+  }, [commands.install.length, currentCategory]);
 
   if (currentCategory) {
     return (
       <>
-        <Box marginBottom={1}>Known Devices</Box>
-        <div>{device.ip}</div>
         {commands[currentCategory].map((command) => {
           return (
-            <Box key={command} paddingLeft={1}>
+            <div key={command}>
               <Markdown>{command}</Markdown>
-            </Box>
+            </div>
           );
         })}
-        <div>
-          <Link
-            href="back"
-            onClick={() => {
-              setCurrentCategory(null);
-            }}
-          >
-            Back
-          </Link>
-        </div>
+        <Link block href="back" onClick={onBack}>
+          Back
+        </Link>
       </>
     );
   }
 
   return (
-    <Box paddingBottom={1}>
-      <Box marginBottom={1}>Known Devices</Box>
-      <div>{device.ip}</div>
+    <>
       {commands.main.map((command) => {
         return (
-          <Box key={command} paddingLeft={1}>
+          <div key={command}>
             <Markdown>{command}</Markdown>
-          </Box>
+          </div>
         );
       })}
       {!!commands.install.length && (
-        <div>
-          <Link
-            href="install"
-            onClick={() => {
-              setCurrentCategory("install");
-            }}
-          >
-            Install Malware
-          </Link>
-        </div>
-      )}
-      <Box paddingLeft={1}>
         <Link
-          href="back"
+          block
+          href="install"
           onClick={() => {
-            setCurrentIp(null);
+            setCurrentCategory("install");
           }}
         >
-          Back
+          Install Malware
         </Link>
-      </Box>
-    </Box>
+      )}
+      <Link block href="back" onClick={onClose}>
+        Back
+      </Link>
+    </>
   );
 };
 
