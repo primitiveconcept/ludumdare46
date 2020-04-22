@@ -85,7 +85,7 @@ export const TerminalOverlay = () => {
           left: 0;
           bottom: 0;
           right: 0;
-          background: rgba(18, 16, 16, 0.1);
+          background: rgba(18, 16, 16, 0.08);
           opacity: 0;
           z-index: 2;
           pointer-events: none;
@@ -100,8 +100,8 @@ export const TerminalOverlay = () => {
           bottom: 0;
           right: 0;
           background: linear-gradient(
-            rgba(18, 16, 16, 0) 50%,
-            rgba(0, 0, 0, 0.25) 50%
+            rgba(18, 16, 16, 0) 25%,
+            rgba(0, 0, 0, 0.25) 30%
           );
           z-index: 2;
           background-size: 100% 2px, 3px 100%;
