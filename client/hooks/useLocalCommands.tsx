@@ -21,16 +21,17 @@ export const useLocalCommands = ({
       if (!command.trim()) {
         return;
       }
-      addHistory(command);
       const [baseCommand, ...args] = command.split(/ +/);
       if (baseCommand === "help") {
         addMessage(`${username}@local$ ${command}`);
         addMessage(helpCommand(args));
+        addHistory(command);
         return;
       }
-      if (baseCommand === "mail") {
+      if (baseCommand === "mail" && !args.length) {
         addMessage(`${username}@local$ ${command}`);
         setOpenProgram("mail");
+        addHistory(command);
         return;
       }
       if (baseCommand === "close") {

@@ -54,6 +54,11 @@ export const GlobalStyles = () => {
           &:hover {
             color: white;
           }
+          &:focus {
+            color: transparent;
+            background-color: #bff3b8;
+            outline: 0;
+          }
         }
       `}
     />

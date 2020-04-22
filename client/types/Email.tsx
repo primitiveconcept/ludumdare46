@@ -1,4 +1,4 @@
-import { Record, String, Union, Literal } from "runtypes";
+import { Record, String, Union, Literal, Static } from "runtypes";
 
 export const Email = Record({
   id: String,
@@ -13,3 +13,4 @@ export const Email = Record({
   // Text of the message, can include Markdown
   body: String,
 });
+export type Email = Static<typeof Email>;
