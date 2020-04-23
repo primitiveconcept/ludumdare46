@@ -23,4 +23,15 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="wwwroot\htmlsettings.json" />
+      <Content Include="wwwroot\htmlsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="wwwroot\index.html" />
+      <Content Include="wwwroot\index.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
