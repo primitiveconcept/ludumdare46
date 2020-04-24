@@ -7,7 +7,7 @@ export const useCommandHistory = (
   const [current, setCurrent] = useState(history.length - 1);
 
   useEffect(() => {
-    setCurrent(history.length - 1);
+    setCurrent(history.length);
   }, [history]);
 
   const setPrevCommand = useCallback(() => {
@@ -23,13 +23,13 @@ export const useCommandHistory = (
     if (!history.length) {
       return;
     }
-    if (current === history.length - 1) {
+    const newCurrent = Math.min(history.length, current + 1);
+    if (newCurrent === history.length) {
       setCommand("");
     } else {
-      const newCurrent = Math.min(history.length - 1, current + 1);
       setCommand(history[newCurrent]);
-      setCurrent(newCurrent);
     }
+    setCurrent(newCurrent);
   }, [current, history, setCommand]);
 
   return { setPrevCommand, setNextCommand };

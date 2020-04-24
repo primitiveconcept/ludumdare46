@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, forwardRef } from "react";
 import { Email } from "../../types";
 import { Static } from "runtypes";
 import { Markdown } from "../library/Markdown";
@@ -7,6 +7,7 @@ import { Link } from "../library/Link";
 import { css } from "@emotion/react";
 import { Box } from "..";
 import { CommandContext } from "../CommandContext";
+import { useFocusSwitching } from "../../hooks/useFocusSwitching";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;
@@ -14,6 +15,7 @@ type MailProgramProps = {
 export const MailProgram = ({ emails }: MailProgramProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { sendCommand } = useContext(CommandContext);
+  const focusSwitchRef = useFocusSwitching(emails.length);
 
   if (selectedId) {
     const email = emails.find((mail) => mail.id === selectedId)!;
@@ -33,6 +35,7 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
           </Link>
         </Box>
         <div>
+          <div>Date: {Date.now()}</div>
           <div>From: {email.from}</div>
           <div>To: {email.to}</div>
           <Box marginBottom={1}>Subject: {email.subject}</Box>
@@ -41,46 +44,29 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
       </Box>
     );
   }
-  const read = emails.filter((email) => email.status === "Read");
-  const unread = emails.filter((email) => email.status === "Unread");
 
   return (
     <>
       <Box>
-        <CommandLink href="close" highlightFocus>
+        <CommandLink block href="close" highlightFocus>
           Close
         </CommandLink>
       </Box>
       <Box marginTop={1}>Unread</Box>
-      {!unread.length && <Box>No unread messages.</Box>}
-      {!!unread.length &&
-        unread.map((email) => {
-          return (
-            <EmailListItem
-              key={email.id}
-              email={email}
-              onClick={() => {
-                sendCommand(`mail read ${email.id}`);
-                setSelectedId(email.id);
-              }}
-            />
-          );
-        })}
-      <Box marginTop={1}>Everything else</Box>
-      {!read.length && <Box>No other messages.</Box>}
-      {!!read.length &&
-        read.map((email) => {
-          return (
-            <EmailListItem
-              key={email.id}
-              email={email}
-              onClick={() => {
-                sendCommand(`mail read ${email.id}`);
-                setSelectedId(email.id);
-              }}
-            />
-          );
-        })}
+      {!emails.length && <Box>No messages.</Box>}
+      {emails.map((email, index) => {
+        return (
+          <EmailListItem
+            ref={focusSwitchRef(index)}
+            key={email.id}
+            email={email}
+            onClick={() => {
+              sendCommand(`mail read ${email.id}`);
+              setSelectedId(email.id);
+            }}
+          />
+        );
+      })}
     </>
   );
 };
@@ -89,10 +75,10 @@ type EmailListItemProps = {
   email: Email;
   onClick: () => void;
 };
-const EmailListItem = ({ email, onClick }: EmailListItemProps) => {
-  return (
-    <div>
-      <Link href="mail open" onClick={onClick}>
+const EmailListItem = forwardRef<HTMLAnchorElement, EmailListItemProps>(
+  ({ email, onClick }: EmailListItemProps, ref) => {
+    return (
+      <Link block href="mail open" onClick={onClick} ref={ref}>
         <pre
           css={css`
             display: inline-block;
@@ -102,6 +88,6 @@ const EmailListItem = ({ email, onClick }: EmailListItemProps) => {
         </pre>
         {email.subject}
       </Link>
-    </div>
-  );
-};
+    );
+  },
+);

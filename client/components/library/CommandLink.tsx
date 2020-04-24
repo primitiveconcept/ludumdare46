@@ -3,17 +3,26 @@ import { useContext } from "react";
 import { CommandContext } from "../CommandContext";
 import { SPACE_CHARACTER } from "./Markdown";
 import { Anchor } from "./Anchor";
+import { css } from "@emotion/react";
 
 type CommandLinkProps = {
   children: string;
   href: string;
   highlightFocus?: boolean;
+  block?: boolean;
 };
-export const CommandLink = ({ href: hrefProp, children }: CommandLinkProps) => {
+export const CommandLink = ({
+  block,
+  href: hrefProp,
+  children,
+}: CommandLinkProps) => {
   const { sendCommand } = useContext(CommandContext);
   const href = hrefProp.replace(SPACE_CHARACTER, " ");
   return (
     <Anchor
+      css={css`
+        display: ${block ? "block" : "inline-block"};
+      `}
       href={href}
       onClick={(event) => {
         event.preventDefault();

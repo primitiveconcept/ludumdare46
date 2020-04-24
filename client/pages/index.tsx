@@ -69,34 +69,44 @@ export const Index = () => {
           min-height: 100vh;
         `}
       >
-        <Box
-          css={css`
-            display: inline-block;
-            width: ${theme.tileWidth * 24}px;
-            position: sticky;
-            top: 0;
-            vertical-align: top;
-          `}
-          paddingLeft={2}
-          paddingTop={1}
-        >
-          {!!state.resources && <ResourcesPanel resources={state.resources} />}
-          {!!state.devices.length && <DevicesPanel devices={state.devices} />}
-          {!!state.emails && <EmailPanel emails={state.emails} />}
-          {!!state.processes.length && (
-            <ProcessesPanel processes={state.processes} />
-          )}
-        </Box>
-        <Box
-          css={css`
-            display: inline-block;
-            width: calc(100% - ${theme.tileWidth * 24}px);
-          `}
-          paddingX={1}
-          paddingY={1}
-        >
-          {!openProgram && (
-            <>
+        {openProgram === "mail" && (
+          <Box padding={1}>
+            <MailProgram emails={state.emails} />
+          </Box>
+        )}
+
+        {!openProgram && (
+          <>
+            <Box
+              css={css`
+                display: inline-block;
+                width: ${theme.tileWidth * 24}px;
+                position: sticky;
+                top: 0;
+                vertical-align: top;
+              `}
+              paddingLeft={2}
+              paddingTop={1}
+            >
+              {!!state.resources && (
+                <ResourcesPanel resources={state.resources} />
+              )}
+              {!!state.devices.length && (
+                <DevicesPanel devices={state.devices} />
+              )}
+              {!!state.emails && <EmailPanel emails={state.emails} />}
+              {!!state.processes.length && (
+                <ProcessesPanel processes={state.processes} />
+              )}
+            </Box>
+            <Box
+              css={css`
+                display: inline-block;
+                width: calc(100% - ${theme.tileWidth * 24}px);
+              `}
+              paddingX={1}
+              paddingY={1}
+            >
               <Status readyState={readyState} />
               <MessagesProgram messages={state.messages} />
               {username ? (
@@ -104,10 +114,9 @@ export const Index = () => {
               ) : (
                 <UsernamePrompt setUsername={setUsername} />
               )}
-            </>
-          )}
-          {openProgram === "mail" && <MailProgram emails={state.emails} />}
-        </Box>
+            </Box>
+          </>
+        )}
       </Box>
     </CommandContext.Provider>
   );

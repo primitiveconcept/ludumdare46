@@ -19,27 +19,28 @@ export const useLocalCommands = ({
   const sendCommand = useCallback(
     (command: string): void => {
       if (!command.trim()) {
+        addMessage(`${username}@local$`);
         return;
       }
       const [baseCommand, ...args] = command.split(/ +/);
-      if (baseCommand === "help") {
-        addMessage(`${username}@local$ ${command}`);
-        addMessage(helpCommand(args));
-        addHistory(command);
-        return;
-      }
-      if (baseCommand === "mail" && !args.length) {
-        addMessage(`${username}@local$ ${command}`);
-        setOpenProgram("mail");
-        addHistory(command);
-        return;
-      }
+
+      // commands without local echo first
       if (baseCommand === "close") {
         setOpenProgram(null);
         return;
       }
+
       addMessage(`${username}@local$ ${command}`);
-      sendCommandProp(command);
+      addHistory(command);
+      if (baseCommand === "help") {
+        addMessage(helpCommand(args));
+        addHistory(command);
+      } else if (baseCommand === "mail" && !args.length) {
+        setOpenProgram("mail");
+        addHistory(command);
+      } else {
+        sendCommandProp(command);
+      }
     },
     [addHistory, addMessage, sendCommandProp, setOpenProgram, username],
   );

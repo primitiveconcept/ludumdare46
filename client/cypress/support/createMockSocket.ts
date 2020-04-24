@@ -6,7 +6,6 @@ type OnCommand = (
   handler: (command: string) => void,
 ) => void;
 type Result = {
-  mockServer: Server;
   socket: WebSocket;
   sendMessage: (delay: number, message: Message) => void;
   onCommand: OnCommand;
@@ -29,6 +28,7 @@ export const createMockSocket = (callback: (result: Result) => void) => {
         }
       });
     };
-    callback({ mockServer, socket, sendMessage, onCommand });
+    callback({ socket, sendMessage, onCommand });
   });
+  return mockServer;
 };

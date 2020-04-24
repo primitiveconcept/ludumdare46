@@ -9,6 +9,11 @@ export const useInputFocus = (
   const { setNextCommand, setPrevCommand } = useContext(CommandContext);
   useEffect(() => {
     const focusInput = (event: KeyboardEvent): void => {
+      // don't interfere with accessibility
+      if (event.keyCode === keycode.codes.tab) {
+        return;
+      }
+
       inputRef.current?.focus();
       if (event.keyCode === keycode.codes.enter) {
         return onSubmit();

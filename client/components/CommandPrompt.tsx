@@ -4,6 +4,8 @@ import { Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
 
+const CURSOR = "█";
+
 type CommandPromptProps = {
   username: string;
 };
@@ -25,7 +27,8 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
         width: 100%;
       `}
     >
-      {prompt} {command}█
+      {prompt} {command}
+      {CURSOR}
       <input
         aria-label="Enter Command"
         ref={inputRef}

@@ -9,7 +9,7 @@ setAutoFreeze(false);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <React.StrictMode>
       <GlobalStyles />
       <ThemeProvider
         theme={{
@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <Component {...pageProps} />
       </ThemeProvider>
-    </>
+    </React.StrictMode>
   );
 }
 
