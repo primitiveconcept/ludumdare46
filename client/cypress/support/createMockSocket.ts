@@ -1,6 +1,7 @@
 import { WebSocket, Server } from "mock-socket";
 import { Message } from "../../types/Message";
 
+export type CloseServer = () => void;
 type OnCommand = (
   command: string | RegExp,
   handler: (command: string) => void,
@@ -11,11 +12,14 @@ type Result = {
   onCommand: OnCommand;
 };
 export const createMockSocket = (callback: (result: Result) => void) => {
+  let open = true;
   const mockServer = new Server("ws://localhost:31337/game");
   mockServer.on("connection", (socket) => {
     const sendMessage = (delay: number, message: Message) => {
       setTimeout(() => {
-        socket.send(JSON.stringify(message));
+        if (open) {
+          socket.send(JSON.stringify(message));
+        }
       }, delay);
     };
     const onCommand: OnCommand = (command, handler) => {
@@ -30,5 +34,9 @@ export const createMockSocket = (callback: (result: Result) => void) => {
     };
     callback({ socket, sendMessage, onCommand });
   });
-  return mockServer;
+  const closeServer: CloseServer = () => {
+    open = false;
+    mockServer.close();
+  };
+  return closeServer;
 };

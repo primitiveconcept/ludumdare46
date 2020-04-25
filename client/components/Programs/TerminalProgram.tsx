@@ -2,11 +2,11 @@ import React from "react";
 import { State } from "../../types/State";
 import { Markdown } from "../library/Markdown";
 
-type MessagesProgramProps = {
+type TerminalProgramProps = {
   messages: State["messages"];
 };
-export const MessagesProgram = React.memo(
-  ({ messages }: MessagesProgramProps) => {
+export const TerminalProgram = React.memo(
+  ({ messages }: TerminalProgramProps) => {
     return (
       <div data-test="messages">
         {messages.map((message, index) => (

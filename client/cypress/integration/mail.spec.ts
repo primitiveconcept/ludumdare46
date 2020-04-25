@@ -1,10 +1,10 @@
-import { WebSocket, Server } from "mock-socket";
-import { createMockSocket } from "../support/createMockSocket";
+import { WebSocket } from "mock-socket";
+import { createMockSocket, CloseServer } from "../support/createMockSocket";
 
 describe("mail", () => {
-  let mockServer: Server;
+  let closeServer: CloseServer;
   beforeEach(() => {
-    mockServer = createMockSocket(({ onCommand, sendMessage }) => {
+    closeServer = createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {
         sendMessage(100, {
           update: "Emails",
@@ -45,7 +45,7 @@ describe("mail", () => {
   });
 
   afterEach(() => {
-    mockServer.close();
+    closeServer();
   });
 
   it("allows malicious links in emails to send commands", () => {

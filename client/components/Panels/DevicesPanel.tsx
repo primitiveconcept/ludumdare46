@@ -34,7 +34,7 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
       <Box marginBottom={1}>Known Devices</Box>
       {devices.map((dev) => {
         return (
-          <>
+          <React.Fragment key={dev.ip}>
             <Link
               href={dev.ip}
               data-test="knownIp"
@@ -45,7 +45,7 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
               {dev.ip}
             </Link>
             <Box paddingLeft={1}>{dev.status}</Box>
-          </>
+          </React.Fragment>
         );
       })}
     </Box>

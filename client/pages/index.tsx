@@ -5,7 +5,7 @@ import {
   Box,
   CommandPrompt,
   DevicesPanel,
-  MessagesProgram,
+  TerminalProgram,
   ProcessesPanel,
   ResourcesPanel,
   Status,
@@ -108,7 +108,7 @@ export const Index = () => {
               paddingY={1}
             >
               <Status readyState={readyState} />
-              <MessagesProgram messages={state.messages} />
+              <TerminalProgram messages={state.messages} />
               {username ? (
                 <CommandPrompt username={username} />
               ) : (
