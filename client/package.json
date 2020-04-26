@@ -48,6 +48,7 @@
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
     "cypress": "^4.4.1",
+    "date-fns": "^2.12.0",
     "graphql": "^15.0.0",
     "humps": "^2.0.1",
     "immer": "^6.0.3",
@@ -65,6 +66,7 @@
     "runtypes": "^4.2.0",
     "styled-system": "^5.1.5",
     "use-immer": "^0.4.0",
+    "utility-types": "^3.10.0",
     "uuid": "^7.0.3",
     "ws": "^7.2.3"
   },

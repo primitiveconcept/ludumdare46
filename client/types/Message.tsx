@@ -2,6 +2,7 @@ import { Array, Union, Record, String, Literal, Static } from "runtypes";
 import { Device } from "./Device";
 import { Process } from "./Process";
 import { Email } from "./Email";
+import { PortscanProcess } from "./PortscanProcess";
 
 export const TerminalMessage = Record({
   update: Literal("Terminal"),
@@ -35,10 +36,17 @@ export const EmailsMessage = Record({
 });
 export type EmailsMessage = Static<typeof EmailsMessage>;
 
+export const PortscanProcessMessage = Record({
+  update: Literal("PortscanProcess"),
+  payload: PortscanProcess,
+});
+export type PortscanProcessMessage = Static<typeof PortscanProcessMessage>;
+
 export const Message = Union(
   TerminalMessage,
   ResourcesMessage,
   ProcessesMessage,
   EmailsMessage,
+  PortscanProcessMessage,
 );
 export type Message = Static<typeof Message>;

@@ -13,24 +13,25 @@ import {
 } from "../components";
 import { CommandContext } from "../components/CommandContext";
 import { EmailPanel } from "../components/Panels/EmailPanel";
-import { MailProgram } from "../components/Programs/MailProgram";
 import { TerminalOverlay } from "../components/TerminalOverlay";
 import { useCommandHistory } from "../hooks/useCommandHistory";
 import { useLocalCommands } from "../hooks/useLocalCommands";
 import { useSession } from "../hooks/useSession";
 import { useSteppedScroll } from "../hooks/useSteppedScroll";
 import { useStore } from "../hooks/useStore";
-import { Program } from "../types";
+import { PortscanProgram } from "../components/Programs/PortscanProgram";
+import { MailProgram } from "../components/Programs/MailProgram";
 
 export const Index = () => {
   const [username, setUsername] = useSession();
-  const [openProgram, setOpenProgram] = useState<Program | null>(null);
+  const [openProcessId, setOpenProcessId] = useState<string | null>(null);
   const {
     addMessage,
     addHistory,
     readyState,
     sendCommand: sendServerCommand,
     state,
+    startProcess,
   } = useStore(username);
   const [command, setCommand] = useState("");
   const { setPrevCommand, setNextCommand } = useCommandHistory(
@@ -39,10 +40,12 @@ export const Index = () => {
   );
   const sendCommand = useLocalCommands({
     username,
+    startProcess,
     sendCommand: sendServerCommand,
-    setOpenProgram,
+    setOpenProcessId,
     addMessage,
     addHistory,
+    state,
   });
   const scrollToBottom = useSteppedScroll();
 
@@ -60,6 +63,9 @@ export const Index = () => {
     };
   }, [command, sendCommand, setNextCommand, setPrevCommand]);
   const theme = useTheme();
+  const openProcess = openProcessId
+    ? state.processDetails[openProcessId]
+    : undefined;
 
   return (
     <CommandContext.Provider value={commandContextValue}>
@@ -69,13 +75,18 @@ export const Index = () => {
           min-height: 100vh;
         `}
       >
-        {openProgram === "mail" && (
+        {openProcess && (
           <Box padding={1}>
-            <MailProgram emails={state.emails} />
+            {openProcess.command === "portscan" && (
+              <PortscanProgram process={openProcess} />
+            )}
+            {openProcess.command === "mail" && (
+              <MailProgram emails={state.emails} />
+            )}
           </Box>
         )}
 
-        {!openProgram && (
+        {!openProcess && (
           <>
             <Box
               css={css`

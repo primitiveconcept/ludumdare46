@@ -6,7 +6,7 @@ import { Anchor } from "./Anchor";
 import { css } from "@emotion/react";
 
 type CommandLinkProps = {
-  children: string;
+  children: React.ReactNode;
   href: string;
   highlightFocus?: boolean;
   block?: boolean;

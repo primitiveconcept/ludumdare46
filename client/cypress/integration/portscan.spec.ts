@@ -6,7 +6,7 @@ describe("install", () => {
     cy.alias("mockServer").then(({ closeServer }) => closeServer());
   });
 
-  it("installs an infostealer onto a remote system", () => {
+  it("completes a portscan", () => {
     createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {
         sendMessage(100, {
@@ -31,95 +31,62 @@ describe("install", () => {
               {
                 ip: "199.201.159.101",
                 status: "portscanning",
-                commands: [],
+                commands: ["[sshcrack](sshcrack|199.201.159.1)"],
               },
             ],
           },
         });
-        sendMessage(300, {
-          update: "Terminal",
+        sendMessage(100, {
+          update: "Processes",
           payload: {
-            message: "[199.201.159.101] Found open port: 22 (SSH)",
+            processes: [
+              {
+                id: "1",
+                command: "portscan 199.201.159.1",
+                origin: "localhost",
+                target: "199.201.159.1",
+                progress: 0,
+              },
+            ],
           },
         });
-        sendMessage(400, {
+        sendMessage(1000, {
+          update: "PortscanProcess",
+          payload: {
+            id: "1",
+            command: "portscan",
+            origin: "localhost",
+            target: "199.201.159.101",
+            progress: 10,
+            error: null,
+            ports: [{ name: "ftp", number: 21 }],
+          },
+        });
+        sendMessage(2000, {
+          update: "PortscanProcess",
+          payload: {
+            id: "1",
+            command: "portscan",
+            origin: "localhost",
+            target: "199.201.159.101",
+            progress: 30,
+            error: null,
+            ports: [
+              { name: "ftp", number: 21 },
+              { name: "ssh", number: 22 },
+            ],
+          },
+        });
+        sendMessage(4000, {
           update: "Devices",
           payload: {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "portscanning",
+                status: "disconnected",
                 commands: ["[sshcrack](sshcrack|199.201.159.101)"],
               },
             ],
-          },
-        });
-      });
-
-      onCommand("sshcrack 199.201.159.101", () => {
-        sendMessage(100, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "sshcrack (0%)",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(250, {
-          update: "Terminal",
-          payload: {
-            message: "[199.201.159.101] Found user/pass match: admin/admin",
-          },
-        });
-        sendMessage(350, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "connected",
-                commands: [
-                  "[infostealer](install|infostealer|199.201.159.101)",
-                ],
-              },
-            ],
-          },
-        });
-      });
-
-      onCommand("install infostealer 199.201.159.101", () => {
-        sendMessage(100, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "install: infostealer (0%)",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(150, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "connected",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(350, {
-          update: "Terminal",
-          payload: {
-            message: "[199.201.159.101] infostealer installed. Running...",
           },
         });
       });

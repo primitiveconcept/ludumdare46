@@ -1,7 +1,9 @@
 import { useCookies } from "react-cookie";
 import { useCallback } from "react";
 
-// sessionId is handled by the server, but we keep track of the name.
+/**
+ * Keep track of the username, as it's handled client-side.
+ */
 export const useSession = () => {
   const [cookies, setCookie] = useCookies();
 

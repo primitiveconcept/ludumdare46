@@ -3,7 +3,16 @@ import { State } from "../types/State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { ReadyState } from "react-use-websocket";
+import { MailProcess } from "../types/MailProcess";
 
+/**
+ * Set up local state to hold onto messages received from the server.
+ *
+ * Concerns:
+ * - Listen to incoming messages and set state.
+ * - Provide functions to other hooks to modify state.
+ *
+ */
 export const useStore = (username: string) => {
   const initial = useRef<boolean>(false);
   const [state, setState] = useImmer<State>({
@@ -13,6 +22,7 @@ export const useStore = (username: string) => {
     commandHistory: [],
     processes: [],
     emails: [],
+    processDetails: {},
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 
@@ -62,15 +72,17 @@ export const useStore = (username: string) => {
         draft.emails = lastMessage.payload.emails;
       });
     }
+    if (lastMessage.update === "PortscanProcess") {
+      const process = lastMessage.payload;
+      setState((draft) => {
+        draft.processDetails[process.id] = process;
+      });
+    }
   }, [lastMessage, setState]);
 
-  const sendCommand = useCallback(
-    (command: string) => {
-      // remote commands
-      sendMessage(command);
-    },
-    [sendMessage],
-  );
+  // This used to do more...
+  const sendCommand = sendMessage;
+
   const addMessage = useCallback(
     (message: string) => {
       setState((draft) => {
@@ -87,6 +99,22 @@ export const useStore = (username: string) => {
     },
     [setState],
   );
+  const startProcess = useCallback(
+    (process: MailProcess) => {
+      setState((draft) => {
+        draft.processDetails[process.id] = process;
+      });
+    },
+    [setState],
+  );
 
-  return { addHistory, addMessage, readyState, sendCommand, state, setState };
+  return {
+    addHistory,
+    addMessage,
+    startProcess,
+    readyState,
+    sendCommand,
+    state,
+    setState,
+  };
 };

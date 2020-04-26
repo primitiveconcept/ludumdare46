@@ -1,9 +1,10 @@
-import { Record, String, Static, Union, Null } from "runtypes";
+import { Record, Number, String, Static, Union, Null } from "runtypes";
 
 export const Process = Record({
-  // The full command run, ex: sshcrack 199.201.159.1
+  id: String,
   command: String,
-  // human-readable status, ex: Running
-  status: Union(String, Null),
+  origin: String,
+  target: String,
+  progress: Union(Number, Null),
 });
 export type Process = Static<typeof Process>;

@@ -1,4 +1,12 @@
 import "@testing-library/cypress/add-commands";
+import { Server } from "mock-socket";
+// Strange false positive, probably namespaces...
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { PickByValue } from "utility-types";
+
+type Aliases = {
+  mockServer: { mockServer: Server; closeServer: () => void };
+};
 
 type ItemLocator<T> = {
   name: T;
@@ -21,10 +29,14 @@ declare global {
        * @example
        * cy.getId("print-button")
        */
-      getId<T = string>(
-        id: Locator<T> | Array<Locator<T>>,
+      getId<TLocator = string>(
+        id: Locator<TLocator> | Array<Locator<TLocator>>,
         options?: Partial<Loggable & Timeoutable>,
       ): Chainable<JQuery<HTMLElement>>;
+
+      alias<TAlias extends keyof Aliases>(
+        name: TAlias,
+      ): Chainable<Aliases[TAlias]>;
     }
   }
 }
@@ -81,3 +93,7 @@ Cypress.Commands.add(
     );
   },
 );
+
+Cypress.Commands.add("alias", <TAlias extends keyof Aliases>(alias: TAlias) => {
+  return cy.get<any>(`@${alias}`);
+});

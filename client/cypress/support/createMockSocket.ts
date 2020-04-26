@@ -38,5 +38,5 @@ export const createMockSocket = (callback: (result: Result) => void) => {
     open = false;
     mockServer.close();
   };
-  return closeServer;
+  return cy.wrap({ mockServer, closeServer });
 };

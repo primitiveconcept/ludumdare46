@@ -1,1 +1,1 @@
-export type Program = "mail";
+export type Program = "mail" | "portscan";

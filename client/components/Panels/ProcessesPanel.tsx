@@ -2,6 +2,7 @@ import React from "react";
 import { Process } from "../../types/Process";
 import { Static } from "runtypes";
 import { Box } from "..";
+import { CommandLink } from "../library/CommandLink";
 
 type ProcessesPanelProps = {
   processes: Array<Static<typeof Process>>;
@@ -9,12 +10,15 @@ type ProcessesPanelProps = {
 export const ProcessesPanel = ({ processes }: ProcessesPanelProps) => {
   return (
     <div>
+      <Box marginBottom={1}>Processes</Box>
       {processes.map((process) => {
+        const progress =
+          process.progress != null ? ` (${process.progress}%)` : "";
         return (
-          <div key={process.command}>
-            <div>{process.command.split(" ")[0]}</div>
-            <Box paddingLeft={1}>{process.status}</Box>
-          </div>
+          <CommandLink href={`foreground ${process.id}`} key={process.command}>
+            {process.command.split(" ")[0]}
+            {progress}
+          </CommandLink>
         );
       })}
     </div>

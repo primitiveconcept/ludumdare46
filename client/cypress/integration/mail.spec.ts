@@ -1,10 +1,9 @@
 import { WebSocket } from "mock-socket";
-import { createMockSocket, CloseServer } from "../support/createMockSocket";
+import { createMockSocket } from "../support/createMockSocket";
 
 describe("mail", () => {
-  let closeServer: CloseServer;
   beforeEach(() => {
-    closeServer = createMockSocket(({ onCommand, sendMessage }) => {
+    createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {
         sendMessage(100, {
           update: "Emails",
@@ -41,11 +40,11 @@ describe("mail", () => {
           },
         });
       });
-    });
+    }).as("mockServer");
   });
 
   afterEach(() => {
-    closeServer();
+    cy.alias("mockServer").then(({ closeServer }) => closeServer());
   });
 
   it("allows malicious links in emails to send commands", () => {

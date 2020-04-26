@@ -1,20 +1,25 @@
 import { useCallback } from "react";
 import { helpCommand } from "../commands/helpCommand";
-import { Program } from "../types";
+import { State } from "../types";
+import { MailProcess } from "../types/MailProcess";
 
 type UseLocalCommands = {
-  sendCommand: (command: string) => void;
-  setOpenProgram: (program: Program | null) => void;
-  addMessage: (message: string) => void;
-  username: string;
   addHistory: (command: string) => void;
+  addMessage: (message: string) => void;
+  sendCommand: (command: string) => void;
+  setOpenProcessId: (processId: string | null) => void;
+  startProcess: (process: MailProcess) => void;
+  state: State;
+  username: string;
 };
 export const useLocalCommands = ({
-  sendCommand: sendCommandProp,
-  setOpenProgram,
-  addMessage,
-  username,
   addHistory,
+  addMessage,
+  sendCommand: sendCommandProp,
+  setOpenProcessId,
+  startProcess,
+  state,
+  username,
 }: UseLocalCommands) => {
   const sendCommand = useCallback(
     (command: string): void => {
@@ -26,7 +31,7 @@ export const useLocalCommands = ({
 
       // commands without local echo first
       if (baseCommand === "close") {
-        setOpenProgram(null);
+        setOpenProcessId(null);
         return;
       }
 
@@ -36,13 +41,39 @@ export const useLocalCommands = ({
         addMessage(helpCommand(args));
         addHistory(command);
       } else if (baseCommand === "mail" && !args.length) {
-        setOpenProgram("mail");
+        startProcess({
+          id: "mail",
+          command: "mail",
+        });
         addHistory(command);
+      } else if (baseCommand === "foreground") {
+        const id = args[0];
+        if (!id) {
+          addMessage("foreground: requires a process id");
+        } else {
+          const process = state.processDetails[id];
+          if (process) {
+            setOpenProcessId(process.id);
+          } else {
+            addMessage(`process id ${id} not found`);
+          }
+        }
+        addHistory(command);
+      } else if (baseCommand === "background") {
+        setOpenProcessId(null);
       } else {
         sendCommandProp(command);
       }
     },
-    [addHistory, addMessage, sendCommandProp, setOpenProgram, username],
+    [
+      addHistory,
+      addMessage,
+      sendCommandProp,
+      setOpenProcessId,
+      startProcess,
+      state.processDetails,
+      username,
+    ],
   );
   return sendCommand;
 };

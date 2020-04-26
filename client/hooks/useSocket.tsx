@@ -5,6 +5,7 @@ import {
   ResourcesMessage,
   ProcessesMessage,
   EmailsMessage,
+  PortscanProcessMessage,
 } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
@@ -14,10 +15,19 @@ enum UpdateTypes {
   Devices = "Devices",
   Processes = "Processes",
   Emails = "Emails",
+  PortscanProcess = "PortscanProcess",
 }
 
-// Controls connect, reconnect, and validation of messages
-// Does nothing with state
+/**
+ * Connect to the Websocket endpoint and hide away the
+ * minutia of incoming messages.
+ *
+ * Concerns:
+ * - Decide the URL to hit
+ * - Connect, reconnect, and provide connection state
+ * - Validate incoming message structure
+ *
+ */
 export const useSocket = () => {
   let hostname = "";
   if (typeof window !== "undefined") {
@@ -64,6 +74,8 @@ export const useSocket = () => {
       return ProcessesMessage.check(data);
     } else if (data?.update === UpdateTypes.Emails) {
       return EmailsMessage.check(data);
+    } else if (data?.update === UpdateTypes.PortscanProcess) {
+      return PortscanProcessMessage.check(data);
     }
     throw new Error(
       `Unsupported update: ${data?.update}. Valid updates are ${JSON.stringify(
