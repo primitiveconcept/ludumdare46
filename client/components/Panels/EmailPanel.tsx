@@ -2,6 +2,7 @@ import React from "react";
 import { Email } from "../../types";
 import { Static } from "runtypes";
 import { CommandLink } from "../library/CommandLink";
+import { Box } from "..";
 
 type EmailPanelProps = {
   emails: Array<Static<typeof Email>>;
@@ -11,10 +12,8 @@ export const EmailPanel = ({ emails }: EmailPanelProps) => {
     .length;
   const text = `(${unreadCount} unread)`;
   return (
-    <div>
-      <div>
-        Mail <CommandLink href="mail">{text}</CommandLink>
-      </div>
-    </div>
+    <Box marginBottom={1}>
+      Mail <CommandLink href="mail">{text}</CommandLink>
+    </Box>
   );
 };

@@ -10,7 +10,7 @@ type ProcessesPanelProps = {
 export const ProcessesPanel = ({ processes }: ProcessesPanelProps) => {
   return (
     <div>
-      <Box marginBottom={1}>Processes</Box>
+      <Box>Processes</Box>
       {processes.map((process) => {
         const progress =
           process.progress != null ? ` (${process.progress}%)` : "";

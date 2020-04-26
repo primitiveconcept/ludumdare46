@@ -1,4 +1,4 @@
-describe("smoke test", () => {
+describe.skip("smoke test", () => {
   it("persists username across reloads", () => {
     cy.visit("/");
     cy.findByLabelText("Enter Username").type(`threehams{enter}`);

@@ -75,59 +75,54 @@ export const Index = () => {
           min-height: 100vh;
         `}
       >
-        {openProcess && (
-          <Box padding={1}>
-            {openProcess.command === "portscan" && (
-              <PortscanProgram process={openProcess} />
+        <>
+          <Box
+            css={css`
+              display: inline-block;
+              width: ${theme.tileWidth * 24}px;
+              position: sticky;
+              top: 0;
+              vertical-align: top;
+            `}
+            paddingLeft={2}
+            paddingTop={1}
+          >
+            {!!state.resources && (
+              <ResourcesPanel resources={state.resources} />
             )}
-            {openProcess.command === "mail" && (
-              <MailProgram emails={state.emails} />
+            {!!state.devices.length && <DevicesPanel devices={state.devices} />}
+            {!!state.emails && <EmailPanel emails={state.emails} />}
+            {!!state.processes.length && (
+              <ProcessesPanel processes={state.processes} />
             )}
           </Box>
-        )}
-
-        {!openProcess && (
-          <>
-            <Box
-              css={css`
-                display: inline-block;
-                width: ${theme.tileWidth * 24}px;
-                position: sticky;
-                top: 0;
-                vertical-align: top;
-              `}
-              paddingLeft={2}
-              paddingTop={1}
-            >
-              {!!state.resources && (
-                <ResourcesPanel resources={state.resources} />
-              )}
-              {!!state.devices.length && (
-                <DevicesPanel devices={state.devices} />
-              )}
-              {!!state.emails && <EmailPanel emails={state.emails} />}
-              {!!state.processes.length && (
-                <ProcessesPanel processes={state.processes} />
-              )}
-            </Box>
-            <Box
-              css={css`
-                display: inline-block;
-                width: calc(100% - ${theme.tileWidth * 24}px);
-              `}
-              paddingX={1}
-              paddingY={1}
-            >
-              <Status readyState={readyState} />
-              <TerminalProgram messages={state.messages} />
-              {username ? (
-                <CommandPrompt username={username} />
-              ) : (
-                <UsernamePrompt setUsername={setUsername} />
-              )}
-            </Box>
-          </>
-        )}
+          <Box
+            css={css`
+              display: inline-block;
+              width: calc(100% - ${theme.tileWidth * 24}px);
+            `}
+            paddingX={1}
+            paddingY={1}
+          >
+            {openProcess?.command === "portscan" && (
+              <PortscanProgram process={openProcess} />
+            )}
+            {openProcess?.command === "mail" && (
+              <MailProgram emails={state.emails} />
+            )}
+            {!openProcess && (
+              <>
+                <Status readyState={readyState} />
+                <TerminalProgram messages={state.messages} />
+                {username ? (
+                  <CommandPrompt username={username} />
+                ) : (
+                  <UsernamePrompt setUsername={setUsername} />
+                )}
+              </>
+            )}
+          </Box>
+        </>
       </Box>
     </CommandContext.Provider>
   );

@@ -36,7 +36,7 @@ describe("install", () => {
             ],
           },
         });
-        sendMessage(100, {
+        sendMessage(500, {
           update: "Processes",
           payload: {
             processes: [
@@ -50,7 +50,7 @@ describe("install", () => {
             ],
           },
         });
-        sendMessage(1000, {
+        sendMessage(250, {
           update: "PortscanProcess",
           payload: {
             id: "1",
@@ -62,7 +62,7 @@ describe("install", () => {
             ports: [{ name: "ftp", number: 21 }],
           },
         });
-        sendMessage(2000, {
+        sendMessage(750, {
           update: "PortscanProcess",
           payload: {
             id: "1",
@@ -109,25 +109,8 @@ describe("install", () => {
       "contain.text",
       `threehams@local$ portscan 199.201.159.101`,
     );
-    cy.getId("messages").should(
-      "contain.text",
-      "[199.201.159.101] Found open port: 22 (SSH)",
-    );
-    cy.findByText("sshcrack").click();
-    cy.findByText("sshcrack").should("not.exist");
-    cy.getId("messages").should(
-      "contain.text",
-      `threehams@local$ sshcrack 199.201.159.101`,
-    );
-    cy.getId("messages").should(
-      "contain.text",
-      `[199.201.159.101] Found user/pass match: admin/admin`,
-    );
-    cy.findByText("Install Malware").click();
-    cy.findByText("infostealer").click();
-    cy.getId("messages").should(
-      "contain.text",
-      "[199.201.159.101] infostealer installed. Running...",
-    );
+    cy.findByText("portscan (0%)").click();
+    cy.getId("portscanProgram").should("contain.text", "21/tcp");
+    cy.getId("portscanProgram").should("contain.text", "22/tcp");
   });
 });

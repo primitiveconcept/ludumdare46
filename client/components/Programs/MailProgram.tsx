@@ -48,7 +48,7 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
   return (
     <>
       <Box>
-        <CommandLink block href="close" highlightFocus>
+        <CommandLink block href="background" highlightFocus>
           Close
         </CommandLink>
       </Box>

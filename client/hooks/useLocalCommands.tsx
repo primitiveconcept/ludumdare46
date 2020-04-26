@@ -45,6 +45,7 @@ export const useLocalCommands = ({
           id: "mail",
           command: "mail",
         });
+        setOpenProcessId("mail");
         addHistory(command);
       } else if (baseCommand === "foreground") {
         const id = args[0];
