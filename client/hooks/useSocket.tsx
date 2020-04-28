@@ -3,7 +3,6 @@ import useWebSocket from "react-use-websocket";
 import {
   TerminalMessage,
   ResourcesMessage,
-  ProcessesMessage,
   EmailsMessage,
   PortscanProcessMessage,
 } from "../types/Message";
@@ -70,8 +69,6 @@ export const useSocket = () => {
       return TerminalMessage.check(data);
     } else if (data?.update === UpdateTypes.Devices) {
       return ResourcesMessage.check(data);
-    } else if (data?.update === UpdateTypes.Processes) {
-      return ProcessesMessage.check(data);
     } else if (data?.update === UpdateTypes.Emails) {
       return EmailsMessage.check(data);
     } else if (data?.update === UpdateTypes.PortscanProcess) {

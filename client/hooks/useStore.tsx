@@ -22,7 +22,6 @@ export const useStore = (username: string) => {
     commandHistory: [],
     processes: [],
     emails: [],
-    processDetails: {},
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 
@@ -62,20 +61,22 @@ export const useStore = (username: string) => {
         draft.devices = lastMessage.payload.devices;
       });
     }
-    if (lastMessage.update === "Processes") {
-      setState((draft) => {
-        draft.processes = lastMessage.payload.processes;
-      });
-    }
     if (lastMessage.update === "Emails") {
       setState((draft) => {
         draft.emails = lastMessage.payload.emails;
       });
     }
     if (lastMessage.update === "PortscanProcess") {
-      const process = lastMessage.payload;
+      const newProcess = lastMessage.payload;
       setState((draft) => {
-        draft.processDetails[process.id] = process;
+        const index = draft.processes.findIndex(
+          (process) => process.id === newProcess.id,
+        );
+        if (index === -1) {
+          draft.processes.push(newProcess);
+        } else {
+          draft.processes[index] = newProcess;
+        }
       });
     }
   }, [lastMessage, setState]);
@@ -100,9 +101,16 @@ export const useStore = (username: string) => {
     [setState],
   );
   const startProcess = useCallback(
-    (process: MailProcess) => {
+    (newProcess: MailProcess) => {
       setState((draft) => {
-        draft.processDetails[process.id] = process;
+        const index = draft.processes.findIndex(
+          (process) => process.id === newProcess.id,
+        );
+        if (index === -1) {
+          draft.processes.push(newProcess);
+        } else {
+          draft.processes[index] = newProcess;
+        }
       });
     },
     [setState],

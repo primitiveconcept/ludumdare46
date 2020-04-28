@@ -36,20 +36,6 @@ describe("install", () => {
             ],
           },
         });
-        sendMessage(500, {
-          update: "Processes",
-          payload: {
-            processes: [
-              {
-                id: "1",
-                command: "portscan 199.201.159.1",
-                origin: "localhost",
-                target: "199.201.159.1",
-                progress: 0,
-              },
-            ],
-          },
-        });
         sendMessage(250, {
           update: "PortscanProcess",
           payload: {
@@ -62,14 +48,14 @@ describe("install", () => {
             ports: [{ name: "ftp", number: 21 }],
           },
         });
-        sendMessage(750, {
+        sendMessage(1000, {
           update: "PortscanProcess",
           payload: {
             id: "1",
             command: "portscan",
             origin: "localhost",
             target: "199.201.159.101",
-            progress: 30,
+            progress: 100,
             error: null,
             ports: [
               { name: "ftp", number: 21 },
@@ -109,8 +95,10 @@ describe("install", () => {
       "contain.text",
       `threehams@local$ portscan 199.201.159.101`,
     );
-    cy.findByText("portscan (0%)").click();
+    cy.findByText(/portscan \([0-9]+%\)/).click();
     cy.getId("portscanProgram").should("contain.text", "21/tcp");
     cy.getId("portscanProgram").should("contain.text", "22/tcp");
+    cy.findByText("Close").click();
+    cy.get("body").type("process{enter}");
   });
 });

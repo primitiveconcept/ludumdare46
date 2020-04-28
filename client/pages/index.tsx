@@ -64,7 +64,7 @@ export const Index = () => {
   }, [command, sendCommand, setNextCommand, setPrevCommand]);
   const theme = useTheme();
   const openProcess = openProcessId
-    ? state.processDetails[openProcessId]
+    ? state.processes.find((proc) => proc.id === openProcessId)
     : undefined;
 
   return (

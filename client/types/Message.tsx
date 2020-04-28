@@ -1,6 +1,5 @@
 import { Array, Union, Record, String, Literal, Static } from "runtypes";
 import { Device } from "./Device";
-import { Process } from "./Process";
 import { Email } from "./Email";
 import { PortscanProcess } from "./PortscanProcess";
 
@@ -11,14 +10,6 @@ export const TerminalMessage = Record({
   }),
 });
 export type TerminalMessage = Static<typeof TerminalMessage>;
-
-export const ProcessesMessage = Record({
-  update: Literal("Processes"),
-  payload: Record({
-    processes: Array(Process),
-  }),
-});
-export type ProcessesMessage = Static<typeof ProcessesMessage>;
 
 export const ResourcesMessage = Record({
   update: Literal("Devices"),
@@ -45,7 +36,6 @@ export type PortscanProcessMessage = Static<typeof PortscanProcessMessage>;
 export const Message = Union(
   TerminalMessage,
   ResourcesMessage,
-  ProcessesMessage,
   EmailsMessage,
   PortscanProcessMessage,
 );

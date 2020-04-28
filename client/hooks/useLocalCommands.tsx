@@ -39,29 +39,36 @@ export const useLocalCommands = ({
       addHistory(command);
       if (baseCommand === "help") {
         addMessage(helpCommand(args));
-        addHistory(command);
       } else if (baseCommand === "mail" && !args.length) {
         startProcess({
           id: "mail",
           command: "mail",
         });
         setOpenProcessId("mail");
-        addHistory(command);
       } else if (baseCommand === "foreground") {
         const id = args[0];
         if (!id) {
           addMessage("foreground: requires a process id");
         } else {
-          const process = state.processDetails[id];
+          const process = state.processes.find((proc) => proc.id === id);
           if (process) {
             setOpenProcessId(process.id);
           } else {
             addMessage(`process id ${id} not found`);
           }
         }
-        addHistory(command);
       } else if (baseCommand === "background") {
         setOpenProcessId(null);
+      } else if (baseCommand === "process") {
+        addMessage(
+          `| ID | COMMAND |
+          |----|---------|
+          ${state.processes
+            .map((process) => {
+              return `| ${process.id} | ${process.command} |`;
+            })
+            .join("  \n")}`,
+        );
       } else {
         sendCommandProp(command);
       }
@@ -72,7 +79,7 @@ export const useLocalCommands = ({
       sendCommandProp,
       setOpenProcessId,
       startProcess,
-      state.processDetails,
+      state.processes,
       username,
     ],
   );
