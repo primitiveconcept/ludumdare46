@@ -44,6 +44,7 @@ describe("install", () => {
             origin: "localhost",
             target: "199.201.159.101",
             progress: 10,
+            complete: false,
             error: null,
             ports: [{ name: "ftp", number: 21 }],
           },
@@ -56,6 +57,7 @@ describe("install", () => {
             origin: "localhost",
             target: "199.201.159.101",
             progress: 100,
+            complete: true,
             error: null,
             ports: [
               { name: "ftp", number: 21 },

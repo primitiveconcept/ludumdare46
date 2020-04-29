@@ -82,6 +82,7 @@ export const GlobalStyles = () => {
           table {
             border: none;
             border-spacing: 0;
+            margin-left: 24px;
           }
 
           td,
@@ -90,7 +91,7 @@ export const GlobalStyles = () => {
             text-align: left;
             padding: 0;
             border: none;
-            padding-right: 12px;
+            padding-right: 24px;
           }
         `}
       />

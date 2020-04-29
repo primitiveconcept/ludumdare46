@@ -1,12 +1,13 @@
 import {
   Array,
-  Union,
-  Record,
-  String,
+  Boolean,
   Literal,
-  Number,
   Null,
+  Number,
+  Record,
   Static,
+  String,
+  Union,
 } from "runtypes";
 import { Port } from "./Port";
 
@@ -16,6 +17,7 @@ export const PortscanProcess = Record({
   origin: String,
   target: String,
   progress: Union(Number, Null),
+  complete: Boolean,
   error: Union(String, Null),
   ports: Array(Port),
 });
