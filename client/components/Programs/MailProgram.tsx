@@ -22,18 +22,17 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
 
     return (
       <Box>
-        <Box marginBottom={1}>
-          <Link
-            block
-            href="back"
-            onClick={() => {
-              setSelectedId(null);
-            }}
-            highlightFocus
-          >
-            Back
-          </Link>
-        </Box>
+        <Link
+          marginBottom={1}
+          block
+          href="back"
+          onClick={() => {
+            setSelectedId(null);
+          }}
+          highlightFocus
+        >
+          Back
+        </Link>
         <div>
           <div>Date: {Date.now()}</div>
           <div>From: {email.from}</div>
@@ -47,11 +46,9 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
 
   return (
     <>
-      <Box>
-        <CommandLink block href="background" highlightFocus>
-          Close
-        </CommandLink>
-      </Box>
+      <CommandLink block href="background" highlightFocus>
+        Close
+      </CommandLink>
       <Box marginTop={1}>Unread</Box>
       {!emails.length && <Box>No messages.</Box>}
       {emails.map((email, index) => {

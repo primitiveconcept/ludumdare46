@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import { Markdown } from "../library/Markdown";
 import { PortscanProcess } from "../../types/PortscanProcess";
 import { CommandLink } from "../library/CommandLink";
-import { Box } from "..";
 
 type TemplateValues = {
   startDate: Date;
@@ -33,11 +32,9 @@ type Props = {
 export const PortscanProgram = ({ process }: Props) => {
   return (
     <div data-test="portscanProgram">
-      <Box marginBottom={1}>
-        <CommandLink block href="background">
-          Close
-        </CommandLink>
-      </Box>
+      <CommandLink marginBottom={1} block href="background">
+        Close
+      </CommandLink>
       <Markdown>
         {template({
           startDate,
