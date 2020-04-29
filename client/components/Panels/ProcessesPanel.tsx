@@ -16,7 +16,11 @@ export const ProcessesPanel = ({ processes }: ProcessesPanelProps) => {
             ? ` (${process.progress}%)`
             : "";
         return (
-          <CommandLink href={`foreground ${process.id}`} key={process.command}>
+          <CommandLink
+            block
+            href={`foreground ${process.id}`}
+            key={process.command}
+          >
             {process.command.split(" ")[0]}
             {progress}
           </CommandLink>

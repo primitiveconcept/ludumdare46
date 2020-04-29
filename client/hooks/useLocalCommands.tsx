@@ -43,9 +43,10 @@ export const useLocalCommands = ({
         startProcess({
           id: "mail",
           command: "mail",
+          complete: false,
         });
         setOpenProcessId("mail");
-      } else if (baseCommand === "foreground") {
+      } else if (baseCommand === "foreground" || baseCommand === "fg") {
         const id = args[0];
         if (!id) {
           addMessage("foreground: requires a process id");
@@ -57,9 +58,9 @@ export const useLocalCommands = ({
             addMessage(`process id ${id} not found`);
           }
         }
-      } else if (baseCommand === "background") {
+      } else if (baseCommand === "background" || baseCommand === "bg") {
         setOpenProcessId(null);
-      } else if (baseCommand === "process") {
+      } else if (baseCommand === "process" || baseCommand === "ps") {
         addMessage(
           `| ID | COMMAND |
           |----|---------|

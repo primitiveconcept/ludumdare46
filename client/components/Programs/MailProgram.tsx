@@ -8,6 +8,7 @@ import { css } from "@emotion/react";
 import { Box } from "..";
 import { CommandContext } from "../CommandContext";
 import { useFocusSwitching } from "../../hooks/useFocusSwitching";
+import { useKeyHandler } from "../../hooks/useHotKey";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;
@@ -16,6 +17,16 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { sendCommand } = useContext(CommandContext);
   const focusSwitchRef = useFocusSwitching(emails.length);
+
+  useKeyHandler((keyCode) => {
+    if (keyCode === "q") {
+      if (selectedId) {
+        setSelectedId(null);
+      } else {
+        sendCommand("background");
+      }
+    }
+  });
 
   if (selectedId) {
     const email = emails.find((mail) => mail.id === selectedId)!;
@@ -31,7 +42,7 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
           }}
           highlightFocus
         >
-          Back
+          q:Back
         </Link>
         <div>
           <div>Date: {Date.now()}</div>
@@ -47,7 +58,7 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
   return (
     <>
       <CommandLink block href="background" highlightFocus>
-        Close
+        q:Quit
       </CommandLink>
       <Box marginTop={1}>Unread</Box>
       {!emails.length && <Box>No messages.</Box>}
