@@ -1,33 +1,33 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
+import produce from "immer";
+import { Email } from "../../types/Email";
 
 describe("mail", () => {
   beforeEach(() => {
+    const email1: Email = {
+      id: "1",
+      status: "Unread",
+      from: "thebiggest <thebiggest@example.com>",
+      to: "hackster <hackster@example.com>",
+      subject: "check this out",
+      body: "want to grow your member size? [click here](portscan|8.8.8.8)",
+    };
+    const email2: Email = {
+      id: "2",
+      status: "Unread",
+      from: "rememberme <rememberme@example.com>",
+      to: "hackster <hackster@example.com>",
+      subject: "omgf",
+      body: "omgf! are u still around? i haven't seen your in yeersss!!!!!",
+    };
+
     createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {
         sendMessage(100, {
           update: "Emails",
           payload: {
-            emails: [
-              {
-                id: "1",
-                status: "Unread",
-                from: "thebiggest <thebiggest@example.com>",
-                to: "hackster <hackster@example.com>",
-                subject: "check this out",
-                body:
-                  "want to grow your member size? [click here](portscan|8.8.8.8)",
-              },
-              {
-                id: "2",
-                status: "Unread",
-                from: "rememberme <rememberme@example.com>",
-                to: "hackster <hackster@example.com>",
-                subject: "omgf",
-                body:
-                  "omgf! are u still around? i haven't seen your in yeersss!!!!!",
-              },
-            ],
+            emails: [email1, email2],
           },
         });
       });
@@ -36,24 +36,10 @@ describe("mail", () => {
           update: "Emails",
           payload: {
             emails: [
-              {
-                id: "1",
-                status: "Read",
-                from: "thebiggest <thebiggest@example.com>",
-                to: "hackster <hackster@example.com>",
-                subject: "check this out",
-                body:
-                  "want to grow your member size? [click here](portscan|8.8.8.8)",
-              },
-              {
-                id: "2",
-                status: "Unread",
-                from: "rememberme <rememberme@example.com>",
-                to: "hackster <hackster@example.com>",
-                subject: "omgf",
-                body:
-                  "omgf! are u still around? i haven't seen your in yeersss!!!!!",
-              },
+              produce(email1, (draft) => {
+                draft.status = "Read";
+              }),
+              email2,
             ],
           },
         });
