@@ -1,5 +1,22 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
+import { InfostealerProcess } from "../../types/InfostealerProcess";
+import produce from "immer";
+
+const process: InfostealerProcess = {
+  id: "4",
+  command: "infostealer",
+  complete: false,
+  error: null,
+  logins: [],
+  target: "199.201.159.1",
+};
+
+const device = {
+  ip: "199.201.159.101",
+  status: "connected",
+  commands: ["[infostealer](install|infostealer|199.201.159.101)"],
+};
 
 describe("install", () => {
   afterEach(() => {
@@ -12,15 +29,7 @@ describe("install", () => {
         sendMessage(100, {
           update: "Devices",
           payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "connected",
-                commands: [
-                  "[infostealer](install|infostealer|199.201.159.101)",
-                ],
-              },
-            ],
+            devices: [device],
           },
         });
       });
@@ -30,11 +39,9 @@ describe("install", () => {
           update: "Devices",
           payload: {
             devices: [
-              {
-                ip: "199.201.159.101",
-                status: "connected",
-                commands: [],
-              },
+              produce(device, (draft) => {
+                draft.commands = [];
+              }),
             ],
           },
         });
@@ -47,29 +54,32 @@ describe("install", () => {
 
         sendMessage(400, {
           update: "InfostealerProcess",
-          payload: {
-            id: "4",
-            command: "infostealer",
-            complete: false,
-            error: null,
-            logins: [],
-            target: "199.201.159.1",
-          },
+          payload: process,
         });
         sendMessage(800, {
           update: "InfostealerProcess",
-          payload: {
-            id: "4",
-            command: "infostealer",
-            complete: false,
-            error: null,
-            logins: [
+          payload: produce(process, (draft) => {
+            draft.logins = [{ username: "root", password: null }];
+          }),
+        });
+        sendMessage(1200, {
+          update: "InfostealerProcess",
+          payload: produce(process, (draft) => {
+            draft.logins = [
+              { username: "root", password: null },
+              { username: "admin", password: "Tr0ub4d0r!" },
+            ];
+          }),
+        });
+        sendMessage(1600, {
+          update: "InfostealerProcess",
+          payload: produce(process, (draft) => {
+            draft.logins = [
               { username: "root", password: null },
               { username: "admin", password: "Tr0ub4d0r!" },
               { username: null, password: "remarkablepenguinmonstrosity" },
-            ],
-            target: "199.201.159.1",
-          },
+            ];
+          }),
         });
       });
     }).as("mockServer");
