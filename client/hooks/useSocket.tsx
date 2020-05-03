@@ -55,10 +55,11 @@ export const useSocket = () => {
   } else {
     url = `ws://${hostname}:31337/game`;
   }
-  const [sendMessage, lastMessageUnsafe, readyState] = useWebSocket(
-    url,
-    options,
-  );
+  const {
+    sendMessage,
+    lastMessage: lastMessageUnsafe,
+    readyState,
+  } = useWebSocket(url, options);
   const lastMessage = useMemo(() => {
     if (!lastMessageUnsafe) {
       return null;

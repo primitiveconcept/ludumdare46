@@ -46,7 +46,19 @@ describe("install", () => {
             progress: 10,
             complete: false,
             error: null,
-            ports: [{ name: "ftp", number: 21 }],
+            ports: [{ name: "telnet", number: 23 }],
+          },
+        });
+        sendMessage(500, {
+          update: "Devices",
+          payload: {
+            devices: [
+              {
+                ip: "199.201.159.101",
+                status: "disconnected",
+                commands: ["[sshcrack](sshcrack|199.201.159.101)"],
+              },
+            ],
           },
         });
         sendMessage(1000, {
@@ -60,20 +72,8 @@ describe("install", () => {
             complete: true,
             error: null,
             ports: [
-              { name: "ftp", number: 21 },
-              { name: "ssh", number: 22 },
-            ],
-          },
-        });
-        sendMessage(4000, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "disconnected",
-                commands: ["[sshcrack](sshcrack|199.201.159.101)"],
-              },
+              { name: "telnet", number: 23 },
+              { name: "http", number: 80 },
             ],
           },
         });
@@ -98,8 +98,8 @@ describe("install", () => {
       `threehams@local$ portscan 199.201.159.101`,
     );
     cy.findByText(/portscan \([0-9]+%\)/).click();
-    cy.getId("portscanProgram").should("contain.text", "21/tcp");
-    cy.getId("portscanProgram").should("contain.text", "22/tcp");
+    cy.getId("portscanProgram").should("contain.text", "23/tcp");
+    cy.getId("portscanProgram").should("contain.text", "80/tcp");
     cy.findByText("Close").click();
     cy.get("body").type("process{enter}");
   });

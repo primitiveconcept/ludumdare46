@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { helpCommand } from "../commands/helpCommand";
 import { State } from "../types";
 import { MailProcess } from "../types/MailProcess";
+import table from "markdown-table";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
@@ -62,13 +63,12 @@ export const useLocalCommands = ({
         setOpenProcessId(null);
       } else if (baseCommand === "process" || baseCommand === "ps") {
         addMessage(
-          `| ID | COMMAND |
-          |----|---------|
-          ${state.processes
-            .map((process) => {
-              return `| ${process.id} | ${process.command} |`;
-            })
-            .join("  \n")}`,
+          table([
+            ["ID", "COMMAND"],
+            ...state.processes.map((process) => {
+              return [process.id, process.command];
+            }),
+          ]),
         );
       } else {
         sendCommandProp(command);
