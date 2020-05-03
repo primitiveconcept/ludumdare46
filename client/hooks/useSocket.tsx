@@ -6,6 +6,7 @@ import {
   EmailsMessage,
   PortscanProcessMessage,
   SshCrackProcessMessage,
+  InfostealerProcessMessage,
 } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
@@ -17,6 +18,7 @@ enum UpdateTypes {
   Emails = "Emails",
   PortscanProcess = "PortscanProcess",
   SshCrackProcess = "SshCrackProcess",
+  InfostealerProcess = "InfostealerProcess",
 }
 
 /**
@@ -78,6 +80,8 @@ export const useSocket = () => {
       return PortscanProcessMessage.check(data);
     } else if (data?.update === UpdateTypes.SshCrackProcess) {
       return SshCrackProcessMessage.check(data);
+    } else if (data?.update === UpdateTypes.InfostealerProcess) {
+      return InfostealerProcessMessage.check(data);
     }
     throw new Error(
       `Unsupported update: ${data?.update}. Valid updates are ${JSON.stringify(

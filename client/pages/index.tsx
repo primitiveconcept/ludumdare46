@@ -21,6 +21,7 @@ import { useStore } from "../hooks/useStore";
 import { PortscanProgram } from "../components/Programs/PortscanProgram";
 import { MailProgram } from "../components/Programs/MailProgram";
 import { SshCrackProgram } from "../components/Programs/SshcrackProgram";
+import { InfostealerProgram } from "../components/Programs/InfostealerProgram";
 
 export const Index = () => {
   const [username, setUsername] = useSession();
@@ -107,6 +108,9 @@ export const Index = () => {
             )}
             {openProcess?.command === "mail" && (
               <MailProgram emails={state.emails} />
+            )}
+            {openProcess?.command === "infostealer" && (
+              <InfostealerProgram process={openProcess} />
             )}
             {!openProcess && (
               <>

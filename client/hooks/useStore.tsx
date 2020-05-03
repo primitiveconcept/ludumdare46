@@ -68,7 +68,8 @@ export const useStore = (username: string) => {
     }
     if (
       lastMessage.update === "PortscanProcess" ||
-      lastMessage.update === "SshCrackProcess"
+      lastMessage.update === "SshCrackProcess" ||
+      lastMessage.update === "InfostealerProcess"
     ) {
       const newProcess = lastMessage.payload;
       setState((draft) => {

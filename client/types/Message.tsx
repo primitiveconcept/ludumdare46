@@ -3,6 +3,7 @@ import { Device } from "./Device";
 import { Email } from "./Email";
 import { PortscanProcess } from "./PortscanProcess";
 import { SshCrackProcess } from "./SshCrackProcess";
+import { InfostealerProcess } from "./InfostealerProcess";
 
 export const TerminalMessage = Record({
   update: Literal("Terminal"),
@@ -40,11 +41,20 @@ export const SshCrackProcessMessage = Record({
 });
 export type SshCrackProcessMessage = Static<typeof SshCrackProcessMessage>;
 
+export const InfostealerProcessMessage = Record({
+  update: Literal("InfostealerProcess"),
+  payload: InfostealerProcess,
+});
+export type InfostealerProcessMessage = Static<
+  typeof InfostealerProcessMessage
+>;
+
 export const Message = Union(
   TerminalMessage,
   ResourcesMessage,
   EmailsMessage,
   PortscanProcessMessage,
   SshCrackProcessMessage,
+  InfostealerProcessMessage,
 );
 export type Message = Static<typeof Message>;

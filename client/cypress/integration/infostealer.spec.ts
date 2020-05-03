@@ -15,72 +15,6 @@ describe("install", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "disconnected",
-                commands: ["[portscan](portscan|199.201.159.101)"],
-              },
-            ],
-          },
-        });
-      });
-
-      onCommand("portscan 199.201.159.101", () => {
-        sendMessage(100, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "portscanning",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(300, {
-          update: "Terminal",
-          payload: {
-            message: "[199.201.159.101] Found open port: 22 (SSH)",
-          },
-        });
-        sendMessage(400, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "portscanning",
-                commands: ["[sshcrack](sshcrack|199.201.159.101)"],
-              },
-            ],
-          },
-        });
-      });
-
-      onCommand("sshcrack 199.201.159.101", () => {
-        sendMessage(100, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "sshcrack (0%)",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(250, {
-          update: "Terminal",
-          payload: {
-            message: "[199.201.159.101] Found user/pass match: admin/admin",
-          },
-        });
-        sendMessage(350, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
                 status: "connected",
                 commands: [
                   "[infostealer](install|infostealer|199.201.159.101)",
@@ -98,18 +32,6 @@ describe("install", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "install: infostealer (0%)",
-                commands: [],
-              },
-            ],
-          },
-        });
-        sendMessage(150, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
                 status: "connected",
                 commands: [],
               },
@@ -120,6 +42,33 @@ describe("install", () => {
           update: "Terminal",
           payload: {
             message: "[199.201.159.101] infostealer installed. Running...",
+          },
+        });
+
+        sendMessage(400, {
+          update: "InfostealerProcess",
+          payload: {
+            id: "4",
+            command: "infostealer",
+            complete: false,
+            error: null,
+            logins: [],
+            target: "199.201.159.1",
+          },
+        });
+        sendMessage(800, {
+          update: "InfostealerProcess",
+          payload: {
+            id: "4",
+            command: "infostealer",
+            complete: false,
+            error: null,
+            logins: [
+              { username: "root", password: null },
+              { username: "admin", password: "Tr0ub4d0r!" },
+              { username: null, password: "remarkablepenguinmonstrosity" },
+            ],
+            target: "199.201.159.1",
           },
         });
       });
@@ -136,31 +85,17 @@ describe("install", () => {
 
     cy.findByText("Known Devices");
     cy.findByText("199.201.159.101").click();
-    cy.findByText("portscan").click();
-    cy.findByText("portscan").should("not.exist");
-    cy.getId("messages").should(
-      "contain.text",
-      `threehams@local$ portscan 199.201.159.101`,
-    );
-    cy.getId("messages").should(
-      "contain.text",
-      "[199.201.159.101] Found open port: 22 (SSH)",
-    );
-    cy.findByText("sshcrack").click();
-    cy.findByText("sshcrack").should("not.exist");
-    cy.getId("messages").should(
-      "contain.text",
-      `threehams@local$ sshcrack 199.201.159.101`,
-    );
-    cy.getId("messages").should(
-      "contain.text",
-      `[199.201.159.101] Found user/pass match: admin/admin`,
-    );
+
     cy.findByText("Install Malware").click();
     cy.findByText("infostealer").click();
     cy.getId("messages").should(
       "contain.text",
       "[199.201.159.101] infostealer installed. Running...",
     );
+    cy.findByText("infostealer").click();
+    cy.getId("infostealerProgram")
+      .should("contain.text", 'username found: "root"')
+      .should("contain.text", 'password found: "remarkablepenguinmonstrosity"')
+      .should("contain.text", 'login found: "admin" / "Tr0ub4d0r!"');
   });
 });
