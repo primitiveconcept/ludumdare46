@@ -1,6 +1,6 @@
 import { css, useTheme } from "@emotion/react";
 import "core-js/stable";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Box,
   CommandPrompt,
@@ -17,10 +17,10 @@ import { TerminalOverlay } from "../components/TerminalOverlay";
 import { useCommandHistory } from "../hooks/useCommandHistory";
 import { useLocalCommands } from "../hooks/useLocalCommands";
 import { useSession } from "../hooks/useSession";
-import { useSteppedScroll } from "../hooks/useSteppedScroll";
 import { useStore } from "../hooks/useStore";
 import { PortscanProgram } from "../components/Programs/PortscanProgram";
 import { MailProgram } from "../components/Programs/MailProgram";
+import { SshCrackProgram } from "../components/Programs/SshcrackProgram";
 
 export const Index = () => {
   const [username, setUsername] = useSession();
@@ -47,11 +47,6 @@ export const Index = () => {
     addHistory,
     state,
   });
-  const scrollToBottom = useSteppedScroll();
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [scrollToBottom, state.messages]);
 
   const commandContextValue = useMemo(() => {
     return {
@@ -106,6 +101,9 @@ export const Index = () => {
           >
             {openProcess?.command === "portscan" && (
               <PortscanProgram process={openProcess} />
+            )}
+            {openProcess?.command === "sshcrack" && (
+              <SshCrackProgram process={openProcess} />
             )}
             {openProcess?.command === "mail" && (
               <MailProgram emails={state.emails} />

@@ -1,5 +1,4 @@
 import {
-  Array,
   Boolean,
   Literal,
   Null,
@@ -9,16 +8,14 @@ import {
   String,
   Union,
 } from "runtypes";
-import { Port } from "./Port";
 
-export const PortscanProcess = Record({
+export const SshCrackProcess = Record({
   id: String,
-  command: Literal("portscan"),
+  command: Literal("sshcrack"),
   origin: String,
   target: String,
   progress: Number,
   complete: Boolean,
   error: Union(String, Null),
-  ports: Array(Port),
 });
-export type PortscanProcess = Static<typeof PortscanProcess>;
+export type SshCrackProcess = Static<typeof SshCrackProcess>;

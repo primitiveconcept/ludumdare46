@@ -66,7 +66,10 @@ export const useStore = (username: string) => {
         draft.emails = lastMessage.payload.emails;
       });
     }
-    if (lastMessage.update === "PortscanProcess") {
+    if (
+      lastMessage.update === "PortscanProcess" ||
+      lastMessage.update === "SshCrackProcess"
+    ) {
       const newProcess = lastMessage.payload;
       setState((draft) => {
         const index = draft.processes.findIndex(

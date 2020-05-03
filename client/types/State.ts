@@ -1,14 +1,13 @@
 import { Device } from "./Device";
 import { Email } from "./Email";
 import { Resources } from "./Resources";
-import { PortscanProcess } from "./PortscanProcess";
-import { MailProcess } from "./MailProcess";
+import { Process } from "./Process";
 
 export type State = {
   messages: string[];
   devices: Device[];
   resources: Resources | null;
   commandHistory: string[];
-  processes: Array<PortscanProcess | MailProcess>;
+  processes: Process[];
   emails: Email[];
 };

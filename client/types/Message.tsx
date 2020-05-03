@@ -2,6 +2,7 @@ import { Array, Union, Record, String, Literal, Static } from "runtypes";
 import { Device } from "./Device";
 import { Email } from "./Email";
 import { PortscanProcess } from "./PortscanProcess";
+import { SshCrackProcess } from "./SshCrackProcess";
 
 export const TerminalMessage = Record({
   update: Literal("Terminal"),
@@ -33,10 +34,17 @@ export const PortscanProcessMessage = Record({
 });
 export type PortscanProcessMessage = Static<typeof PortscanProcessMessage>;
 
+export const SshCrackProcessMessage = Record({
+  update: Literal("SshCrackProcess"),
+  payload: SshCrackProcess,
+});
+export type SshCrackProcessMessage = Static<typeof SshCrackProcessMessage>;
+
 export const Message = Union(
   TerminalMessage,
   ResourcesMessage,
   EmailsMessage,
   PortscanProcessMessage,
+  SshCrackProcessMessage,
 );
 export type Message = Static<typeof Message>;

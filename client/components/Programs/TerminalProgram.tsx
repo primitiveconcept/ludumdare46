@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Markdown } from "../library/Markdown";
+import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 
 type TerminalProgramProps = {
   messages: string[];
 };
 export const TerminalProgram = React.memo(
   ({ messages }: TerminalProgramProps) => {
+    const scrollToBottom = useSteppedScroll();
+
+    useEffect(() => {
+      scrollToBottom();
+    }, [scrollToBottom, messages]);
+
     return (
       <div data-test="messages">
         {messages.map((message, index) => (
