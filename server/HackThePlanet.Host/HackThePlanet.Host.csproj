@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
-        <RootNamespace>HackThePlanet.Server</RootNamespace>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>HackThePlanet.Host</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,27 +11,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="hacktheplanet.service">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="wwwroot\htmlsettings.json" />
-      <Content Include="wwwroot\htmlsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="wwwroot\index.html" />
-      <Content Include="wwwroot\index.html">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+      <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.3" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.3" />
     </ItemGroup>
 
 </Project>

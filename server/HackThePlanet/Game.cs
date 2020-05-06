@@ -1,162 +1,135 @@
 namespace HackThePlanet
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.Logging;
-	using PrimitiveEngine;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Threading;
+    using Newtonsoft.Json;
+    using PrimitiveEngine;
 
 
-	/// <summary>
-	/// You can essentially think of this as the starting point of the game.
-	/// Starts and stops the game loop and websocket server.
-	/// You also register endpoints here.
-	/// </summary>
-	public class Game : ICommonService
-	{
-		private static Game _instance;
+    public class Game
+    {
+        private static Game _instance;
 
-		private IConfiguration configuration;
-		private ILogger<Game> logger;
-
-		private GameThread gameThread;
-		private GameWebSocket gameWebSocket;
-		private Task gameTask;
-		private CancellationTokenSource gameCancellationTokenSource  = new CancellationTokenSource();
+        private EntityWorld entityWorld = new EntityWorld();
+        private GameTime gameTime = new GameTime();
+        private PlayerList players = new PlayerList();
+        private GlobalNetwork globalNetwork = new GlobalNetwork();
+        private readonly ConcurrentDictionary<string, List<string>> incomingPlayerCommands = 
+            new ConcurrentDictionary<string, List<string>>();
 
 
-		#region Constructors
-		public Game(
-			IConfiguration configuration,
-			ILogger<Game> logger)
-		{
-			_instance = this;
-			this.configuration = configuration;
-			this.logger = logger;
-			LogInfo("Standard service instantiated.");
-		}
-		#endregion
+        #region Constructors
+        private Game()
+        {
+            this.entityWorld.InitializeAll();
+        }
+        #endregion
 
 
-		#region Properties
-		public static GameTime Time
-		{
-			get { return _instance.gameThread.GameTime; }
-		}
+        private event Action<string, string> messageForClient;
 
 
-		public static EntityWorld World
-		{
-			get { return _instance.gameThread.EntityWorld; }
-		}
+        #region Properties
+        public static GlobalNetwork GlobalNetwork
+        {
+            get { return Instance.globalNetwork; }
+        }
 
 
-		public IConfiguration Configuration
-		{
-			get { return this.configuration; }
-		}
+        public static PlayerList Players
+        {
+            get { return Instance.players; }
+        }
 
 
-		public ILogger<Game> Logger
-		{
-			get { return this.logger; }
-		}
-		#endregion
+        public static GameTime Time
+        {
+            get { return Instance.gameTime; }
+        }
 
 
-		public static GameThread GameThread
-		{
-			get { return _instance.gameThread; }
-		}
-		
-		public static IEnumerable<T> GetComponents<T>()
-			where T: IEntityComponent
-		{
-			return World.EntityManager.GetComponents<T>().Cast<T>();
-		}
+        public static EntityWorld World
+        {
+            get { return Instance.entityWorld; }
+        }
 
 
-		public static List<Entity> GetEntities(params int[] entityIds)
-		{
-			List<Entity> entities = new List<Entity>();
-			
-			foreach (int entityId in entityIds)
-			{
-				Entity entity = World.GetEntityById(entityId);
-				if (entity != null)
-					entities.Add(entity);
-			}
-
-			return entities;
-		}
+        private static Game Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Game();
+                return _instance;
+            }
+        }
+        #endregion
 
 
-		public static Entity GetEntity(int entityId)
-		{
-			return World.GetEntityById(entityId);
-		}
+        public static void QueueCommand(string playerId, string command)
+        {
+            if (!Instance.incomingPlayerCommands.ContainsKey(playerId))
+                Instance.incomingPlayerCommands.TryAdd(playerId, new List<string>());
+
+            Instance.incomingPlayerCommands[playerId].Add(command);
+        }
 
 
-		public static void LogError(string info)
-		{
-			_instance.logger.LogError(info);
-		}
+        public static void RemovePlayerCommandQueue(string playerId)
+        {
+            Instance.incomingPlayerCommands.TryRemove(playerId, out List<string> unusedValue);
+        }
 
 
-		public static void LogInfo(string info)
-		{
-			_instance.logger.LogInformation(info);
-		}
+        public static void SubscribeToClientMessages(Action<string, string> eventHandler)
+        {
+            Instance.messageForClient += eventHandler;
+        }
 
 
-		public static void LogWarning(string info)
-		{
-			_instance.logger.LogWarning(info);
-		}
+        public static void Update()
+        {
+            Instance.ExecuteIncomingCommands();
+            Instance.entityWorld.FixedUpdate(Instance.gameTime.ElapsedTime);
+            Thread.Sleep(30); // Fuck it, let's not get fancy here.
+        }
 
 
-		public void OnStart()
-		{
-			LogInfo("Starting game service.");
-			this.gameThread = new GameThread();
-			
-			CancellationToken cancellationToken = this.gameCancellationTokenSource.Token;
-			this.gameTask = Task.Run(
-				action: () => this.gameThread.Start(), 
-				cancellationToken: cancellationToken);
-			
-			this.gameWebSocket = new GameWebSocket(this.gameThread);
-			RegisterEndpoints();
-			this.gameWebSocket.Start();
-		}
+        private void ExecuteIncomingCommands()
+        {
+            foreach (KeyValuePair<string, List<string>> playerEntry in this.incomingPlayerCommands)
+            {
+                string playerId = playerEntry.Key;
+                List<string> playerCommands = playerEntry.Value;
+                
+                foreach (string commandString in playerCommands)
+                {
+                    Command command = Command.ParseCommand(commandString);
+                    string response = command.Execute(playerEntry.Key);
+
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        var result = new
+                                         {
+                                             Update = "Terminal",
+                                             Payload = new {
+                                                                   Message = response,
+                                                               }
+                                         };
+                        SendMessageToClient(playerId, JsonConvert.SerializeObject(result));
+                    }
+                }
+                
+                playerCommands.Clear();
+            }
+        }
 
 
-		public void OnStopped()
-		{
-			LogInfo("Stopped game service.");
-		}
-
-
-		public void OnStopping()
-		{
-			LogInfo("Stopping game service.");
-			this.gameWebSocket.Stop();
-			
-			// TODO: Stop the game class cleanly.
-			
-			this.gameThread.Stop();
-			this.gameCancellationTokenSource.Cancel();
-		}
-
-
-		private void RegisterEndpoints()
-		{
-			this.gameWebSocket.AddEndpoint<EchoEndpoint>("/echo");
-			this.gameWebSocket.AddEndpoint<EmoEndpoint>("/linkinpark");
-			this.gameWebSocket.AddEndpoint<GameEndpoint>("/game");
-			this.gameWebSocket.AddEndpoint<BigBrotherEndpoint>("/bigbrother");
-		}
-	}
+        internal static void SendMessageToClient(string playerId, string playerStateJson)
+        {
+            Instance.messageForClient.Raise(playerId, playerStateJson);
+        }
+    }
 }

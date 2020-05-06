@@ -131,13 +131,24 @@
         public Entity GetComponentEntity<T>(T entityComponent)
             where T: IEntityComponent
         {
-            Bag<IEntityComponent> components = GetComponents<T>();
-            Game.LogInfo($"Found Components for {typeof(T).Name}: {components.Count}");
-            //ComponentType type = ComponentType<T>.CType;
-            //Bag<IEntityComponent> components = this.componentsByType.Get(type.Id);
+            for (int entityIndex = 0; entityIndex < this.ActiveEntities.Count; entityIndex++)
+            {
+                if (this.ActiveEntities[entityIndex].Components.Contains(entityComponent))
+                    return this.ActiveEntities[entityIndex];
+            }
+
+            return null;
+
+            /* TODO: This would be slightly faster, but always return null.
+            Bag<IEntityComponent> components = this.componentsByType.Get(ComponentTypeManager.GetId<T>());
+            
+            if (components == null)
+                throw new NullReferenceException("Component bag null");
+            
             int entityIndex = components.IndexOf(entityComponent);
             
             return GetEntityByIndex(entityIndex);
+            */
         }
 
 
@@ -166,16 +177,6 @@
             }
 
             return entityComponents;
-        }
-
-
-        public Bag<IEntityComponent> GetComponents<T>()
-            where T: IEntityComponent
-        {
-            ComponentType componentType = ComponentType<T>.CType;
-            return componentType.Id >= this.componentsByType.Capacity 
-                       ? null 
-                       : this.componentsByType.Get(componentType.Id);
         }
 
 

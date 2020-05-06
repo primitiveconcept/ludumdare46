@@ -11,7 +11,7 @@ namespace HackThePlanet
             where T: class, IEntityComponent
         {
             List<T> componentCollection = new List<T>();
-            foreach (var componentReference in componentReferenceCollection)
+            foreach (ComponentReference<T> componentReference in componentReferenceCollection)
             {
                 componentCollection.Add(componentReference.Component);
             }

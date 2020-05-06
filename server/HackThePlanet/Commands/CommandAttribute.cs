@@ -1,15 +1,15 @@
 namespace HackThePlanet
 {
-	using System;
+    using System;
 
 
-	public class CommandAttribute : Attribute
-	{
-		public readonly string Name;
+    public class CommandAttribute : Attribute
+    {
+        public readonly string Name;
 
-		public CommandAttribute(string name)
-		{
-			this.Name = name;
-		}
-	}
+        public CommandAttribute(string name)
+        {
+            this.Name = name;
+        }
+    }
 }
