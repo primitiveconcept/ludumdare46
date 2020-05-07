@@ -1,25 +1,8 @@
 import { useMemo } from "react";
 import useWebSocket from "react-use-websocket";
-import {
-  TerminalMessage,
-  ResourcesMessage,
-  EmailsMessage,
-  PortscanProcessMessage,
-  SshCrackProcessMessage,
-  InfostealerProcessMessage,
-} from "../types/Message";
+import { Message } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
-
-enum UpdateTypes {
-  Terminal = "Terminal",
-  Devices = "Devices",
-  Processes = "Processes",
-  Emails = "Emails",
-  PortscanProcess = "PortscanProcess",
-  SshCrackProcess = "SshCrackProcess",
-  InfostealerProcess = "InfostealerProcess",
-}
 
 /**
  * Connect to the Websocket endpoint and hide away the
@@ -69,25 +52,7 @@ export const useSocket = () => {
       return null;
     }
 
-    const data: any = camelizeKeys(JSON.parse(lastMessageUnsafe.data));
-    if (data?.update === UpdateTypes.Terminal) {
-      return TerminalMessage.check(data);
-    } else if (data?.update === UpdateTypes.Devices) {
-      return ResourcesMessage.check(data);
-    } else if (data?.update === UpdateTypes.Emails) {
-      return EmailsMessage.check(data);
-    } else if (data?.update === UpdateTypes.PortscanProcess) {
-      return PortscanProcessMessage.check(data);
-    } else if (data?.update === UpdateTypes.SshCrackProcess) {
-      return SshCrackProcessMessage.check(data);
-    } else if (data?.update === UpdateTypes.InfostealerProcess) {
-      return InfostealerProcessMessage.check(data);
-    }
-    throw new Error(
-      `Unsupported update: ${data?.update}. Valid updates are ${JSON.stringify(
-        Object.values(UpdateTypes),
-      )}. Message: ${JSON.stringify(data)}.`,
-    );
+    return Message.check(camelizeKeys(JSON.parse(lastMessageUnsafe.data)));
   }, [lastMessageUnsafe]);
   const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
     lastMessage,
