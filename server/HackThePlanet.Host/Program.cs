@@ -32,13 +32,12 @@
 
         private static void ConfigureKestrel(KestrelServerOptions options)
         {
-            options.ListenLocalhost(31337);
             options.Listen(
                 IPAddress.Any,
                 31337,
                 builder =>
                     {
-                        // TODO
+                        
                     });
         }
 
