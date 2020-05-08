@@ -14,7 +14,7 @@ namespace HackThePlanet.Host
             {
                 Console.Out.WriteLine("GameService task is starting.");
             
-                Game.Internet.Seed();
+                NetworkGenerator.SeedInternet();
                 
                 stoppingToken.Register(() => Console.Out.WriteLine("GameService task is stopping."));
 

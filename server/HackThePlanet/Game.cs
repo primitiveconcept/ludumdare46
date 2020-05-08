@@ -126,7 +126,7 @@ namespace HackThePlanet
             }
         }
 
-
+        
         internal static void SendMessageToClient(int playerId, string playerStateJson)
         {
             Instance.messageForClient.Raise(playerId, playerStateJson);

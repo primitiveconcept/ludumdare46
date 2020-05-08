@@ -7,6 +7,7 @@ namespace HackThePlanet
 
     public class Network : IGraph<NetworkInterface>
     {
+        private Dictionary<string, IP> domains = new Dictionary<string, IP>();
         private Dictionary<IP, NetworkInterface> networkInterfaces  = 
             new Dictionary<IP, NetworkInterface>();
         private List<NetworkInterface> serviceProviders = new List<NetworkInterface>();
@@ -37,6 +38,16 @@ namespace HackThePlanet
         }
 
 
+        public IP GetDomainIP(string domain)
+        {
+            domain = domain.ToLower();
+            if (!domain.Contains(domain))
+                return default;
+            
+            return this.domains[domain];
+        }
+
+
         public NetworkRoute GetRoute(
             IP sourceIP, 
             IP destinationIP)
@@ -50,30 +61,17 @@ namespace HackThePlanet
         }
 
 
-        public void RegisterNetworkInterface(NetworkInterface networkInterface)
+        public void RegisterDomain(string domainAddress, IP mappedIP)
         {
-            this.networkInterfaces.Add(networkInterface.IP, networkInterface);
+            domainAddress = domainAddress.ToLower();
+            if (!this.domains.ContainsKey(domainAddress))
+                this.domains.Add(domainAddress, mappedIP);
         }
 
 
-        // TODO: Temporary, for testing. Remove later.
-        public void Seed()
+        public void RegisterNetworkInterface(NetworkInterface networkInterface)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                Entity playerEntity = PlayerGenerator.GeneratePlayerEntity();
-                ComputerComponent playerComputer = playerEntity.GetComponent<ComputerComponent>();
-                
-                // TODO: Temporary, for testing
-                SshServerComponent sshServer = 
-                    ApplicationComponent.RunOnComputer<SshServerComponent>(playerComputer);
-                sshServer.Accounts.Add(new UserAccount()
-                                           {
-                                               UserName = "root",
-                                               Password = "god",
-                                               AccessLevel = AccessLevel.Root
-                                           });
-            }
+            this.networkInterfaces.Add(networkInterface.IP, networkInterface);
         }
     }
 }

@@ -34,9 +34,9 @@ namespace HackThePlanet
 
 			ComputerComponent targetComputer = 
 				networkRoute.ToNode.HostDevice.GetSiblingComponent<ComputerComponent>();
-			
-			PortScanComponent portscanComponent = 
-				ApplicationComponent.RunOnComputer<PortScanComponent>(playerComputer);
+
+			PortScanApplication portscanComponent =
+				ProcessPool<PortScanApplication>.RunApplication(playerComputer);
 			portscanComponent.OriginEntityId = player.GetEntity();
 			portscanComponent.TargetEntityId = networkRoute.ToNode.HostDevice.GetEntity();
 			

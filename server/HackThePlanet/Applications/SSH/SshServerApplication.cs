@@ -4,7 +4,7 @@ namespace HackThePlanet
     using PrimitiveEngine;
 
 
-    public class SshServerComponent : IServerComponent
+    public class SshServerApplication : IServerApplication
     {
         private const ushort RamUsePerSession = 2;
 
@@ -28,6 +28,9 @@ namespace HackThePlanet
         {
             get { return Port.Ssh; }
         }
+
+
+        public ushort ProcessId { get; set; }
 
 
         public ushort RamUse

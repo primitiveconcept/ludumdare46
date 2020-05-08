@@ -96,10 +96,10 @@
         /// <summary>
         /// Called every for every entity in this system with the components automatically passed as arguments.
         /// </summary>
-        /// <param name="entity">The entity that is processed </param>
+        /// <param name="originEntity">The entity that is processed </param>
         /// <param name="component1">The first component.</param>
-        /// <param name="component2">The second component.</param>
-        public abstract void Process(Entity entity, T1 component1, T2 component2);
+        /// <param name="originComputer">The second component.</param>
+        public abstract void Process(Entity originEntity, T1 component1, T2 originComputer);
 
 
         /// <summary>

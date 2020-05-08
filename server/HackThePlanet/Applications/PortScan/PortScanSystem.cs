@@ -4,44 +4,25 @@ namespace HackThePlanet
 
     
     [EntitySystem(UpdateType = UpdateType.FixedUpdate)]
-    public class PortScanSystem : EntityComponentProcessingSystem<PortScanComponent>
+    public class PortScanSystem : EntityComponentProcessingSystem<
+        ProcessPool<PortScanApplication>, 
+        ComputerComponent>
     {
-        private const long Delay = 20000;
+        private const long Delay = 40000;
 
 
         public override void Process(
-            Entity portscanEntity,
-            PortScanComponent portScanComponent)
+            Entity originEntity, 
+            ProcessPool<PortScanApplication> processPool,
+            ComputerComponent originComputer)
         {
-            if (portScanComponent.TicksSinceLastUpdate < Delay)
+            foreach (PortScanApplication process in processPool)
             {
-                portScanComponent.TicksSinceLastUpdate += Game.Time.ElapsedTime;
-                return;
-            }
-
-            PlayerComponent player = Game.World.GetEntityById(portScanComponent.OriginEntityId)?
-                .GetComponent<PlayerComponent>();
-            ComputerComponent targetComputer = Game.World.GetEntityById(portScanComponent.TargetEntityId)?
-                .GetComponent<ComputerComponent>();
-
-            if (!ValidateHost(
-                    portscanEntity: portscanEntity, 
-                    targetComputer: targetComputer, 
-                    player: player))
-            {
-                return;
-            }
+                if (Process(originEntity, process, originComputer))
+                    continue;
                 
-            ScanCurrentPort(
-                portScanComponent: portScanComponent, 
-                targetComputer: targetComputer, 
-                player: player);
-
-            if (!IncrementCurrentPort(portScanComponent))
-            {
-                FinishPortScan(
-                    portscanEntity: portscanEntity, 
-                    player: player);
+                processPool.KillProcess(process.ProcessId);
+                originComputer.RunningApplications.Remove(process.ProcessId);
             }
         }
 
@@ -51,11 +32,11 @@ namespace HackThePlanet
             Game.SendMessageToClient(
                 player.Id,
                 TerminalUpdateMessage.Create("Finished port scan"));
-            Game.World.EntityManager.Remove(portscanEntity);
+            
         }
 
 
-        private static bool IncrementCurrentPort(PortScanComponent portScanComponent)
+        private static bool IncrementCurrentPort(PortScanApplication portScanComponent)
         {
             if (portScanComponent.CurrentPort != EnumExtensions.GetLast<Port>())
             {
@@ -68,28 +49,27 @@ namespace HackThePlanet
 
 
         private static void ScanCurrentPort(
-            PortScanComponent portScanComponent,
+            PortScanApplication portScanComponent,
             ComputerComponent targetComputer,
             PlayerComponent player)
         {
             foreach (
-                int processEntityId
+                IApplication processEntityId
                 in targetComputer.RunningApplications.Values)
             {
-                IServerComponent serverComponent = Game.World.GetEntityById(processEntityId)?
-                                                       .Components?[0] as IServerComponent;
+                IServerApplication serverApplication = processEntityId as IServerApplication;
 
-                if (serverComponent != null
-                    && serverComponent.Port == portScanComponent.CurrentPort)
+                if (serverApplication != null
+                    && serverApplication.Port == portScanComponent.CurrentPort)
                 {
-                    portScanComponent.OpenPorts.Add(serverComponent.Port);
+                    portScanComponent.OpenPorts.Add(serverApplication.Port);
 
                     if (player != null)
                     {
                         Game.SendMessageToClient(
                             player.Id, 
-                            TerminalUpdateMessage.Create($"Found open port: {(int)serverComponent.Port} "
-                                                         + $"[{serverComponent.Port.ToString().ToUpper()}]"));
+                            TerminalUpdateMessage.Create($"Found open port: {(int)serverApplication.Port} "
+                                                         + $"[{serverApplication.Port.ToString().ToUpper()}]"));
                     }
                         
                     // TODO: Component update message per port found
@@ -100,14 +80,54 @@ namespace HackThePlanet
         }
 
 
-        private static bool ValidateHost(Entity portscanEntity, ComputerComponent targetComputer, PlayerComponent player)
+        private static bool ValidateHost(
+            ComputerComponent targetComputer, 
+            PlayerComponent player)
         {
             if (targetComputer == null)
             {
                 Game.SendMessageToClient(
                     player.Id,
                     TerminalUpdateMessage.Create($"Timed out connecting to host."));
-                Game.World.EntityManager.Remove(portscanEntity);
+                return false;
+            }
+
+            return true;
+        }
+
+
+        private bool Process(
+            Entity originEntity,
+            PortScanApplication portScan,
+            ComputerComponent originComputer)
+        {
+            if (portScan.TicksSinceLastUpdate < Delay)
+            {
+                portScan.TicksSinceLastUpdate += Game.Time.ElapsedTime;
+                return true;
+            }
+
+            PlayerComponent player = originComputer.GetSiblingComponent<PlayerComponent>();
+            ComputerComponent targetComputer = Game.World.GetEntityById(portScan.TargetEntityId)?
+                .GetComponent<ComputerComponent>();
+
+            if (!ValidateHost(
+                    targetComputer: targetComputer, 
+                    player: player))
+            {
+                return false;
+            }
+                
+            ScanCurrentPort(
+                portScanComponent: portScan, 
+                targetComputer: targetComputer, 
+                player: player);
+
+            if (!IncrementCurrentPort(portScan))
+            {
+                FinishPortScan(
+                    portscanEntity: originEntity, 
+                    player: player);
                 return false;
             }
 

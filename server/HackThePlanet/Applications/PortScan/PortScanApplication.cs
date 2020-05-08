@@ -3,13 +3,13 @@ namespace HackThePlanet
     using System.Collections.Generic;
 
 
-    public class PortScanComponent :
-        IApplicationComponent
+    public class PortScanApplication : IApplication
     {
         #region Properties
         public Port CurrentPort { get; set; }
         public List<Port> OpenPorts { get; set; }  = new List<Port>();
         public int OriginEntityId { get; set; }
+        public ushort ProcessId { get; set; }
 
 
         public ushort RamUse

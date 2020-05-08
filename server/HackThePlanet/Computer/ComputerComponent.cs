@@ -24,8 +24,8 @@ namespace HackThePlanet
         /// Lookup table to application components running on separate entities.
         /// ushort = PID (process ID), int = Entity.Id
         /// </summary>
-        public Dictionary<ushort, int> RunningApplications { get; set; } =
-            new Dictionary<ushort, int>();
+        public Dictionary<ushort, IApplication> RunningApplications { get; set; } =
+            new Dictionary<ushort, IApplication>();
         #endregion
 
 
