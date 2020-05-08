@@ -13,6 +13,14 @@ namespace HackThePlanet
         private List<T> processes = new List<T>();
 
 
+        #region Properties
+        public T this[int index]
+        {
+            get { return this.processes[index]; }
+        }
+        #endregion
+
+
         public static T RunApplication(ComputerComponent computer)
         {
             Entity computerEntity = computer.GetEntity();

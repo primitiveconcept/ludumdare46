@@ -1,5 +1,8 @@
 namespace HackThePlanet
 {
+    using System;
+
+
     public interface IApplication
     {
         #region Properties
@@ -7,5 +10,18 @@ namespace HackThePlanet
         int OriginEntityId { get; set; }
         ushort RamUse { get; }
         #endregion
+    }
+
+
+    public static class ApplicationExtensions
+    {
+        public static string GetName(this IApplication application)
+        {
+            return application
+                .GetType()
+                .Name
+                .Replace("Application", string.Empty)
+                .ToLower();
+        }
     }
 }

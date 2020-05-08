@@ -28,6 +28,16 @@ namespace HackThePlanet
             playerEntity.AddComponent(networkDevice);
             Console.Out.WriteLine($"New Player IP: {playerIP}");
             
+            // TODO: Temporary, for testing
+            SshServerApplication sshServer =
+                ProcessPool<SshServerApplication>.RunApplication(playerComputer);
+            sshServer.Accounts.Add(new UserAccount()
+                                       {
+                                           UserName = "root",
+                                           Password = "god",
+                                           AccessLevel = AccessLevel.Root
+                                       });
+            
             // Create a new ISP for the player if there isn't an existing one close enough.
             // TODO: Find closest ISP, just creates a new one for all players right now.
             IP ispIP = IPGenerator.GenerateGatewayAddressFor(playerIP);

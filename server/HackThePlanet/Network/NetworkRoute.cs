@@ -81,8 +81,12 @@ namespace HackThePlanet
 
 		public IList<NetworkInterface> GetShortest()
 		{
-			if (this.UnblockedRoutes.Count > 0)
+			if (this.UnblockedRoutes != null
+				&& this.UnblockedRoutes.Count > 0)
+			{
 				return this.UnblockedRoutes[0];
+			}
+				
 
 			return null;
 		}

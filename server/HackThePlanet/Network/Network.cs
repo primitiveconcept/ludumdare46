@@ -52,6 +52,11 @@ namespace HackThePlanet
             IP sourceIP, 
             IP destinationIP)
         {
+            if (!this.networkInterfaces.ContainsKey(sourceIP))
+                return null;
+            if (!this.networkInterfaces.ContainsKey(destinationIP))
+                return null;
+            
             NetworkInterface source = this.networkInterfaces[sourceIP];
             NetworkInterface destination = this.networkInterfaces[destinationIP];
             NetworkRoute route = new NetworkRoute(this, source, destination);

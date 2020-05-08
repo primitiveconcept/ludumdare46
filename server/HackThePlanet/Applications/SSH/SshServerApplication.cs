@@ -20,7 +20,6 @@ namespace HackThePlanet
             }
         }
 
-
         public int OriginEntityId { get; set; }
 
 

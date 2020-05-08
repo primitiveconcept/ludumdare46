@@ -8,7 +8,7 @@ namespace HackThePlanet
         ProcessPool<PortScanApplication>, 
         ComputerComponent>
     {
-        private const long Delay = 40000;
+        private const long Delay = 10000000;
 
 
         public override void Process(
