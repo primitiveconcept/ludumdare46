@@ -45,9 +45,9 @@ namespace HackThePlanet
 		/// <summary>
 		/// Executes the command upon Game state.
 		/// </summary>
-		/// <param name="session">Game state object.</param>
+		/// <param name="connection">Game state object.</param>
 		/// <returns>Data to send back to the client, if any.</returns>
-		public abstract string Execute(GameEndpoint session);
+		public abstract string Execute(int playerId);
 
 
 		/// <summary>

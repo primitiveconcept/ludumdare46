@@ -99,7 +99,7 @@ namespace PrimitiveEngine
         /// </summary>
         /// <value>The type of the C.</value>
         // ReSharper disable once StaticMemberInGenericType
-        public static volatile ComponentType CType; 
+        public static ComponentType CType; 
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace PrimitiveEngine
 {
+	using System;
 	using System.Threading;
 
 
@@ -16,6 +17,7 @@
 		public GameTime GameTime
 		{
 			get { return this.gameTime; }
+			set { this.gameTime = value; }
 		}
 		#endregion
 
@@ -32,6 +34,7 @@
 		/// </summary>
 		public void Start()
 		{
+			Console.Out.WriteLine("Started Game");
 			this.running = true;
 			this.gameTime = new GameTime();
 			while (this.running)

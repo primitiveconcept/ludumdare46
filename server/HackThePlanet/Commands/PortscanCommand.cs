@@ -1,72 +1,47 @@
 namespace HackThePlanet
 {
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+	using System.Linq;
 	using PrimitiveEngine;
 
 
 	[Command("portscan")]
 	public class PortscanCommand : Command
 	{
-		public override string Execute(GameEndpoint session)
+		public override string Execute(int playerId)
 		{
-			string ipArgument = GetArgument(0);
-			if (ipArgument == null) {
-				return $"Usage: {this.Name} [ip_address]";
-			}
-
-			// Locate computer with given IP address.
-			long ipAddress;
-			try
+			IP targetIP = GetArgument(0);
+			if (!targetIP.IsValid)
 			{
-				ipAddress = ipArgument.ToIPLong();
+				return $"Failed to resolve \"{GetArgument(0)}\".<br>"
+						+ $"WARNING: No targets were specified, so 0 hosts were scanned.<br>"
+						+ $"portscan done: 0 IP addresses (0 hosts up) scanned in 0.05 seconds";
 			}
-			catch
+
+			// TODO: ComputerComponent should be specified as an optional argument.
+			PlayerComponent player = Game.Players.GetPlayer(playerId);
+			ComputerComponent playerComputer = player.GetSiblingComponent<ComputerComponent>();
+			NetworkDeviceComponent playerNetworkDevice = player.GetSiblingComponent<NetworkDeviceComponent>();
+			IP playerIP = playerNetworkDevice.GetMainInterface().IP;
+
+			NetworkRoute networkRoute = Game.Internet.GetRoute(playerIP, targetIP);
+			IList<NetworkInterface> shortestRoute = networkRoute.GetShortest();
+
+			if (shortestRoute == null)
 			{
-				return "Invalid IP address format";
+				// TODO: Network timeout
 			}
 
-			return InitiatePortScan(ipAddress, session);
-		}
-
-		private string InitiatePortScan(long ipAddress, GameEndpoint connection)
-		{
-			ComputerComponent targetComputer = Computer.Find(ipAddress);
-			if (targetComputer == null)
-				return $"[{ipAddress.ToIPString()}] Could not locate";
-
-			Entity targetEntity = targetComputer.GetEntity();
-			Entity playerEntity = connection.PlayerEntity;
-			 
-			NetworkAccessComponent playerAccess = playerEntity.NetworkAccessComponent();
-			AccessOptions accessOptions = playerAccess.AccessOptions[targetEntity.Id];
-			if (accessOptions.PortAccessability.Keys.Count > 0)
-				return $"[{ipAddress.ToIPString()}] Already been portscanned";  
+			ComputerComponent targetComputer = 
+				networkRoute.ToNode.HostDevice.GetSiblingComponent<ComputerComponent>();
 			
-			accessOptions.PortAccessability = 
-				new Dictionary<Port, AccessLevel>();
-					
-			Entity portscanEntity = Game.World.CreateEntity();
-			PortScanComponent portScanComponent = new PortScanComponent();
-			// ReSharper disable once PossibleNullReferenceException
-			portScanComponent.InitiatingEntity = playerEntity.Id;
-			portScanComponent.TargetEntity = targetEntity.Id;
-			portScanComponent.Status = "portscanning";
-			portscanEntity.AddComponent(portScanComponent);
-
-			DeviceState targetDevice = new DeviceState();
-			targetDevice.ip = ipAddress.ToIPString();
-			targetDevice.status = "portscanning";
-			targetDevice.commands = new string[0];
-
-			ComponentReference<IProcess> process = new ComponentReference<IProcess>(
-				portscanEntity.Id, 
-				portScanComponent);
-			playerEntity.GetComponent<ComputerComponent>().AddProcess(process);
-
-			connection.PlayerComponent.QueueDeviceUpdate(targetDevice);
-			connection.PlayerComponent.QueueProcessUpdate(targetComputer);
-
-			return $"[{ipAddress.ToIPString()}] {this.Name} started..."; 
+			PortScanComponent portscanComponent = 
+				ApplicationComponent.RunOnComputer<PortScanComponent>(playerComputer);
+			portscanComponent.OriginEntityId = player.GetEntity();
+			portscanComponent.TargetEntityId = networkRoute.ToNode.HostDevice.GetEntity();
+			
+			// TODO: Return "started" response.
+			return null;
 		}
 	}
 }

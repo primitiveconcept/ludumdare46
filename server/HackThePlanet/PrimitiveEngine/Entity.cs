@@ -171,6 +171,14 @@ namespace PrimitiveEngine
 		#endregion
 
 
+		#region Operators
+		public static implicit operator int(Entity entity)
+		{
+			return entity.Id;
+		}
+		#endregion
+
+
 		/// <summary>
 		/// Adds the component.
 		/// </summary>
@@ -181,20 +189,6 @@ namespace PrimitiveEngine
 
 			this.entityManager.AddComponent(this, component);
 		}
-
-
-		/* TODO: This doesn't use the static ComponentType field of the most child class T. 
-		/// <summary>
-		/// Adds the component.
-		/// </summary>
-		/// <typeparam name="T">The <see langword="Type"/> T.</typeparam>
-		/// <param name="component">The component.</param>
-		public void AddComponent<T>(T component) where T : IEntityComponent
-		{
-			Debug.Assert(component != null, "Component must not be null.");
-			this.entityManager.AddComponent<T>(this, component);
-		}
-		*/
 
 
 		/// <summary>
