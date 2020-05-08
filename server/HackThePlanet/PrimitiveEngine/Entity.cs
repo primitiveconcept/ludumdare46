@@ -171,6 +171,14 @@ namespace PrimitiveEngine
 		#endregion
 
 
+		#region Operators
+		public static implicit operator int(Entity entity)
+		{
+			return entity.Id;
+		}
+		#endregion
+
+
 		/// <summary>
 		/// Adds the component.
 		/// </summary>

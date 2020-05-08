@@ -4,6 +4,7 @@ namespace HackThePlanet.Host
     using System.Net.WebSockets;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using PrimitiveEngine;
 
 
     public class GameEndpoint : WebsocketEndpoint
@@ -19,10 +20,10 @@ namespace HackThePlanet.Host
         #endregion
 
 
-        public override async Task<string> OnHandshake(HttpRequest request, HttpResponse response)
+        public override async Task<int> OnHandshake(HttpRequest request, HttpResponse response)
         {
-            string playerId = request.Cookies[SessionCookieKey];
-            if (string.IsNullOrEmpty(playerId))
+            int playerId = 0;
+            if (!int.TryParse(request.Cookies[SessionCookieKey], out playerId))
             {
                 Console.Out.WriteLine("New player");
                 return CreateNewPlayer(response);
@@ -47,23 +48,23 @@ namespace HackThePlanet.Host
             WebSocketReceiveResult result, 
             byte[] buffer)
         {
-            string clientId = this.connections.GetSocketId(socket);
+            int clientId = this.connections.GetSocketId(socket);
             string message = ExtractTextMessage(result, buffer);
 
             Game.QueueCommand(clientId, message);
         }
 
 
-        private static string CreateNewPlayer(HttpResponse response)
+        private static int CreateNewPlayer(HttpResponse response)
         {
-            PlayerComponent newPlayer = Game.Players.CreateNewPlayer();
-            response.Cookies.Append(SessionCookieKey, newPlayer.Id);
+            int playerId = Game.Players.CreateNewPlayer().Id;
+            response.Cookies.Append(SessionCookieKey, playerId.ToString());
                 
-            return newPlayer.Id;
+            return playerId;
         }
 
 
-        private async void OnGameStateUpdate(string playerId, string message)
+        private async void OnGameStateUpdate(int playerId, string message)
         {
             await SendMessageAsync(playerId, message);
         }

@@ -8,7 +8,7 @@ namespace HackThePlanet
     [Command("traceroute")]
     public class TraceRouteCommand : Command
     {
-        public override string Execute(string playerId)
+        public override string Execute(int playerId)
         {
             NetworkInterface playerNetworkInterface = Game.Players.GetPlayer(playerId)?
                 .GetSiblingComponent<NetworkDeviceComponent>()?
@@ -19,7 +19,7 @@ namespace HackThePlanet
             IP playerIP = playerNetworkInterface.IP;
          
             IP destinationIP = GetArgument(0);
-            IList<NetworkInterface> route = Game.GlobalNetwork.GetRoute(playerIP, destinationIP).GetShortest();
+            IList<NetworkInterface> route = Game.Internet.GetRoute(playerIP, destinationIP).GetShortest();
             
             StringBuilder result = new StringBuilder();
             result.Append($"Tracing route to {destinationIP} over a maximum of 30 hops<br>");

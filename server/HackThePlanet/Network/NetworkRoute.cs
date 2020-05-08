@@ -83,8 +83,6 @@ namespace HackThePlanet
 		{
 			if (this.UnblockedRoutes.Count > 0)
 				return this.UnblockedRoutes[0];
-			if (this.BlockedRoutes.Count > 0)
-				return this.BlockedRoutes[0];
 
 			return null;
 		}

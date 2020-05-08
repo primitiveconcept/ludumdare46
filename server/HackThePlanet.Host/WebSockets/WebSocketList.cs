@@ -9,24 +9,24 @@ namespace HackThePlanet.Host
 
     public class WebSocketList
     {
-        private ConcurrentDictionary<string, WebSocket> sockets = new ConcurrentDictionary<string, WebSocket>();
+        private ConcurrentDictionary<int, WebSocket> sockets = new ConcurrentDictionary<int, WebSocket>();
 
 
         #region Properties
-        public ConcurrentDictionary<string, WebSocket> Sockets
+        public ConcurrentDictionary<int, WebSocket> Sockets
         {
             get { return this.sockets; }
         }
         #endregion
 
 
-        public void AddSocket(string id, WebSocket socket)
+        public void AddSocket(int id, WebSocket socket)
         {
             this.sockets.TryAdd(id, socket);
         }
 
 
-        public WebSocket GetSocket(string id)
+        public WebSocket GetSocket(int id)
         {
             return this.sockets.TryGetValue(id, out WebSocket socket) 
                        ? socket 
@@ -34,15 +34,15 @@ namespace HackThePlanet.Host
         }
 
 
-        public string GetSocketId(WebSocket socket)
+        public int GetSocketId(WebSocket socket)
         {
-            foreach (KeyValuePair<string, WebSocket> entry in this.sockets)
+            foreach (KeyValuePair<int, WebSocket> entry in this.sockets)
             {
                 if (entry.Value == socket)
                     return entry.Key;
             }
 
-            return null;
+            return 0;
         }
 
 
@@ -52,7 +52,7 @@ namespace HackThePlanet.Host
         }
 
 
-        public async Task RemoveSocket(string id)
+        public async Task RemoveSocket(int id)
         {
             if (this.sockets.TryRemove(id, out WebSocket socket))
             {

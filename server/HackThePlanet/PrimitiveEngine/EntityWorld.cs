@@ -63,31 +63,6 @@
 
 
         /// <summary>
-        /// Gets the current state of the entity world.
-        /// </summary>
-        /// <value>The state of the current.</value>
-        public Dictionary<Entity, Bag<IEntityComponent>> CurrentState
-        {
-            get
-            {
-                Bag<Entity> entities = this.EntityManager.ActiveEntities;
-                Dictionary<Entity, Bag<IEntityComponent>> currentState = new Dictionary<Entity, Bag<IEntityComponent>>();
-                for (int index = 0, j = entities.Count; index < j; ++index)
-                {
-                    Entity entity = entities.Get(index);
-                    if (entity != null)
-                    {
-                        Bag<IEntityComponent> components = entity.Components;
-                        currentState.Add(entity, components);
-                    }
-                }
-
-                return currentState;
-            }
-        }
-
-
-        /// <summary>
         /// Gets the delta time since last game loop in ticks.
         /// </summary>
         /// <value>The delta in ticks.</value>
@@ -190,6 +165,68 @@
 
 
         /// <summary>
+        /// Updates the EntityWorld.
+        /// </summary>
+        public void FixedUpdate()
+        {
+            long deltaTicks = (FastDateTime.Now - this.dateTime).Ticks;
+            this.dateTime = FastDateTime.Now;
+            FixedUpdate(deltaTicks);
+        }
+
+
+        /// <summary>
+        /// Updates the EntityWorld.
+        /// </summary>
+        /// <param name="deltaTicks">The delta ticks.</param>
+        public void FixedUpdate(long deltaTicks)
+        {
+            this.Delta = deltaTicks;
+
+            this.EntityManager.RemoveMarkedComponents();
+
+            ++this.poolCleanupDelayCounter;
+            if (this.poolCleanupDelayCounter > this.PoolCleanupDelay)
+            {
+                this.poolCleanupDelayCounter = 0;
+                foreach (Type item in this.pools.Keys)
+                {
+                    this.pools[item].CleanUp();
+                }
+            }
+
+            if (!this.deleted.IsEmpty)
+            {
+                for (int index = this.deleted.Count - 1; index >= 0; --index)
+                {
+                    Entity entity = this.deleted.Get(index);
+                    this.TagManager.Unregister(entity);
+                    this.GroupManager.Remove(entity);
+                    this.EntityManager.Remove(entity);
+                    entity.DeletingState = false;
+                }
+
+                this.deleted.Clear();
+            }
+
+            bool isRefreshing = this.refreshed.Count > 0;
+
+            if (isRefreshing)
+            {
+                foreach (Entity entity in this.refreshed)
+                {
+                    this.EntityManager.Refresh(entity);
+                    entity.RefreshingState = false;
+                }
+
+                this.refreshed.Clear();
+            }
+
+            this.SystemManager.FixedUpdate();
+        }
+
+
+        /// <summary>
         /// Draws the EntityWorld.
         /// </summary>
         public void FrameUpdate()
@@ -228,6 +265,34 @@
 
 
         /// <summary>
+        /// Gets the current state of the entity world.
+        /// </summary>
+        /// <value>The state of the current.</value>
+        public Dictionary<Entity, Bag<IEntityComponent>> GetCurrentState()
+        {
+            Bag<Entity> entities = this.EntityManager.ActiveEntities;
+            Dictionary<Entity, Bag<IEntityComponent>> currentState = new Dictionary<Entity, Bag<IEntityComponent>>();
+            for (int index = 0, j = entities.Count; index < j; ++index)
+            {
+                Entity entity = entities.Get(index);
+                if (entity != null)
+                {
+                    Bag<IEntityComponent> components = entity.Components;
+                    currentState.Add(entity, components);
+                }
+            }
+
+            return currentState;
+        }
+
+
+        public Entity GetEntityById(int uniqueId)
+        {
+            return this.EntityManager.GetEntityById(uniqueId);
+        }
+
+
+        /// <summary>
         /// Gets the entity by its index in the entity collection.
         /// </summary>
         /// <param name="entityIndex">The entity index.</param>
@@ -238,11 +303,6 @@
             return this.EntityManager.GetEntityByIndex(entityIndex);
         }
 
-
-        public Entity GetEntityById(int uniqueId)
-        {
-            return this.EntityManager.GetEntityById(uniqueId);
-        }
 
         /// <summary>
         /// Gets the pool for a Type.
@@ -291,7 +351,7 @@
         {
             InitializeAll(AppDomain.CurrentDomain.GetAssemblies());
         }
-        
+
 
         /// <summary>
         /// Initialize the EntityWorld.
@@ -373,68 +433,6 @@
         public void UnloadContent()
         {
             this.SystemManager.TerminateAll();
-        }
-
-
-        /// <summary>
-        /// Updates the EntityWorld.
-        /// </summary>
-        public void FixedUpdate()
-        {
-            long deltaTicks = (FastDateTime.Now - this.dateTime).Ticks;
-            this.dateTime = FastDateTime.Now;
-            FixedUpdate(deltaTicks);
-        }
-
-
-        /// <summary>
-        /// Updates the EntityWorld.
-        /// </summary>
-        /// <param name="deltaTicks">The delta ticks.</param>
-        public void FixedUpdate(long deltaTicks)
-        {
-            this.Delta = deltaTicks;
-
-            this.EntityManager.RemoveMarkedComponents();
-
-            ++this.poolCleanupDelayCounter;
-            if (this.poolCleanupDelayCounter > this.PoolCleanupDelay)
-            {
-                this.poolCleanupDelayCounter = 0;
-                foreach (Type item in this.pools.Keys)
-                {
-                    this.pools[item].CleanUp();
-                }
-            }
-
-            if (!this.deleted.IsEmpty)
-            {
-                for (int index = this.deleted.Count - 1; index >= 0; --index)
-                {
-                    Entity entity = this.deleted.Get(index);
-                    this.TagManager.Unregister(entity);
-                    this.GroupManager.Remove(entity);
-                    this.EntityManager.Remove(entity);
-                    entity.DeletingState = false;
-                }
-
-                this.deleted.Clear();
-            }
-
-            bool isRefreshing = this.refreshed.Count > 0;
-
-            if (isRefreshing)
-            {
-                foreach (Entity entity in this.refreshed)
-                {
-                    this.EntityManager.Refresh(entity);
-                    entity.RefreshingState = false;
-                }
-
-                this.refreshed.Clear();
-            }
-
-            this.SystemManager.FixedUpdate();
         }
 
 

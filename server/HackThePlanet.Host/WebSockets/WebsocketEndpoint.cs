@@ -35,7 +35,7 @@ namespace HackThePlanet.Host
 
         public async Task BroadcastMessageAsync(string message)
         {
-            foreach (KeyValuePair<string, WebSocket> entry in this.connections.Sockets)
+            foreach (KeyValuePair<int, WebSocket> entry in this.connections.Sockets)
             {
                 if (entry.Value.State == WebSocketState.Open)
                     await SendMessageAsync(entry.Value, message);
@@ -50,9 +50,9 @@ namespace HackThePlanet.Host
             return Encoding.UTF8.GetString(buffer, 0, result.Count);
         }
 
-        public virtual async Task<string> OnHandshake(HttpRequest request, HttpResponse response)
+        public virtual async Task<int> OnHandshake(HttpRequest request, HttpResponse response)
         {
-            return Guid.NewGuid().ToString();
+            return Guid.NewGuid().GetHashCode();
         }
 
         public virtual async Task OnDisconnected(WebSocket socket)
@@ -77,7 +77,7 @@ namespace HackThePlanet.Host
         }
 
 
-        public async Task SendMessageAsync(string socketId, string message)
+        public async Task SendMessageAsync(int socketId, string message)
         {
             await SendMessageAsync(this.connections.GetSocket(socketId), message);
         }

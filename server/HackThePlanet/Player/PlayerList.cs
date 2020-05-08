@@ -2,20 +2,22 @@ namespace HackThePlanet
 {
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using PrimitiveEngine;
 
 
     public class PlayerList
     {
-        private ConcurrentDictionary<string, PlayerComponent> players = 
-            new ConcurrentDictionary<string, PlayerComponent>();
+        private ConcurrentDictionary<int, PlayerComponent> players = 
+            new ConcurrentDictionary<int, PlayerComponent>();
 
 
-        public PlayerComponent CreateNewPlayer()
+        public Entity CreateNewPlayer()
         {
-            PlayerComponent player = PlayerGenerator.Generate();
-            Add(player);
+            Entity playerEntity = PlayerGenerator.GeneratePlayerEntity();
+            PlayerComponent playerComponent = playerEntity.GetComponent<PlayerComponent>();
+            Add(playerComponent);
 
-            return player;
+            return playerEntity;
         }
 
         
@@ -34,19 +36,19 @@ namespace HackThePlanet
         }
 
 
-        public string GetPlayerId(PlayerComponent player)
+        public int GetPlayerId(PlayerComponent player)
         {
-            foreach (KeyValuePair<string, PlayerComponent> entry in this.players)
+            foreach (KeyValuePair<int, PlayerComponent> entry in this.players)
             {
                 if (entry.Value == player)
                     return entry.Key;
             }
 
-            return null;
+            return 0;
         }
 
 
-        public PlayerComponent GetReadonlyPlayer(string playerId)
+        public PlayerComponent GetReadonlyPlayer(int playerId)
         {
             return this.players.TryGetValue(playerId, out PlayerComponent player) 
                        ? player.Clone() 
@@ -60,13 +62,13 @@ namespace HackThePlanet
         }
 
 
-        public void Remove(string playerId)
+        public void Remove(int playerId)
         {
             this.players.TryRemove(playerId, out PlayerComponent socket);
         }
 
 
-        internal PlayerComponent GetPlayer(string playerId)
+        internal PlayerComponent GetPlayer(int playerId)
         {
             return this.players.TryGetValue(playerId, out PlayerComponent player) 
                        ? player 

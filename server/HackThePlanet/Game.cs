@@ -15,9 +15,9 @@ namespace HackThePlanet
         private EntityWorld entityWorld = new EntityWorld();
         private GameTime gameTime = new GameTime();
         private PlayerList players = new PlayerList();
-        private GlobalNetwork globalNetwork = new GlobalNetwork();
-        private readonly ConcurrentDictionary<string, List<string>> incomingPlayerCommands = 
-            new ConcurrentDictionary<string, List<string>>();
+        private Network internet = new Network();
+        private readonly ConcurrentDictionary<int, List<string>> incomingPlayerCommands = 
+            new ConcurrentDictionary<int, List<string>>();
 
 
         #region Constructors
@@ -28,13 +28,13 @@ namespace HackThePlanet
         #endregion
 
 
-        private event Action<string, string> messageForClient;
+        private event Action<int, string> messageForClient;
 
 
         #region Properties
-        public static GlobalNetwork GlobalNetwork
+        public static Network Internet
         {
-            get { return Instance.globalNetwork; }
+            get { return Instance.internet; }
         }
 
 
@@ -68,7 +68,7 @@ namespace HackThePlanet
         #endregion
 
 
-        public static void QueueCommand(string playerId, string command)
+        public static void QueueCommand(int playerId, string command)
         {
             if (!Instance.incomingPlayerCommands.ContainsKey(playerId))
                 Instance.incomingPlayerCommands.TryAdd(playerId, new List<string>());
@@ -77,13 +77,13 @@ namespace HackThePlanet
         }
 
 
-        public static void RemovePlayerCommandQueue(string playerId)
+        public static void RemovePlayerCommandQueue(int playerId)
         {
             Instance.incomingPlayerCommands.TryRemove(playerId, out List<string> unusedValue);
         }
 
 
-        public static void SubscribeToClientMessages(Action<string, string> eventHandler)
+        public static void SubscribeToClientMessages(Action<int, string> eventHandler)
         {
             Instance.messageForClient += eventHandler;
         }
@@ -99,9 +99,9 @@ namespace HackThePlanet
 
         private void ExecuteIncomingCommands()
         {
-            foreach (KeyValuePair<string, List<string>> playerEntry in this.incomingPlayerCommands)
+            foreach (KeyValuePair<int, List<string>> playerEntry in this.incomingPlayerCommands)
             {
-                string playerId = playerEntry.Key;
+                int playerId = playerEntry.Key;
                 List<string> playerCommands = playerEntry.Value;
                 
                 foreach (string commandString in playerCommands)
@@ -127,7 +127,7 @@ namespace HackThePlanet
         }
 
 
-        internal static void SendMessageToClient(string playerId, string playerStateJson)
+        internal static void SendMessageToClient(int playerId, string playerStateJson)
         {
             Instance.messageForClient.Raise(playerId, playerStateJson);
         }

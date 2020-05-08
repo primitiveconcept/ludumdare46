@@ -5,14 +5,14 @@ namespace HackThePlanet
     using PrimitiveEngine;
 
 
-    public class GlobalNetwork : IGraph<NetworkInterface>
+    public class Network : IGraph<NetworkInterface>
     {
         private Dictionary<IP, NetworkInterface> networkInterfaces  = 
             new Dictionary<IP, NetworkInterface>();
         private List<NetworkInterface> serviceProviders = new List<NetworkInterface>();
 
 
-        public NetworkDeviceComponent CreateIsp(IP gatewayIP)
+        public NetworkDeviceComponent CreateServiceProvider(IP gatewayIP)
         {
             Entity newIspEntity = Game.World.CreateEntity();
             NetworkDeviceComponent newIspRouter = NetworkDeviceGenerator.GenerateIspRouter(gatewayIP);
@@ -59,8 +59,21 @@ namespace HackThePlanet
         // TODO: Temporary, for testing. Remove later.
         public void Seed()
         {
-            PlayerGenerator.Generate();
-            PlayerGenerator.Generate();
+            for (int i = 0; i < 3; i++)
+            {
+                Entity playerEntity = PlayerGenerator.GeneratePlayerEntity();
+                ComputerComponent playerComputer = playerEntity.GetComponent<ComputerComponent>();
+                
+                // TODO: Temporary, for testing
+                SshServerComponent sshServer = 
+                    ApplicationComponent.RunOnComputer<SshServerComponent>(playerComputer);
+                sshServer.Accounts.Add(new UserAccount()
+                                           {
+                                               UserName = "root",
+                                               Password = "god",
+                                               AccessLevel = AccessLevel.Root
+                                           });
+            }
         }
     }
 }

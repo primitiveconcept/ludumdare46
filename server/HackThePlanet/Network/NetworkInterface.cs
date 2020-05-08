@@ -11,10 +11,11 @@ namespace HackThePlanet
 
 
         #region Constructors
-        public NetworkInterface(IP ip)
+        public NetworkInterface(NetworkDeviceComponent hostDevice, IP ip)
         {
+            this.HostDevice = hostDevice;
             this.IP = ip;
-            Game.GlobalNetwork.RegisterNetworkInterface(this);
+            Game.Internet.RegisterNetworkInterface(this);
         }
         #endregion
 

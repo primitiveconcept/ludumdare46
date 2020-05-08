@@ -9,7 +9,7 @@ namespace HackThePlanet
         {
             NetworkDeviceComponent router = new NetworkDeviceComponent();
             NetworkInterface gatewayInterface = 
-                new NetworkInterface(gatewayIP);
+                new NetworkInterface(router, gatewayIP);
             router.AddNetworkInterface(gatewayInterface);
             
             return router;

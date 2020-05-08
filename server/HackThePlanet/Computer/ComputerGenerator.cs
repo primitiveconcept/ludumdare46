@@ -14,7 +14,7 @@ namespace HackThePlanet
                                       ClockSpeed = 1024
                                   }
                     };
-
+            
             return computer;
         }
     }

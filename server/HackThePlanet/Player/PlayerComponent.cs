@@ -1,12 +1,22 @@
 namespace HackThePlanet
 {
+    using Newtonsoft.Json;
     using PrimitiveEngine;
 
 
     public class PlayerComponent : IEntityComponent
     {
-        public string Id;
+        public int Id;
         public string Name;
+
+
+        #region Properties
+        [JsonIgnore]
+        public Entity Entity
+        {
+            get { return Game.World.GetEntityById(this.Id); }
+        }
+        #endregion
 
 
         public PlayerComponent Clone()

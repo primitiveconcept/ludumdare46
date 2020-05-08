@@ -28,8 +28,8 @@ namespace HackThePlanet.Host
             if (!context.WebSockets.IsWebSocketRequest)
                 return;
 
-            string clientId = await this.session.OnHandshake(context.Request, context.Response);
-            if (string.IsNullOrEmpty(clientId))
+            int clientId = await this.session.OnHandshake(context.Request, context.Response);
+            if (clientId == 0)
             {
                 return;
             }
