@@ -30,12 +30,6 @@ export const useLocalCommands = ({
       }
       const [baseCommand, ...args] = command.split(/ +/);
 
-      // commands without local echo first
-      if (baseCommand === "close") {
-        setOpenProcessId(null);
-        return;
-      }
-
       addMessage(`${username}@local$ ${command}`);
       addHistory(command);
       if (baseCommand === "help") {
