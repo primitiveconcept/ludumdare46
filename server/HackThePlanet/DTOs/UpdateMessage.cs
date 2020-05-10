@@ -10,7 +10,7 @@ namespace HackThePlanet
         public string Message { get; set; }
         public abstract T Payload { get; set; }
         public abstract string Type { get; }
-        public long Update { get; set; }
+        public int EntityId { get; set; }
 
 
         public virtual string ToJson()

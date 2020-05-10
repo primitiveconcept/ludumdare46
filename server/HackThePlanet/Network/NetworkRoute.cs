@@ -10,8 +10,7 @@ namespace HackThePlanet
 		private IGraph<NetworkInterface> graph;
 		private NetworkInterface fromNode;
 		private NetworkInterface toNode;
-		private IList<IList<NetworkInterface>> unblockedRoutes;
-		private IList<IList<NetworkInterface>> blockedRoutes;
+		private List<List<NetworkInterface>> routes;
 		private Stack<NetworkInterface> routeStack;
 		private HashSet<NetworkInterface> visitedNodes;
 
@@ -24,33 +23,60 @@ namespace HackThePlanet
 		/// <param name="graph">Graph to map paths of.</param>
 		/// <param name="fromNode">Source node.</param>
 		/// <param name="toNode">Destination node.</param>
-		public NetworkRoute(IGraph<NetworkInterface> graph, NetworkInterface fromNode, NetworkInterface toNode)
+		public NetworkRoute(
+			IGraph<NetworkInterface> graph, 
+			NetworkInterface fromNode, 
+			NetworkInterface toNode)
 		{
 			this.graph = graph;
 			this.fromNode = fromNode;
 			this.toNode = toNode;
-			this.unblockedRoutes = new List<IList<NetworkInterface>>();
-			this.blockedRoutes = new List<IList<NetworkInterface>>();
+			this.routes = new List<List<NetworkInterface>>();
 			this.visitedNodes = new HashSet<NetworkInterface>();
 			this.routeStack = new Stack<NetworkInterface>();
 
 			FindRoute(this.fromNode);
-			((List<IList<NetworkInterface>>)this.unblockedRoutes).Sort((a, b) => a.Count - b.Count);
-			((List<IList<NetworkInterface>>)this.blockedRoutes).Sort((a, b) => a.Count - b.Count);
+			this.routes.Sort(
+				(a, b) => a.Count - b.Count);
+		}
+
+
+		/// <summary>
+		/// Create a direct route between two nodes.
+		/// </summary>
+		/// <param name="fromNode"></param>
+		/// <param name="toNode"></param>
+		public NetworkRoute(NetworkInterface fromNode, NetworkInterface toNode)
+		{
+			this.graph = null;
+			this.fromNode = fromNode;
+			this.toNode = toNode;
+			this.routes = new List<List<NetworkInterface>> 
+							{ 
+								new List<NetworkInterface> { fromNode, toNode } 
+							};
+		}
+
+
+		/// <summary>
+		/// Create a direct route between two nodes.
+		/// </summary>
+		/// <param name="fromNode"></param>
+		/// <param name="toNode"></param>
+		public NetworkRoute(NetworkInterface loopbackNode)
+		{
+			this.graph = null;
+			this.fromNode = loopbackNode;
+			this.toNode = loopbackNode;
+			this.routes = new List<List<NetworkInterface>> 
+							{ 
+								new List<NetworkInterface> { loopbackNode } 
+							};
 		}
 		#endregion
 
 
 		#region Properties
-		/// <summary>
-		/// All possible paths that are "blocked," sorted by length.
-		/// </summary>
-		public IList<IList<NetworkInterface>> BlockedRoutes
-		{
-			get { return this.blockedRoutes; }
-		}
-
-
 		/// <summary>
 		/// Node all paths start from.
 		/// </summary>
@@ -61,37 +87,51 @@ namespace HackThePlanet
 
 
 		/// <summary>
+		/// All possible paths that are "unblocked," sorted by length.
+		/// </summary>
+		public List<List<NetworkInterface>> Routes
+		{
+			get { return this.routes; }
+		}
+
+
+		/// <summary>
+		/// Return the shortest found route.
+		/// </summary>
+		public List<NetworkInterface> Shortest
+		{
+			get
+			{
+				if (this.Routes != null
+					&& this.Routes.Count > 0)
+				{
+					return this.Routes[0];
+				}
+				return null;	
+			}
+		}
+
+
+		/// <summary>
 		/// Node all paths end at.
 		/// </summary>
 		public NetworkInterface ToNode
 		{
 			get { return this.toNode; }
 		}
+		#endregion
 
 
-		/// <summary>
-		/// All possible paths that are "unblocked," sorted by length.
-		/// </summary>
-		public IList<IList<NetworkInterface>> UnblockedRoutes
+		#region Operators
+		public static implicit operator List<NetworkInterface>(NetworkRoute networkRoute)
 		{
-			get { return this.unblockedRoutes; }
+			return networkRoute != null 
+						? networkRoute.Shortest 
+						: null;
 		}
 		#endregion
 
 
-		public IList<NetworkInterface> GetShortest()
-		{
-			if (this.UnblockedRoutes != null
-				&& this.UnblockedRoutes.Count > 0)
-			{
-				return this.UnblockedRoutes[0];
-			}
-				
-
-			return null;
-		}
-
-		
 		// Recursive pathfinding algorithm.
 		// Completed paths are stored via RecordCurrentPath().
 		private void FindRoute(NetworkInterface currentNode)
@@ -140,8 +180,8 @@ namespace HackThePlanet
 				IGraphNodeConnection<NetworkInterface> path =
 					this.graph.GetConnections(currentNode).FirstOrDefault(connection => connection.Destination == nextNode);
 
-				if (path.Equals(default(NetworkInterface)))
-					throw new NullReferenceException();
+				if (path == null)
+					continue;
 
 				if (!path.CanTraverse())
 				{
@@ -150,10 +190,8 @@ namespace HackThePlanet
 				}
 			}
 
-			if (isBlocked)
-				this.blockedRoutes.Add(reversePath);
-			else
-				this.unblockedRoutes.Add(reversePath);
+			if (!isBlocked)
+				this.routes.Add(reversePath);
 		}
 	}
 }

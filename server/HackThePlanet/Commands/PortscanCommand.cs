@@ -25,12 +25,10 @@ namespace HackThePlanet
 			IP playerIP = playerNetworkDevice.GetMainInterface().IP;
 
 			NetworkRoute networkRoute = Game.Internet.GetRoute(playerIP, targetIP);
-			IList<NetworkInterface> shortestRoute = networkRoute?.GetShortest();
+			List<NetworkInterface> shortestRoute = networkRoute;
 
 			if (shortestRoute == null)
-			{
-				return $"Timed out connecting to host.";
-			}
+				return $"Timed out connecting to {targetIP}";
 
 			PortScanApplication portscanComponent =
 				ProcessPool<PortScanApplication>.RunApplication(playerComputer);

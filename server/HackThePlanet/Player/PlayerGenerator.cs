@@ -1,6 +1,7 @@
 namespace HackThePlanet
 {
     using System;
+    using System.Net;
     using PrimitiveEngine;
 
 
@@ -22,11 +23,15 @@ namespace HackThePlanet
 
             // Player network device
             NetworkDeviceComponent networkDevice = new NetworkDeviceComponent();
-            IP playerIP = IPGenerator.GenerateRandom();
+            IP playerIP = IPGenerator.GenerateRandomPublic();
             NetworkInterface networkInterface = new NetworkInterface(networkDevice, playerIP);
+            NetworkInterface loopbackInterface = new NetworkInterface(networkDevice, "127.0.0.1");
             networkDevice.AddNetworkInterface(networkInterface);
+            networkDevice.AddNetworkInterface(loopbackInterface);
             playerEntity.AddComponent(networkDevice);
             Console.Out.WriteLine($"New Player IP: {playerIP}");
+            
+            
             
             // TODO: Temporary, for testing
             SshServerApplication sshServer =

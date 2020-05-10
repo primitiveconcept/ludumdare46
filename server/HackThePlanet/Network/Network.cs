@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using PrimitiveEngine;
@@ -8,7 +9,7 @@ namespace HackThePlanet
     public class Network : IGraph<NetworkInterface>
     {
         private Dictionary<string, IP> domains = new Dictionary<string, IP>();
-        private Dictionary<IP, NetworkInterface> networkInterfaces  = 
+        private Dictionary<IP, NetworkInterface> publicInterfaces  = 
             new Dictionary<IP, NetworkInterface>();
         private List<NetworkInterface> serviceProviders = new List<NetworkInterface>();
 
@@ -28,6 +29,29 @@ namespace HackThePlanet
             this.serviceProviders.Add(newIspNetworkInterface);
 
             return newIspRouter;
+        }
+
+
+        public ComputerComponent GetComputer(IP ip, Port port)
+        {
+            if (!this.publicInterfaces.ContainsKey(ip))
+                return null;
+
+            return this.publicInterfaces[ip]
+                .GetInterfaceForPort(port)?
+                .HostDevice?
+                .GetSiblingComponent<ComputerComponent>();
+        }
+
+
+        public ComputerComponent GetComputer(IP ip)
+        {
+            if (!this.publicInterfaces.ContainsKey(ip))
+                return null;
+
+            return this.publicInterfaces[ip]
+                .HostDevice?
+                .GetSiblingComponent<ComputerComponent>();
         }
 
 
@@ -52,13 +76,21 @@ namespace HackThePlanet
             IP sourceIP, 
             IP destinationIP)
         {
-            if (!this.networkInterfaces.ContainsKey(sourceIP))
+            if (!this.publicInterfaces.ContainsKey(sourceIP))
                 return null;
-            if (!this.networkInterfaces.ContainsKey(destinationIP))
+            NetworkInterface source = this.publicInterfaces[sourceIP];
+
+            if (destinationIP.IsLoopbackAddress())
+            {
+                Console.Out.WriteLine("Loopback device");
+                return new NetworkRoute(source);
+            }
+                
+
+            if (!this.publicInterfaces.ContainsKey(destinationIP))
                 return null;
             
-            NetworkInterface source = this.networkInterfaces[sourceIP];
-            NetworkInterface destination = this.networkInterfaces[destinationIP];
+            NetworkInterface destination = this.publicInterfaces[destinationIP];
             NetworkRoute route = new NetworkRoute(this, source, destination);
 
             return route;
@@ -76,7 +108,7 @@ namespace HackThePlanet
 
         public void RegisterNetworkInterface(NetworkInterface networkInterface)
         {
-            this.networkInterfaces.Add(networkInterface.IP, networkInterface);
+            this.publicInterfaces.Add(networkInterface.IP, networkInterface);
         }
     }
 }

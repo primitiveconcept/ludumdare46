@@ -1,6 +1,5 @@
 namespace HackThePlanet
 {
-    using System;
     using System.Collections.Generic;
     using System.Text;
 
@@ -14,12 +13,16 @@ namespace HackThePlanet
                 .GetSiblingComponent<NetworkDeviceComponent>()?
                 .GetMainInterface();
 
-            // TODO: Null ref check
+            if (playerNetworkInterface == null)
+                return "No network device found.";
             
             IP playerIP = playerNetworkInterface.IP;
-         
             IP destinationIP = GetArgument(0);
-            IList<NetworkInterface> route = Game.Internet.GetRoute(playerIP, destinationIP).GetShortest();
+            
+            List<NetworkInterface> route = Game.Internet.GetRoute(playerIP, destinationIP);
+            
+            if (route == null)
+                return $"Timed out connecting to {destinationIP}";
             
             StringBuilder result = new StringBuilder();
             result.Append($"Tracing route to {destinationIP} over a maximum of 30 hops<br>");

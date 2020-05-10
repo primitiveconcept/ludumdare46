@@ -6,15 +6,15 @@ namespace HackThePlanet
 
     public static class IPGenerator
     {
-        public static IP GenerateRandom()
+        public static IP GenerateRandomPublic()
         {
             byte[] randomBytes = new byte[4];
             new Random().NextBytes(randomBytes);
             IP ip = new IP(randomBytes);
-            
-            // TODO: Redo if IP already exists in the world.
 
-            return ip;
+            return ip.IsValidPublicAddress() 
+                       ? ip 
+                       : GenerateRandomPublic();
         }
 
 
@@ -28,7 +28,7 @@ namespace HackThePlanet
 
         public static IP GenerateRandomGatewayAddress()
         {
-            IP randomAddress = GenerateRandom();
+            IP randomAddress = GenerateRandomPublic();
             randomAddress[3] = 1;
 
             // TODO: Redo if IP already exists in the world.

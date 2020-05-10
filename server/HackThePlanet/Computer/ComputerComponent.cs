@@ -15,6 +15,8 @@ namespace HackThePlanet
             new List<UserAccount>();
 
 
+        public IShell ActiveShell { get; set; }
+
         public Cpu Cpu { get; set; }
 
         public ushort Ram { get; set; }

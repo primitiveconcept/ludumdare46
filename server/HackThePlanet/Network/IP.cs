@@ -2,6 +2,7 @@ namespace HackThePlanet
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
     using Newtonsoft.Json;
@@ -13,17 +14,75 @@ namespace HackThePlanet
     [JsonConverter(typeof(IPJsonConverter))]
     public struct IP
     {
+        public const uint PossiblePublicIPv4Addresses = 3706452992;
+        private static readonly IP[] SourceAddressRange = { new IP("0.0.0.0"), new IP("0.255.255.255") };
+        private static readonly IP[] LoopbackAddressRange = { new IP("127.0.0.0"), new IP("127.255.255.255") }; 
+        private static readonly IP[] PrivateAddressRanges = 
+            { 
+                new IP("10.0.0.0"), new IP("10.255.255.255"), 
+                new IP("100.64.0.0"), new IP("100.127.255.255"), 
+                new IP("172.16.0.0"), new IP("172.31.255.255"), 
+                new IP("192.0.0.0"), new IP("192.0.0.255"),
+                new IP("192.168.0.0"), new IP("192.168.255.255"), 
+                new IP("198.18.0.0"), new IP("198.19.255.255") 
+            };
+        private static readonly IP[] ReservedAddressRanges =
+            {
+                new IP("100.64.0.0"), new IP("100.127.255.255"),
+                new IP("169.254.0.0"), new IP("169.254.255.255"),
+                new IP("192.0.2.0"), new IP("192.0.2.255"),
+                new IP("192.88.99.0"), new IP("192.88.99.255"),
+                new IP("198.51.100.0"), new IP("198.51.100.255"), 
+                new IP("203.0.113.0"), new IP("203.0.113.255"), 
+                new IP("224.0.0.0"), new IP("239.255.255.255"),
+                new IP("240.0.0.0"), new IP("255.255.255.254"),
+                new IP("255.255.255.255"), new IP("255.255.255.255")  
+            };
+
         private const string IPMatchPattern = @"\d\d?\d?\.\d\d?\d?\.\d\d?\d?\.\d\d?\d?";
 
-        public long Value;
+        public uint Value;
 
 
         public bool IsValid
         {
-            get { return this.Value > 0; }
+            get { return this.Value > -1; }
         }
 
-        public byte this[int index]
+
+        public bool IsPrivateAddress()
+        {
+            return IsInRange(PrivateAddressRanges);
+        }
+
+
+        public bool IsLoopbackAddress()
+        {
+            return IsInRange(LoopbackAddressRange);
+        }
+
+
+        public bool IsReservedAddress()
+        {
+            return IsInRange(ReservedAddressRanges);
+        }
+
+
+        public bool IsSourceAddress()
+        {
+            return IsInRange(SourceAddressRange);
+        }
+
+        public bool IsValidPublicAddress()
+        {
+            return !IsSourceAddress()
+                   && !IsLoopbackAddress()
+                   && !IsPrivateAddress()
+                   && !IsReservedAddress();
+        }
+        
+
+        public byte this[uint index]
         {
             get
             {
@@ -37,7 +96,7 @@ namespace HackThePlanet
                 string[] parts = ipString.Split('.');
                 parts[index] = value.ToString();
                 ipString = string.Join(separator: '.', value: parts);
-                this.Value = ConvertToLong(ipString);
+                this.Value = ConvertToInt(ipString);
             }
         }
 
@@ -56,11 +115,11 @@ namespace HackThePlanet
 
         public IP(string address)
         {
-            this.Value = ConvertToLong(address);
+            this.Value = ConvertToInt(address);
         }
 
 
-        public IP(long value)
+        public IP(uint value)
         {
             this.Value = value;
         }
@@ -68,7 +127,7 @@ namespace HackThePlanet
 
         public IP(byte[] value)
         {
-            this.Value = new IPAddress(value).Address;
+            this.Value = ConvertToInt(value);
         }
 
 
@@ -78,7 +137,7 @@ namespace HackThePlanet
         }
 
 
-        public static implicit operator IP(long ip)
+        public static implicit operator IP(uint ip)
         {
             return new IP(ip);
         }
@@ -96,21 +155,34 @@ namespace HackThePlanet
         }
 
 
-        public static long ConvertToLong(string ip)
+        public static uint ConvertToInt(byte[] ipBytes)
         {
-            IPAddress ipAddress;
-            if (IPAddress.TryParse(ip, out ipAddress))
-            {
-                return ipAddress.Address;
-            };
+            return BitConverter.ToUInt32(ipBytes, 0);
+        }
+        
+        
+        public static uint ConvertToInt(string ip)
+        {
+            IPAddress address = IPAddress.Parse(ip);
+            byte[] bytes = address.GetAddressBytes();
 
-            return -1;
+            // flip big-endian(network order) to little-endian
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return BitConverter.ToUInt32(bytes, 0);
         }
 
 
-        public static string ConvertToString(long ip)
+        public static string ConvertToString(uint ip)
         {
-            return new IPAddress(ip).ToString();
+            byte[] bytes = BitConverter.GetBytes(ip);
+
+            // flip little-endian to big-endian(network order)
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+            
+            return new IPAddress(bytes).ToString();
         }
 
 
@@ -135,6 +207,25 @@ namespace HackThePlanet
 
             return ips;
         }
+
+
+        public bool IsInRange(IP[] addressTuples)
+        {
+            for (uint i = 0; i < addressTuples.Length; i += 2)
+            {
+                if (IsInRange(addressTuples[i].Value, addressTuples[i + 1].Value)) 
+                    return true;
+            }
+
+            return false;
+        }
+        
+        
+        public bool IsInRange(uint lower, uint upper)
+        {
+            return this.Value >= lower
+                   && this.Value <= upper;
+        }
     }
 
 
@@ -152,7 +243,7 @@ namespace HackThePlanet
             object? existingValue,
             JsonSerializer serializer)
         {
-            long ipValue = (long)reader.Value;
+            uint ipValue = (uint)reader.Value;
             IP ip = new IP(ipValue);
             return ip;
         }
@@ -160,7 +251,7 @@ namespace HackThePlanet
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            long ipValue = ((IP)value).Value;
+            uint ipValue = ((IP)value).Value;
             writer.WriteValue(ipValue);
         }
     }

@@ -20,6 +20,7 @@ namespace HackThePlanet
 
         public int TargetEntityId { get; set; }
         public long TicksSinceLastUpdate { get; set; }
+        public StringReference User { get; set; }
         #endregion
     }
 }

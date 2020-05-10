@@ -9,6 +9,7 @@ namespace HackThePlanet
         ushort ProcessId { get; set; }
         int OriginEntityId { get; set; }
         ushort RamUse { get; }
+        StringReference User { get; set; }
         #endregion
     }
 

@@ -31,9 +31,9 @@ namespace HackThePlanet
             MemberSerialization memberSerialization)
         {
             Type typeToSerialize = this._typeToSerializeMap.GetOrAdd(
-                type,
-                t => this._interfaceTypes.FirstOrDefault(
-                         it => it.IsAssignableFrom(t)) ?? t);
+                key: type,
+                valueFactory: t => this._interfaceTypes.FirstOrDefault(
+                                       it => it.IsAssignableFrom(t)) ?? t);
 
             IList<JsonProperty> props = base.CreateProperties(typeToSerialize, memberSerialization);
 

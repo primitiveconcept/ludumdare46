@@ -20,6 +20,7 @@ namespace HackThePlanet
             }
         }
 
+
         public int OriginEntityId { get; set; }
 
 
@@ -46,6 +47,9 @@ namespace HackThePlanet
                 return (ushort)(count * RamUsePerSession);
             }
         }
+
+
+        public StringReference User { get; set; }
         #endregion
     }
 }
