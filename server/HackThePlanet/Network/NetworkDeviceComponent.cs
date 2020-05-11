@@ -1,7 +1,6 @@
 namespace HackThePlanet
 {
     using System.Collections.Generic;
-    using System.Linq;
     using PrimitiveEngine;
 
 
@@ -11,9 +10,15 @@ namespace HackThePlanet
         private Dictionary<IP, NetworkInterface> networkInterfaces = new Dictionary<IP, NetworkInterface>();
 
 
-        public NetworkInterface GetMainInterface()
+        public NetworkInterface GetPublic()
         {
-            return this.networkInterfaces.First().Value;
+            foreach (NetworkInterface networkInterface in this.networkInterfaces.Values)
+            {
+                if (networkInterface.IP.IsValidPublicAddress())
+                    return networkInterface;
+            }
+
+            return null;
         }
         
 

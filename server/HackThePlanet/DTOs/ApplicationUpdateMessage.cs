@@ -1,5 +1,8 @@
 namespace HackThePlanet
 {
+    using Newtonsoft.Json;
+
+
     public class ApplicationUpdateMessage : UpdateMessage<IApplication>
     {
         private const string UpdateType = "application"; 

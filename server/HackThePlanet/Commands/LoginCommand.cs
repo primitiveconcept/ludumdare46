@@ -17,6 +17,8 @@ namespace HackThePlanet
             {
                 // TODO: Add account on first login.
                 // TODO: Set account active
+
+                return PlayerStateMessage.Create(playerId);
             }
             
             return null;

@@ -29,13 +29,36 @@
 		/// <summary>
 		/// Returns number of ticks since the last time Update() was called.
 		/// </summary>
-		public long ElapsedTime
+		public long ElapsedTicks
 		{
 			get
 			{
 				if (!this.paused)
 					return DateTime.Now.Ticks - this.previousUpdateTime;
 				return 0;
+			}
+		}
+
+
+		/// <summary>
+		/// Returns number of milliseconds since the last time Update() was called.
+		/// </summary>
+		public long ElapsedMillisceonds
+		{
+			get
+			{
+				return this.ElapsedTicks / TimeSpan.TicksPerMillisecond;
+			}
+		}
+
+
+		/// <summary>
+		/// Return number of seconds (fractional) since the last time Update() was called.
+		/// </summary>
+		public float ElapsedSeconds
+		{
+			// ReSharper disable once PossibleLossOfFraction
+			get { return (float)this.ElapsedTicks / TimeSpan.TicksPerSecond;
 			}
 		}
 
@@ -88,7 +111,7 @@
 		{
 			if (!this.paused)
 			{
-				this.totalGameTime += this.ElapsedTime;
+				this.totalGameTime += this.ElapsedTicks;
 				this.previousUpdateTime = DateTime.Now.Ticks;
 			}
 		}

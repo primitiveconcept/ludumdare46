@@ -11,7 +11,7 @@ namespace HackThePlanet
         {
             NetworkInterface playerNetworkInterface = Game.Players.GetPlayer(playerId)?
                 .GetSiblingComponent<NetworkDeviceComponent>()?
-                .GetMainInterface();
+                .GetPublic();
 
             if (playerNetworkInterface == null)
                 return "No network device found.";

@@ -39,7 +39,7 @@
 			this.gameTime = new GameTime();
 			while (this.running)
 			{
-				Update(this.gameTime.ElapsedTime);
+				Update(this.gameTime.ElapsedTicks);
 				this.gameTime.Update();
 			}
 		}

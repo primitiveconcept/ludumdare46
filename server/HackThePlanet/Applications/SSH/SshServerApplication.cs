@@ -7,6 +7,7 @@ namespace HackThePlanet
     public class SshServerApplication : IServerApplication
     {
         private const ushort RamUsePerSession = 2;
+        private const string SshServer = "sshserver";
 
 
         #region Properties
@@ -21,6 +22,12 @@ namespace HackThePlanet
         }
 
 
+        public string Name
+        {
+            get { return SshServer; }
+        }
+
+
         public int OriginEntityId { get; set; }
 
 
@@ -31,6 +38,12 @@ namespace HackThePlanet
 
 
         public ushort ProcessId { get; set; }
+
+
+        public float? Progress
+        {
+            get { return null; }
+        }
 
 
         public ushort RamUse

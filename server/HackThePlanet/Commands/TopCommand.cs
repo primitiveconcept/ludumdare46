@@ -22,7 +22,7 @@ namespace HackThePlanet
                               + $"<td>{process.ProcessId}</td>"
                               + $"<td>root</td>"
                               + $"<td>{process.RamUse}</td>"
-                              + $"<td>{process.GetName()}</td>"
+                              + $"<td>{process.Name}</td>"
                               + $"</tr>");
             }
             result.Append("</table>");

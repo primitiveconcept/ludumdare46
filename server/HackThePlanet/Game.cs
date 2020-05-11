@@ -5,6 +5,7 @@ namespace HackThePlanet
     using System.Collections.Generic;
     using System.Threading;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using PrimitiveEngine;
 
 
@@ -24,6 +25,16 @@ namespace HackThePlanet
         private Game()
         {
             this.entityWorld.InitializeAll();
+            JsonConvert.DefaultSettings = () =>
+                new JsonSerializerSettings
+                    {
+                        Formatting = Formatting.Indented,
+                        Converters = new List<JsonConverter>()
+                                         {
+                                             new StringEnumConverter(),
+                                             new StringReferenceConverter()
+                                         }
+                    };
         }
         #endregion
 
@@ -92,7 +103,7 @@ namespace HackThePlanet
         public static void Update()
         {
             Instance.ExecuteIncomingCommands();
-            Instance.entityWorld.FixedUpdate(Instance.gameTime.ElapsedTime);
+            Instance.entityWorld.FixedUpdate(Instance.gameTime.ElapsedTicks);
             Thread.Sleep(30); // Fuck it, let's not get fancy here.
         }
 

@@ -22,7 +22,7 @@ namespace HackThePlanet
 			PlayerComponent player = Game.Players.GetPlayer(playerId);
 			ComputerComponent playerComputer = player.GetSiblingComponent<ComputerComponent>();
 			NetworkDeviceComponent playerNetworkDevice = player.GetSiblingComponent<NetworkDeviceComponent>();
-			IP playerIP = playerNetworkDevice.GetMainInterface().IP;
+			IP playerIP = playerNetworkDevice.GetPublic().IP;
 
 			NetworkRoute networkRoute = Game.Internet.GetRoute(playerIP, targetIP);
 			List<NetworkInterface> shortestRoute = networkRoute;

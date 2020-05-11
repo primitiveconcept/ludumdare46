@@ -1,7 +1,9 @@
 namespace HackThePlanet
 {
+    using System;
     using System.Collections.Generic;
-    
+    using Newtonsoft.Json;
+
 
     /// <summary>
     /// Encapsulates a string value as a handful of bytes, using
@@ -49,15 +51,26 @@ namespace HackThePlanet
         /// <returns>A string value retrieved from cached string tables.</returns>
         public static implicit operator string(StringReference stringReference)
         {
-            if (stringReference.stringTable == 0)
+            return stringReference.ToString();
+        }
+
+
+        public override string ToString()
+        {
+            if (this.stringTable == 0)
                 return null;
             
-            List<string> stringTable = _stringTables[stringReference.stringTable];
+            List<string> table = _stringTables[this.stringTable];
+            if (table == null
+                || table.Count == 0)
+            {
+                return null;
+            }
 
-            string[] values = new string[stringReference.stringIndexes.Length];
+            string[] values = new string[this.stringIndexes.Length];
             for (int index = 0; index < values.Length; index++)
             {
-                values[index] = stringTable[index];
+                values[index] = table[index];
             }
 
             return string.Join(' ', values);
@@ -93,6 +106,31 @@ namespace HackThePlanet
             }
             
             return new StringReference(1, indexes);
+        }
+    }
+    
+    public class StringReferenceConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        {
+            StringReference stringReference = (StringReference)value;
+            string stringValue = stringReference;
+            writer.WriteValue(stringValue);
+        }
+
+
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        {
+            if (reader.Value == null)
+                return null;
+            
+            return (StringReference)reader.Value;
+        }
+
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(StringReference).IsAssignableFrom(objectType);
         }
     }
 }

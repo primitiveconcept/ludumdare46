@@ -8,7 +8,7 @@ namespace HackThePlanet
         ProcessPool<PortScanApplication>, 
         ComputerComponent>
     {
-        private const long Delay = 10000000;
+        private const float Delay = 0.5f; // In seconds
 
 
         public override void Process(
@@ -24,6 +24,45 @@ namespace HackThePlanet
                 processPool.KillProcess(process.ProcessId);
                 originComputer.RunningApplications.Remove(process.ProcessId);
             }
+        }
+
+
+        public bool Process(
+            Entity originEntity,
+            PortScanApplication portScan,
+            ComputerComponent originComputer)
+        {
+            if (portScan.SecondsSinceLastUpdate < Delay)
+            {
+                portScan.SecondsSinceLastUpdate += Game.Time.ElapsedSeconds;
+                return true;
+            }
+
+            PlayerComponent player = originComputer.GetSiblingComponent<PlayerComponent>();
+            ComputerComponent targetComputer = Game.World.GetEntityById(portScan.TargetEntityId)?
+                .GetComponent<ComputerComponent>();
+
+            if (!ValidateHost(
+                    targetComputer: targetComputer, 
+                    player: player))
+            {
+                return false;
+            }
+                
+            ScanCurrentPort(
+                portScanComponent: portScan, 
+                targetComputer: targetComputer, 
+                player: player);
+
+            if (!IncrementCurrentPort(portScan))
+            {
+                FinishPortScan(
+                    portscanEntity: originEntity, 
+                    player: player);
+                return false;
+            }
+
+            return true;
         }
 
 
@@ -89,45 +128,6 @@ namespace HackThePlanet
                 Game.SendMessageToClient(
                     player.Id,
                     TerminalUpdateMessage.Create($"Timed out connecting to host."));
-                return false;
-            }
-
-            return true;
-        }
-
-
-        private bool Process(
-            Entity originEntity,
-            PortScanApplication portScan,
-            ComputerComponent originComputer)
-        {
-            if (portScan.TicksSinceLastUpdate < Delay)
-            {
-                portScan.TicksSinceLastUpdate += Game.Time.ElapsedTime;
-                return true;
-            }
-
-            PlayerComponent player = originComputer.GetSiblingComponent<PlayerComponent>();
-            ComputerComponent targetComputer = Game.World.GetEntityById(portScan.TargetEntityId)?
-                .GetComponent<ComputerComponent>();
-
-            if (!ValidateHost(
-                    targetComputer: targetComputer, 
-                    player: player))
-            {
-                return false;
-            }
-                
-            ScanCurrentPort(
-                portScanComponent: portScan, 
-                targetComputer: targetComputer, 
-                player: player);
-
-            if (!IncrementCurrentPort(portScan))
-            {
-                FinishPortScan(
-                    portscanEntity: originEntity, 
-                    player: player);
                 return false;
             }
 

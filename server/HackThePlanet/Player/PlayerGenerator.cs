@@ -1,6 +1,7 @@
 namespace HackThePlanet
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using PrimitiveEngine;
 
@@ -14,7 +15,14 @@ namespace HackThePlanet
             // Player component
             PlayerComponent player = new PlayerComponent();
             player.Id = playerEntity.Id;
-            player.Name = String.Empty;
+            player.Name = "root";
+            player.KnownIPs.Add(
+                "127.0.0.1", 
+                new List<AvailableIPActions>
+                    {
+                        AvailableIPActions.Portscan, 
+                        AvailableIPActions.Ssh
+                    });
             playerEntity.AddComponent(player);
 
             // Player computer
@@ -47,7 +55,7 @@ namespace HackThePlanet
             // TODO: Find closest ISP, just creates a new one for all players right now.
             IP ispIP = IPGenerator.GenerateGatewayAddressFor(playerIP);
             NetworkDeviceComponent newIsp = Game.Internet.CreateServiceProvider(ispIP);
-            newIsp.GetMainInterface().EstablishTwoWayLink(networkInterface);
+            newIsp.GetPublic().EstablishTwoWayLink(networkInterface);
             Console.Out.WriteLine($"New ISP IP: {ispIP}");
 
             return playerEntity;

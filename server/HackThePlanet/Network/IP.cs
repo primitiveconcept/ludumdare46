@@ -243,7 +243,7 @@ namespace HackThePlanet
             object? existingValue,
             JsonSerializer serializer)
         {
-            uint ipValue = (uint)reader.Value;
+            string ipValue = (string)reader.Value;
             IP ip = new IP(ipValue);
             return ip;
         }
@@ -251,7 +251,7 @@ namespace HackThePlanet
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            uint ipValue = ((IP)value).Value;
+            string ipValue = (IP)value;
             writer.WriteValue(ipValue);
         }
     }
