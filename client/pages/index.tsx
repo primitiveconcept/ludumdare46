@@ -114,7 +114,10 @@ export const Index = () => {
             )}
             {!openProcess && (
               <>
-                <Status readyState={readyState} />
+                <Status
+                  readyState={readyState}
+                  thing={{ __typename: "Thing", name: "asdf" }}
+                />
                 <TerminalProgram messages={state.messages} />
                 {username ? (
                   <CommandPrompt username={username} />

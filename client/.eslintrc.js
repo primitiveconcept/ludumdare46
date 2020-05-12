@@ -72,6 +72,7 @@ module.exports = {
     "mocha/no-exclusive-tests": "error",
     "no-sequences": "error",
     "no-shadow": "error",
+    "gql/require-gql-type-parameters": "error",
     "padding-line-between-statements": [
       warnOnLocal,
       {
@@ -94,5 +95,12 @@ module.exports = {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "error",
   },
-  plugins: ["@typescript-eslint", "jsx-a11y", "mocha", "react-hooks", "react"],
+  plugins: [
+    "@typescript-eslint",
+    "jsx-a11y",
+    "mocha",
+    "react-hooks",
+    "react",
+    "gql",
+  ],
 };

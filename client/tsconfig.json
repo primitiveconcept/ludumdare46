@@ -20,5 +20,11 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules", "./cypress/**/*.ts", "./cypress/**/*.tsx"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./typings/**/*.d.ts"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "./typings/**/*.d.ts",
+    "lib/eslint-plugin-gql.js"
+  ]
 }
