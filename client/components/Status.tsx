@@ -3,10 +3,7 @@ import { ReadyState } from "react-use-websocket";
 import { gql, useQuery, useMutation, Static } from "../lib/client-gql";
 import { useLazyQuery } from "@apollo/client";
 
-export const thingsQuery = gql<
-  "StatusGetThingsQuery",
-  "StatusGetThingsQueryVariables"
->`
+export const thingsQuery = gql`
   query statusGetThings {
     things {
       ...StatusThing
@@ -25,10 +22,7 @@ export const thingQuery = gql<
   }
 `;
 
-export const createThingMutation = gql<
-  "StatusCreateThingMutation",
-  "StatusCreateThingMutationVariables"
->`
+export const createThingMutation = gql(`
   mutation statusCreateThing($stuff: String!) {
     createThing(stuff: $stuff) {
       thing {
@@ -36,7 +30,7 @@ export const createThingMutation = gql<
       }
     }
   }
-`;
+`);
 
 export const ThingFragment = gql<"StatusThingFragment">`
   fragment StatusThing on Thing {

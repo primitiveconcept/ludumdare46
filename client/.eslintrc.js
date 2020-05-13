@@ -72,7 +72,7 @@ module.exports = {
     "mocha/no-exclusive-tests": "error",
     "no-sequences": "error",
     "no-shadow": "error",
-    "gql/require-gql-type-parameters": "error",
+    // "gql/require-gql-type-parameters": "error",
     "padding-line-between-statements": [
       warnOnLocal,
       {

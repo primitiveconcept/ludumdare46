@@ -7,6 +7,10 @@ import {
 import { Operations } from "./graphql";
 import { DocumentNode } from "graphql";
 
+type TemplateStringsArray<T extends string> = {
+  readonly raw: readonly string[];
+} & readonly T[];
+
 export type Static<
   TFragment extends { __returnType: unknown }
 > = TFragment["__returnType"];
@@ -16,17 +20,9 @@ type Document<TReturn = unknown, TVariables = undefined> = DocumentNode & {
   __variables: TVariables;
 };
 
-export declare function gql<
-  TName extends keyof Operations,
-  TVariablesName extends keyof Operations | undefined = undefined
->(
-  literals: TemplateStringsArray,
-): Document<
-  Operations[TName],
-  TVariablesName extends keyof Operations
-    ? Operations[TVariablesName]
-    : undefined
->;
+export declare function gql<TName extends string>(
+  literals: TemplateStringsArray<TName>,
+): TName extends keyof Operations ? Document<Operations[TName]> : unknown;
 
 export declare function useQuery<TDocument extends Document<unknown, unknown>>(
   document: TDocument,
