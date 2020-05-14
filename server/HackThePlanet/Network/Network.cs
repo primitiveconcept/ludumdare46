@@ -19,7 +19,7 @@ namespace HackThePlanet
             Entity newIspEntity = Game.World.CreateEntity();
             NetworkDeviceComponent newIspRouter = NetworkDeviceGenerator.GenerateIspRouter(gatewayIP);
             newIspEntity.AddComponent(newIspRouter);
-            NetworkInterface newIspNetworkInterface = newIspRouter.GetPublic();
+            NetworkInterface newIspNetworkInterface = newIspRouter.GetPublicInterface();
 
             foreach (NetworkInterface isp in this.serviceProviders)
             {
@@ -76,7 +76,7 @@ namespace HackThePlanet
         {
             NetworkDeviceComponent networkDeviceComponent = entity?.GetComponent<NetworkDeviceComponent>();
             return networkDeviceComponent != null
-                       ? networkDeviceComponent.GetPublic().IP
+                       ? networkDeviceComponent.GetPublicInterface().IP
                        : null;
         }
 

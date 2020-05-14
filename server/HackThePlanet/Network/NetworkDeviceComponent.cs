@@ -10,7 +10,12 @@ namespace HackThePlanet
         private Dictionary<IP, NetworkInterface> networkInterfaces = new Dictionary<IP, NetworkInterface>();
 
 
-        public NetworkInterface GetPublic()
+        public IP? GetPublicIP()
+        {
+            return GetPublicInterface()?.IP;
+        }
+        
+        public NetworkInterface GetPublicInterface()
         {
             foreach (NetworkInterface networkInterface in this.networkInterfaces.Values)
             {

@@ -36,6 +36,12 @@ namespace HackThePlanet
         }
 
 
+        public IP? GetPublicIP()
+        {
+            return this.GetSiblingComponent<NetworkDeviceComponent>().GetPublicIP();
+        }
+
+
         public void RemoveKnownIP(string ip)
         {
             if (this.KnownIPs.ContainsKey(ip))

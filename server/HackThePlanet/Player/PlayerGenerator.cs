@@ -55,7 +55,7 @@ namespace HackThePlanet
             // TODO: Find closest ISP, just creates a new one for all players right now.
             IP ispIP = IPGenerator.GenerateGatewayAddressFor(playerIP);
             NetworkDeviceComponent newIsp = Game.Internet.CreateServiceProvider(ispIP);
-            newIsp.GetPublic().EstablishTwoWayLink(networkInterface);
+            newIsp.GetPublicInterface().EstablishTwoWayLink(networkInterface);
             Console.Out.WriteLine($"New ISP IP: {ispIP}");
 
             return playerEntity;

@@ -277,7 +277,7 @@
                 Entity entity = entities.Get(index);
                 if (entity != null)
                 {
-                    Bag<IEntityComponent> components = entity.Components;
+                    Bag<IEntityComponent> components = entity.GetComponents();
                     currentState.Add(entity, components);
                 }
             }

@@ -57,12 +57,17 @@ namespace HackThePlanet.Host
 
         public virtual async Task OnDisconnected(WebSocket socket)
         {
+            Console.Out.WriteLine($"Socket disconnected: {this.connections.GetSocketId(socket)}");
             await this.connections.RemoveSocket(socket);
         }
 
 
         public async Task SendMessageAsync(WebSocket socket, string message)
         {
+            // This can happen if client errors out and disconnects before the message is actually sent.
+            if (socket == null)
+                return;
+            
             if (socket.State != WebSocketState.Open)
                 return;
 

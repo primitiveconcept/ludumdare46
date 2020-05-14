@@ -133,13 +133,13 @@
         {
             for (int entityIndex = 0; entityIndex < this.ActiveEntities.Count; entityIndex++)
             {
-                if (this.ActiveEntities[entityIndex].Components.Contains(entityComponent))
+                if (this.ActiveEntities[entityIndex].GetComponents().Contains(entityComponent))
                     return this.ActiveEntities[entityIndex];
             }
 
             return null;
 
-            /* TODO: This would be slightly faster, but always return null.
+            /* TODO: This would be slightly faster, but always returns null.
             Bag<IEntityComponent> components = this.componentsByType.Get(ComponentTypeManager.GetId<T>());
             
             if (components == null)
@@ -160,8 +160,7 @@
         public Bag<IEntityComponent> GetComponents(Entity entity)
         {
             Debug.Assert(entity != null, "Entity must not be null.");
-            //Debug.Assert(entity.entityManager == this, "");  // TODO
-
+            
             Bag<IEntityComponent> entityComponents = new Bag<IEntityComponent>();
             int entityId = entity.Index;
             for (int index = 0, b = this.componentsByType.Count; b > index; ++index)
@@ -173,6 +172,33 @@
                     IEntityComponent component = components.Get(entityId);
                     if (component != null)
                         entityComponents.Add(component);
+                }
+            }
+
+            return entityComponents;
+        }
+
+
+        public Bag<T> GetComponents<T>(Entity entity)
+            where T: IEntityComponent
+        {
+            Debug.Assert(entity != null, "Entity must not be null.");
+            
+            Bag<T> entityComponents = new Bag<T>();
+            int entityId = entity.Index;
+            for (int index = 0, b = this.componentsByType.Count; b > index; ++index)
+            {
+                Bag<IEntityComponent> components = this.componentsByType.Get(index);
+                if (components != null
+                    && entityId < components.Count)
+                {
+                    IEntityComponent component = components.Get(entityId);
+                    if (component != null
+                        && component is T)
+                    {
+                        entityComponents.Add((T)component);
+                    }
+                        
                 }
             }
 

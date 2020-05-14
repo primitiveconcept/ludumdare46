@@ -35,19 +35,6 @@ namespace PrimitiveEngine
 
 		#region Properties
 		/// <summary>
-		///   Gets all components belonging to this entity.
-		///   Warning: Use only for debugging purposes, it is dead slow.
-		///   The returned bag is only valid until this method is called
-		///   again, then it is overwritten.
-		/// </summary>
-		/// <value>All components of this entity.</value>
-		public Bag<IEntityComponent> Components
-		{
-			get { return this.entityManager.GetComponents(this); }
-		}
-
-
-		/// <summary>
 		/// Gets or sets a value indicating whether [deleting state].
 		/// </summary>
 		/// <value>
@@ -254,22 +241,6 @@ namespace PrimitiveEngine
 
 		/// <summary>
 		/// Gets the component.
-		/// Slower retrieval of components from this entity.
-		/// Minimize usage of this, but is fine to use e.g. when
-		/// creating new entities and setting data in components.
-		/// </summary>
-		/// <param name="componentType">Type of the component.</param>
-		/// <returns>component that matches, or null if none is found.</returns>
-		public IEntityComponent GetComponent(ComponentType componentType)
-		{
-			Debug.Assert(componentType != null, "Component type must not be null.");
-
-			return this.entityManager.GetComponent(this, componentType);
-		}
-
-
-		/// <summary>
-		/// Gets the component.
 		/// This is the preferred method to use when
 		/// retrieving a component from a entity.
 		/// It will provide good performance.
@@ -279,6 +250,17 @@ namespace PrimitiveEngine
 		public T GetComponent<T>() where T : IEntityComponent
 		{
 			return (T)this.entityManager.GetComponent(this, ComponentType<T>.CType);
+		}
+
+
+		/// <summary>
+		///   Gets all components belonging to this entity.
+		///   Warning: This is slow, don't use in System loops.
+		/// </summary>
+		/// <value>All components of this entity.</value>
+		public Bag<IEntityComponent> GetComponents()
+		{
+			return this.entityManager.GetComponents(this);
 		}
 
 

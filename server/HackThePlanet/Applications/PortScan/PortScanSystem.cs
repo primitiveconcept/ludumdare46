@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+    using System;
     using PrimitiveEngine;
 
     
@@ -50,7 +51,7 @@ namespace HackThePlanet
             }
                 
             ScanCurrentPort(
-                portScanComponent: portScan, 
+                portScan: portScan, 
                 targetComputer: targetComputer, 
                 player: player);
 
@@ -80,42 +81,67 @@ namespace HackThePlanet
             if (portScanComponent.CurrentPort != EnumExtensions.GetLast<Port>())
             {
                 portScanComponent.CurrentPort = portScanComponent.CurrentPort.Next();
+                Array portsToScan = Enum.GetValues(typeof(Port));
+                float portIterationNumber = Array.IndexOf(portsToScan, portScanComponent.CurrentPort) + 1;
+                portScanComponent.Progress = portIterationNumber / portsToScan.Length;
                 return true;
             }
 
+            portScanComponent.Progress = 1;
+            
             return false;
         }
 
 
         private static void ScanCurrentPort(
-            PortScanApplication portScanComponent,
+            PortScanApplication portScan,
             ComputerComponent targetComputer,
             PlayerComponent player)
         {
             foreach (
-                IApplication processEntityId
+                IApplication application
                 in targetComputer.RunningApplications.Values)
             {
-                IServerApplication serverApplication = processEntityId as IServerApplication;
+                IServerApplication serverApplication = application as IServerApplication;
 
                 if (serverApplication != null
-                    && serverApplication.Port == portScanComponent.CurrentPort)
+                    && serverApplication.Port == portScan.CurrentPort)
                 {
-                    portScanComponent.OpenPorts.Add(serverApplication.Port);
-
-                    if (player != null)
-                    {
-                        Game.SendMessageToClient(
-                            player.Id, 
-                            TerminalUpdateMessage.Create($"Found open port: {(int)serverApplication.Port} "
-                                                         + $"[{serverApplication.Port.ToString().ToUpper()}]"));
-                    }
-                        
-                    // TODO: Component update message per port found
-
+                    portScan.OpenPorts.Add(serverApplication.Port);
+                    SendPlayerUpdate(
+                        portScan: portScan, 
+                        player: player, 
+                        serverApplication: serverApplication);
                     break;
                 }
             }
+        }
+
+
+        private static void SendPlayerUpdate(
+            PortScanApplication portScan,
+            PlayerComponent player,
+            IServerApplication serverApplication)
+        {
+            if (player == null)
+                return;
+            
+            ProcessInfo processInfo = new ProcessInfo(portScan);
+            ProcessUpdateMessage processUpdate =
+                ProcessUpdateMessage.Create(
+                    player.Id,
+                    processInfo,
+                    player.GetPublicIP());
+            processUpdate.Message = $"Found open port: {(int)serverApplication.Port} "
+                                    + $"[{serverApplication.Port.ToString().ToUpper()}]";
+            Game.SendMessageToClient(player.Id, processUpdate.ToJson());
+
+            // TODO: Remove once client IP can handle process updates. 
+            Game.SendMessageToClient(
+                player.Id,
+                TerminalUpdateMessage.Create(
+                    $"Found open port: {(int)serverApplication.Port} "
+                    + $"[{serverApplication.Port.ToString().ToUpper()}]"));
         }
 
 

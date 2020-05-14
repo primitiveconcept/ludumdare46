@@ -2,15 +2,7 @@ namespace HackThePlanet
 {
     public class ProcessInfo
     {
-        #region Properties
-        public string Name { get; set; }
-        public IP? IP { get; set; }
-        public ushort ProcessId { get; set; }
-        public float? Progress { get; set; }
-        public ushort RamUse { get; set; }
-        
-        #endregion
-        
+        #region Constructors
         public ProcessInfo (IApplication application)
         {
             this.Name = application.Name;
@@ -20,5 +12,15 @@ namespace HackThePlanet
 
             this.IP = Game.Internet.GetIP(application.OriginEntityId);
         }
+        #endregion
+
+
+        #region Properties
+        public IP? IP;
+        public string Name;
+        public ushort ProcessId;
+        public float? Progress;
+        public ushort RamUse;
+        #endregion
     }
 }
