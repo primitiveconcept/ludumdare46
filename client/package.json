@@ -29,7 +29,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.0.0-beta.44",
+    "@apollo/client": "^3.0.0-beta.48",
     "@babel/node": "^7.8.7",
     "@cypress/webpack-preprocessor": "^5.1.2",
     "@emotion/babel-plugin": "^11.0.0-next.12",
@@ -57,7 +57,7 @@
     "date-fns": "^2.12.0",
     "dedent": "^0.7.0",
     "eslint-plugin-gql": "file:./lib/eslint-plugin-gql",
-    "graphql": "^15.0.0",
+    "graphql": "^14.6.0",
     "humps": "^2.0.1",
     "immer": "^6.0.3",
     "jest": "^25.5.4",
@@ -102,6 +102,6 @@
     "prettier": "2.0.5",
     "start-server-and-test": "^1.11.0",
     "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   }
 }

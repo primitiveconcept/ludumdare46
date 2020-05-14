@@ -1,26 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { ReadyState } from "react-use-websocket";
 import { gql, useQuery, useMutation, Static } from "../lib/client-gql";
 import { useLazyQuery } from "@apollo/client";
 
-export const thingsQuery = gql`
+export const thingsQuery = gql(`
   query statusGetThings {
     things {
       ...StatusThing
     }
   }
-`;
+`);
 
-export const thingQuery = gql<
-  "StatusGetThingQuery",
-  "StatusGetThingQueryVariables"
->`
+export const thingQuery = gql(`
   query statusGetThing($thingId: String!) {
     thing(id: $thingId) {
       ...StatusThing
     }
   }
-`;
+`);
 
 export const createThingMutation = gql(`
   mutation statusCreateThing($stuff: String!) {
@@ -32,11 +30,11 @@ export const createThingMutation = gql(`
   }
 `);
 
-export const ThingFragment = gql<"StatusThingFragment">`
+export const ThingFragment = gql(`
   fragment StatusThing on Thing {
     name
   }
-`;
+`);
 type ThingFragment = Static<typeof ThingFragment>;
 
 type StatusProps = {
@@ -45,7 +43,7 @@ type StatusProps = {
 };
 export const Status = ({ readyState, thing }: StatusProps) => {
   const thingId = useState<number | null>(null);
-  thing.name;
+  const stuff = thing.name;
   const [getThing] = useLazyQuery(thingQuery);
   const { data: thingsData, loading: thingLoading } = useQuery(thingsQuery);
   const { data: thingData, loading, error } = useQuery(thingQuery, {
