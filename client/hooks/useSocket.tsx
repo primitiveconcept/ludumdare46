@@ -54,7 +54,7 @@ export const useSocket = () => {
       return null;
     }
 
-    const updateNames: string[] = Message.alternatives.map(
+    const updateNames = Message.alternatives.map(
       (record) => record.fields.update.value,
     );
     const camelized = camelizeKeys(
