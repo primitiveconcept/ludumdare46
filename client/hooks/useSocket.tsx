@@ -4,6 +4,8 @@ import { Message } from "../types/Message";
 import { camelizeKeys } from "humps";
 import { useRouter } from "next/router";
 
+type UnsafeMessage = Pick<Message, "update"> | { update?: string };
+
 /**
  * Connect to the Websocket endpoint and hide away the
  * minutia of incoming messages.
@@ -52,7 +54,38 @@ export const useSocket = () => {
       return null;
     }
 
-    return Message.check(camelizeKeys(JSON.parse(lastMessageUnsafe.data)));
+    const updateNames: string[] = Message.alternatives.map(
+      (record) => record.fields.update.value,
+    );
+    const camelized = camelizeKeys(
+      JSON.parse(lastMessageUnsafe.data),
+    ) as UnsafeMessage;
+    const update = camelized.update;
+    if (!update || !updateNames.includes(update)) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Received unknown update type ${update}. Known updates: ${updateNames}`,
+      );
+      return null;
+    }
+    const Record = Message.alternatives.find(
+      (record) => record.fields.update.value === update,
+    )!;
+
+    try {
+      return Record.check(camelized);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Message failed validation.",
+        err.message,
+        "in",
+        err.key,
+        "in message",
+        camelized,
+      );
+      return null;
+    }
   }, [lastMessageUnsafe]);
   const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
     lastMessage,
