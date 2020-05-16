@@ -64,7 +64,9 @@ export const useSocket = () => {
     if (!update || !updateNames.includes(update)) {
       // eslint-disable-next-line no-console
       console.error(
-        `Received unknown update type ${update}. Known updates: ${updateNames}`,
+        `Received unknown update type ${update} for message`,
+        camelized,
+        `Known updates: ${updateNames}`,
       );
       return null;
     }
