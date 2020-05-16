@@ -5,16 +5,13 @@ namespace HackThePlanet
 
     public class ProcessUpdateMessage : UpdateMessage<ProcessInfo>
     {
-        private const string UpdateType = "Process";
-
-
         #region Properties
         public override ProcessInfo Payload { get; set; }
 
 
-        public override string Type
+        public override string UpdateType
         {
-            get { return UpdateType; }
+            get { return "ProcessUpdate"; }
         }
         #endregion
 
