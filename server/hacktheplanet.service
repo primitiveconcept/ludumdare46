@@ -6,7 +6,7 @@ ExecStart=/usr/bin/dotnet HackThePlanet.Host.dll
 WorkingDirectory=/usr/local/sbin/hacktheplanet/
 User=root
 Group=root
-Restart=on-failure  
+Restart=always
 SyslogIdentifier=hacktheplanet-service  
 PrivateTemp=true  
   

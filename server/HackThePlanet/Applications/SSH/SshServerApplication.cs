@@ -57,7 +57,9 @@ namespace HackThePlanet
                         count++;
                 }
 
-                return (ushort)(count * RamUsePerSession);
+                return (ushort)(
+                                   2 
+                                   + (count * RamUsePerSession));
             }
         }
 

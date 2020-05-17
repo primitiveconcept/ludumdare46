@@ -9,7 +9,9 @@ namespace HackThePlanet.Host
 
     public class Startup
     {
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env)
         { 
             app.UseStaticFiles(); 
             app.UseCors("AllowEverything");

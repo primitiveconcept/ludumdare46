@@ -134,14 +134,15 @@ namespace HackThePlanet
                     player.GetPublicIP());
             processUpdate.Message = $"Found open port: {(int)serverApplication.Port} "
                                     + $"[{serverApplication.Port.ToString().ToUpper()}]";
+            
             Game.SendMessageToClient(player.Id, processUpdate.ToJson());
 
-            // TODO: Remove once client IP can handle process updates. 
-            Game.SendMessageToClient(
-                player.Id,
-                TerminalUpdateMessage.Create(
-                    $"Found open port: {(int)serverApplication.Port} "
-                    + $"[{serverApplication.Port.ToString().ToUpper()}]"));
+            // TODO: Have debug config use this. 
+            //Game.SendMessageToClient(
+            //    player.Id,
+            //    TerminalUpdateMessage.Create(
+            //        $"Found open port: {(int)serverApplication.Port} "
+            //        + $"[{serverApplication.Port.ToString().ToUpper()}]"));
         }
 
 
