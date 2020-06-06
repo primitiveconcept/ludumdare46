@@ -43,7 +43,7 @@
     "@types/styled-system": "^5.1.9",
     "@types/testing-library__cypress": "^5.0.5",
     "@types/uuid": "^7.0.3",
-    "apollo-server": "^2.12.0",
+    "apollo-server": "^2.14.2",
     "babel-loader": "^8.1.0",
     "consolidated-events": "^2.0.2",
     "core-js": "^3.6.5",
