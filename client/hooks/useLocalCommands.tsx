@@ -3,6 +3,7 @@ import { helpCommand } from "../commands/helpCommand";
 import { State } from "../types";
 import { MailProcess } from "../types/MailProcess";
 import table from "markdown-table";
+import { useFiles } from "./useFiles";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
@@ -12,6 +13,7 @@ type UseLocalCommands = {
   startProcess: (process: MailProcess) => void;
   state: State;
   username: string;
+  setCwd: (cwd: string) => void;
 };
 export const useLocalCommands = ({
   addHistory,
@@ -21,16 +23,20 @@ export const useLocalCommands = ({
   startProcess,
   state,
   username,
+  setCwd,
 }: UseLocalCommands) => {
+  const files = useFiles(state.filesystems["8.8.8.8"]);
+
   const sendCommand = useCallback(
     (command: string): void => {
+      const prompt = `${username}@local:${state.cwd}$`;
       if (!command.trim()) {
-        addMessage(`${username}@local$`);
+        addMessage(prompt);
         return;
       }
       const [baseCommand, ...args] = command.split(/ +/);
 
-      addMessage(`${username}@local$ ${command}`);
+      addMessage(`${prompt} ${command}`);
       addHistory(command);
       if (baseCommand === "help") {
         addMessage(helpCommand(args));
@@ -64,18 +70,49 @@ export const useLocalCommands = ({
             }),
           ]),
         );
+      } else if (baseCommand === "cd") {
+        const path = args[0];
+        if (!path || path === ".") {
+          return;
+        }
+        if (path === "..") {
+          if (state.cwd === "/") {
+            return;
+          }
+          const newPath = state.cwd
+            .split("/")
+            .filter(Boolean)
+            .slice(0, -1)
+            .join("/");
+          setCwd(`/${newPath}`);
+        } else {
+          setCwd(`${state.cwd !== "/" ? state.cwd : ""}/${path}`);
+        }
+      } else if (baseCommand === "ls") {
+        if (!files) {
+          return;
+        }
+        addMessage(
+          files
+            .filter((file) => file.path === state.cwd)
+            .map((file) => `- ${file.name}${file.type === "Folder" ? "/" : ""}`)
+            .join("\n"),
+        );
       } else {
         sendCommandProp(command);
       }
     },
     [
-      addHistory,
       addMessage,
-      sendCommandProp,
-      setOpenProcessId,
-      startProcess,
-      state.processes,
       username,
+      addHistory,
+      state.cwd,
+      state.processes,
+      startProcess,
+      setOpenProcessId,
+      setCwd,
+      files,
+      sendCommandProp,
     ],
   );
   return sendCommand;

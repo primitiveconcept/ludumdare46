@@ -4,6 +4,7 @@ import { Email } from "./Email";
 import { PortscanProcess } from "./PortscanProcess";
 import { SshCrackProcess } from "./SshCrackProcess";
 import { InfostealerProcess } from "./InfostealerProcess";
+import { Filesystem } from "./Filesystem";
 
 export const TerminalMessage = Record({
   update: Literal("Terminal"),
@@ -49,6 +50,12 @@ export type InfostealerProcessMessage = Static<
   typeof InfostealerProcessMessage
 >;
 
+export const FilesystemMessage = Record({
+  update: Literal("Filesystem"),
+  payload: Filesystem,
+});
+export type FilesystemMessage = Static<typeof FilesystemMessage>;
+
 export const Message = Union(
   TerminalMessage,
   ResourcesMessage,
@@ -56,5 +63,6 @@ export const Message = Union(
   PortscanProcessMessage,
   SshCrackProcessMessage,
   InfostealerProcessMessage,
+  FilesystemMessage,
 );
 export type Message = Static<typeof Message>;

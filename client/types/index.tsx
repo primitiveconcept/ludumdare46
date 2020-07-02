@@ -1,5 +1,7 @@
 export * from "./Device";
 export * from "./Email";
+export * from "./Filesystem";
+export * from "./Login";
 export * from "./Message";
 export * from "./Process";
 export * from "./Program";

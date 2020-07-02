@@ -1,11 +1,7 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
 
-describe("install", () => {
-  afterEach(() => {
-    cy.alias("mockServer").then(({ closeServer }) => closeServer());
-  });
-
+describe("portscan", () => {
   it("completes a portscan", () => {
     createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {
@@ -22,7 +18,6 @@ describe("install", () => {
           },
         });
       });
-
       onCommand("portscan 199.201.159.101", () => {
         sendMessage(100, {
           update: "Devices",
@@ -79,7 +74,6 @@ describe("install", () => {
         });
       });
     }).as("mockServer");
-
     cy.visit("/", {
       onBeforeLoad(win) {
         // Call some code to initialize the fake server part using MockSocket
@@ -88,15 +82,11 @@ describe("install", () => {
     });
     cy.findByLabelText("Enter Username").type(`threehams{enter}`);
     cy.getId("messages").should("contain.text", "Logged in as threehams");
-
     cy.findByText("Known Devices");
     cy.findByText("199.201.159.101").click();
     cy.findByText("portscan").click();
     cy.findByText("portscan").should("not.exist");
-    cy.getId("messages").should(
-      "contain.text",
-      `threehams@local$ portscan 199.201.159.101`,
-    );
+    cy.getId("messages").should("contain.text", `$ portscan 199.201.159.101`);
     cy.findByText(/portscan \([0-9]+%\)/).click();
     cy.getId("portscanProgram").should("contain.text", "23/tcp");
     cy.getId("portscanProgram").should("contain.text", "80/tcp");

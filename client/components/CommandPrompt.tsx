@@ -8,11 +8,12 @@ const CURSOR = "█";
 
 type CommandPromptProps = {
   username: string;
+  cwd: string;
 };
-export const CommandPrompt = ({ username }: CommandPromptProps) => {
+export const CommandPrompt = ({ username, cwd }: CommandPromptProps) => {
   const { command, setCommand, sendCommand } = useContext(CommandContext);
   const inputRef = createRef<HTMLInputElement>();
-  const prompt = username ? `${username}@local$` : `username?`;
+  const prompt = username ? `${username}@local:${cwd}$` : `username?`;
 
   const onSubmit = useCallback(() => {
     sendCommand(command);
@@ -26,6 +27,7 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
         position: relative;
         width: 100%;
       `}
+      data-test="commandPrompt"
     >
       {prompt} {command}
       {CURSOR}
