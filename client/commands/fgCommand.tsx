@@ -1,12 +1,12 @@
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const fgCommand = ({
+export const fgCommand: CommandHandler = ({
   command,
   args,
   state,
   addMessage,
   setOpenProcessId,
-}: CommandProps) => {
+}) => {
   const id = args[0];
   if (!id) {
     addMessage(`${command}: requires a process id`);

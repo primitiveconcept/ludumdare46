@@ -1,6 +1,6 @@
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const lsCommand = ({ addMessage, files, state }: CommandProps) => {
+export const lsCommand: CommandHandler = ({ addMessage, files, state }) => {
   if (!files) {
     return;
   }

@@ -1,14 +1,14 @@
 import { joinPath } from "../lib/joinPath";
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const cdCommand = ({
+export const cdCommand: CommandHandler = ({
   addMessage,
   args,
   command,
   files,
   setCwd,
   state,
-}: CommandProps) => {
+}) => {
   const path = args[0];
   if (!path || path === ".") {
     return;

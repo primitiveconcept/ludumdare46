@@ -1,9 +1,9 @@
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const mailCommand = ({
+export const mailCommand: CommandHandler = ({
   startProcess,
   setOpenProcessId,
-}: CommandProps) => {
+}) => {
   startProcess({
     id: "mail",
     command: "mail",

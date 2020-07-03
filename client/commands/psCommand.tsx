@@ -1,8 +1,7 @@
-import { Process } from "../types";
 import table from "markdown-table";
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const psCommand = ({ addMessage, state }: CommandProps) => {
+export const psCommand: CommandHandler = ({ addMessage, state }) => {
   return addMessage(
     table([
       ["ID", "COMMAND"],

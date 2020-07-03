@@ -1,5 +1,5 @@
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-export const bgCommand = ({ setOpenProcessId }: CommandProps) => {
+export const bgCommand: CommandHandler = ({ setOpenProcessId }) => {
   setOpenProcessId(null);
 };

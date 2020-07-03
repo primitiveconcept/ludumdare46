@@ -1,4 +1,4 @@
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
 const helpText = `Type [help](help) to see this list.
 
@@ -16,10 +16,10 @@ for sites or other machines.
 detection.
 `;
 
-export const helpCommand = ({
+export const helpCommand: CommandHandler = ({
   args: [command, subcommand],
   addMessage,
-}: CommandProps) => {
+}) => {
   if (!command) {
     addMessage(helpText);
   }

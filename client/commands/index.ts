@@ -5,10 +5,9 @@ import { helpCommand } from "./helpCommand";
 import { lsCommand } from "./lsCommand";
 import { mailCommand } from "./mailCommand";
 import { psCommand } from "./psCommand";
-import { CommandProps } from "./commandProps";
+import { CommandHandler } from "./commandHandler";
 
-type CommandFunc = (props: CommandProps) => void;
-export const commands: { [key: string]: CommandFunc | undefined } = {
+export const commands: { [key: string]: CommandHandler | undefined } = {
   background: bgCommand,
   bg: bgCommand,
   cd: cdCommand,

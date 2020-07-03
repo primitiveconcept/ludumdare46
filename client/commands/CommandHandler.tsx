@@ -2,7 +2,7 @@ import { MailProcess } from "../types/MailProcess";
 import { State } from "../types";
 import { useFiles } from "../hooks/useFiles";
 
-export type CommandProps = {
+type CommandProps = {
   addHistory: (command: string) => void;
   addMessage: (message: string) => void;
   args: Array<string | undefined>;
@@ -14,3 +14,4 @@ export type CommandProps = {
   startProcess: (process: MailProcess) => void;
   state: State;
 };
+export type CommandHandler = (props: CommandProps) => void;
