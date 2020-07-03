@@ -1,3 +1,5 @@
+import { CommandProps } from "./commandProps";
+
 const helpText = `Type [help](help) to see this list.
 
 * [portscan](help|portscan) Scan a remote machine for open ports. Once found, ports can be [attacked](help|attacks)
@@ -14,14 +16,10 @@ for sites or other machines.
 detection.
 `;
 
-type HelpCommand = {
-  args: string[];
-  addMessage: (message: string) => void;
-};
 export const helpCommand = ({
   args: [command, subcommand],
   addMessage,
-}: HelpCommand) => {
+}: CommandProps) => {
   if (!command) {
     addMessage(helpText);
   }

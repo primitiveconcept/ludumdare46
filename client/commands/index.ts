@@ -1,3 +1,4 @@
+export { bgCommand } from "./bgCommand";
 export { cdCommand } from "./cdCommand";
 export { fgCommand } from "./fgCommand";
 export { helpCommand } from "./helpCommand";

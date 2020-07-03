@@ -1,6 +1,4 @@
 import { useCallback } from "react";
-import { State } from "../types";
-import { MailProcess } from "../types/MailProcess";
 import { useFiles } from "./useFiles";
 import {
   mailCommand,
@@ -9,94 +7,67 @@ import {
   psCommand,
   cdCommand,
   lsCommand,
+  bgCommand,
 } from "../commands";
+import { MailProcess } from "../types/MailProcess";
+import { State } from "../types";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
   addMessage: (message: string) => void;
   sendCommand: (command: string) => void;
+  setCwd: (cwd: string) => void;
   setOpenProcessId: (processId: string | null) => void;
   startProcess: (process: MailProcess) => void;
   state: State;
   username: string;
-  setCwd: (cwd: string) => void;
 };
-export const useLocalCommands = ({
-  addHistory,
-  addMessage,
-  sendCommand: sendCommandProp,
-  setOpenProcessId,
-  startProcess,
-  state,
-  username,
-  setCwd,
-}: UseLocalCommands) => {
+export const useLocalCommands = (props: UseLocalCommands) => {
+  const {
+    username,
+    state,
+    addMessage,
+    addHistory,
+    sendCommand: sendCommandProp,
+  } = props;
   const files = useFiles(state.filesystems["8.8.8.8"]);
+  const prompt = `${username}@local:${state.cwd}$`;
 
   const sendCommand = useCallback(
-    (command: string): void => {
-      const prompt = `${username}@local:${state.cwd}$`;
-      if (!command.trim()) {
+    (fullCommand: string): void => {
+      if (!fullCommand.trim()) {
         addMessage(prompt);
         return;
       }
-      const [baseCommand, ...args] = command.split(/ +/);
+      const [command, ...args] = fullCommand.split(/ +/);
+      const commandProps = {
+        command,
+        args,
+        files,
+        ...props,
+      };
 
-      addMessage(`${prompt} ${command}`);
-      addHistory(command);
-      if (baseCommand === "help") {
-        return helpCommand({ args, addMessage });
-      } else if (baseCommand === "mail" && !args.length) {
-        return mailCommand({
-          startProcess,
-          setOpenProcessId,
-        });
-      } else if (baseCommand === "foreground" || baseCommand === "fg") {
-        return fgCommand({
-          id: args[0],
-          baseCommand,
-          addMessage,
-          processes: state.processes,
-          setOpenProcessId,
-        });
-      } else if (baseCommand === "background" || baseCommand === "bg") {
-        setOpenProcessId(null);
-      } else if (baseCommand === "process" || baseCommand === "ps") {
-        return psCommand({
-          addMessage,
-          processes: state.processes,
-        });
-      } else if (baseCommand === "cd") {
-        return cdCommand({
-          baseCommand,
-          path: args[0],
-          addMessage,
-          cwd: state.cwd,
-          setCwd,
-          files,
-        });
-      } else if (baseCommand === "ls") {
-        return lsCommand({
-          addMessage,
-          cwd: state.cwd,
-          files,
-        });
+      addMessage(`${prompt} ${fullCommand}`);
+      addHistory(fullCommand);
+      if (command === "help") {
+        return helpCommand(commandProps);
+      } else if (command === "mail" && !args.length) {
+        return mailCommand(commandProps);
+      } else if (command === "foreground" || command === "fg") {
+        return fgCommand(commandProps);
+      } else if (command === "background" || command === "bg") {
+        return bgCommand(commandProps);
+      } else if (command === "process" || command === "ps") {
+        return psCommand(commandProps);
+      } else if (command === "cd") {
+        return cdCommand(commandProps);
+      } else if (command === "ls") {
+        return lsCommand(commandProps);
       } else {
-        sendCommandProp(command);
+        sendCommandProp(fullCommand);
       }
     },
-    [
-      addMessage,
-      username,
-      addHistory,
-      state.cwd,
-      state.processes,
-      startProcess,
-      setOpenProcessId,
-      setCwd,
-      files,
-      sendCommandProp,
-    ],
+    [addHistory, addMessage, files, prompt, props, sendCommandProp],
   );
   return sendCommand;
 };

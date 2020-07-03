@@ -1,22 +1,15 @@
-import { useFiles } from "../hooks/useFiles";
 import { joinPath } from "../lib/joinPath";
+import { CommandProps } from "./commandProps";
 
-type CdCommand = {
-  baseCommand: string;
-  path: string;
-  addMessage: (message: string) => void;
-  cwd: string;
-  setCwd: (cwd: string) => void;
-  files: ReturnType<typeof useFiles>;
-};
 export const cdCommand = ({
-  baseCommand,
-  path,
-  setCwd,
-  cwd,
   addMessage,
+  args,
+  command,
   files,
-}: CdCommand) => {
+  setCwd,
+  state,
+}: CommandProps) => {
+  const path = args[0];
   if (!path || path === ".") {
     return;
   }
@@ -25,13 +18,13 @@ export const cdCommand = ({
     return;
   }
   if (path === "..") {
-    if (cwd === "/") {
+    if (state.cwd === "/") {
       return;
     }
-    const newPath = cwd.split("/").filter(Boolean).slice(0, -1).join("/");
+    const newPath = state.cwd.split("/").filter(Boolean).slice(0, -1).join("/");
     setCwd(`/${newPath}`);
   } else {
-    const newPath = joinPath(cwd, path);
+    const newPath = joinPath(state.cwd, path);
     if (
       newPath === "/" ||
       files?.find((file) => {
@@ -42,7 +35,7 @@ export const cdCommand = ({
     ) {
       setCwd(newPath);
     } else {
-      addMessage(`${baseCommand}: ${path}: directory not found`);
+      addMessage(`${command}: ${path}: directory not found`);
     }
   }
 };

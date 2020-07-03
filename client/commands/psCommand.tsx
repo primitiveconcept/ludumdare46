@@ -1,15 +1,12 @@
 import { Process } from "../types";
 import table from "markdown-table";
+import { CommandProps } from "./commandProps";
 
-type PsCommand = {
-  addMessage: (message: string) => void;
-  processes: Process[];
-};
-export const psCommand = ({ addMessage, processes }: PsCommand) => {
+export const psCommand = ({ addMessage, state }: CommandProps) => {
   return addMessage(
     table([
       ["ID", "COMMAND"],
-      ...processes.map((process) => {
+      ...state.processes.map((process) => {
         return [process.id, process.command];
       }),
     ]),

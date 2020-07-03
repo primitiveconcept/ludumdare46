@@ -1,13 +1,9 @@
-import { MailProcess } from "../types/MailProcess";
+import { CommandProps } from "./commandProps";
 
-type MailCommand = {
-  setOpenProcessId: (processId: string | null) => void;
-  startProcess: (process: MailProcess) => void;
-};
 export const mailCommand = ({
   startProcess,
   setOpenProcessId,
-}: MailCommand) => {
+}: CommandProps) => {
   startProcess({
     id: "mail",
     command: "mail",
