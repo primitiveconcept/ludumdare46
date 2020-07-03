@@ -4,6 +4,7 @@ import { State } from "../types";
 import { MailProcess } from "../types/MailProcess";
 import table from "markdown-table";
 import { useFiles } from "./useFiles";
+import { joinPath } from "../lib/joinPath";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
@@ -50,13 +51,13 @@ export const useLocalCommands = ({
       } else if (baseCommand === "foreground" || baseCommand === "fg") {
         const id = args[0];
         if (!id) {
-          addMessage("foreground: requires a process id");
+          addMessage(`${baseCommand}: requires a process id`);
         } else {
           const process = state.processes.find((proc) => proc.id === id);
           if (process) {
             setOpenProcessId(process.id);
           } else {
-            addMessage(`process id ${id} not found`);
+            addMessage(`${baseCommand}: process id ${id} not found`);
           }
         }
       } else if (baseCommand === "background" || baseCommand === "bg") {
@@ -75,6 +76,10 @@ export const useLocalCommands = ({
         if (!path || path === ".") {
           return;
         }
+        if (path === "/") {
+          setCwd("/");
+          return;
+        }
         if (path === "..") {
           if (state.cwd === "/") {
             return;
@@ -86,7 +91,20 @@ export const useLocalCommands = ({
             .join("/");
           setCwd(`/${newPath}`);
         } else {
-          setCwd(`${state.cwd !== "/" ? state.cwd : ""}/${path}`);
+          const newPath = joinPath(state.cwd, path);
+          if (
+            newPath === "/" ||
+            files?.find((file) => {
+              return (
+                file.type === "Folder" &&
+                newPath === joinPath(file.path, file.name)
+              );
+            })
+          ) {
+            setCwd(newPath);
+          } else {
+            addMessage(`${baseCommand}: ${args[0]}: directory not found`);
+          }
         }
       } else if (baseCommand === "ls") {
         if (!files) {

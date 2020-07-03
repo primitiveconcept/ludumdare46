@@ -72,5 +72,24 @@ describe("filesystem", () => {
         cy.stub(win, "WebSocket" as any, (url: string) => new WebSocket(url));
       },
     });
+    cy.findByLabelText("Enter Username").type(`threehams{enter}`);
+    cy.getId("messages").should("contain.text", "Logged in as threehams");
+    cy.get("body").type("cd nope{enter}");
+    cy.getId("messages").should(
+      "contain.text",
+      "cd: nope: directory not found",
+    );
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.get("body").type("cd ..{enter}");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.get("body").type("ls{enter}");
+    cy.getId("messages").should("contain.text", "warez/");
+    cy.get("body").type("cd warez/mp3{enter}");
+    cy.getId("commandPrompt").should(
+      "contain.text",
+      "threehams@local:/warez/mp3$",
+    );
+    cy.get("body").type("cd /{enter}");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
   });
 });
