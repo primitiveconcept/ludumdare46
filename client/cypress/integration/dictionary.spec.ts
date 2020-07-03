@@ -3,12 +3,8 @@ import { createMockSocket } from "../support/createMockSocket";
 import { SshCrackProcess } from "../../types/SshCrackProcess";
 import produce from "immer";
 
-describe("install", () => {
-  afterEach(() => {
-    cy.alias("mockServer").then(({ closeServer }) => closeServer());
-  });
-
-  it("installs an infostealer onto a remote system", () => {
+describe("dictionary", () => {
+  it("executes a remote dictionary attack", () => {
     const process: SshCrackProcess = {
       id: "3",
       command: "sshcrack",
@@ -98,10 +94,7 @@ describe("install", () => {
     cy.findByText("199.201.159.101").click();
     cy.findByText("sshcrack").click();
     cy.findByText("sshcrack").should("not.exist");
-    cy.getId("messages").should(
-      "contain.text",
-      `threehams@local$ sshcrack 199.201.159.101`,
-    );
+    cy.getId("messages").should("contain.text", `$ sshcrack 199.201.159.101`);
     cy.findByText(/sshcrack \([0-9]+%\)/).click();
     cy.getId("sshCrackProgram").should(
       "contain.text",

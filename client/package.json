@@ -50,7 +50,7 @@
     "consolidated-events": "^2.0.2",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
-    "cypress": "^4.9.0",
+    "cypress": "4.9.0",
     "date-fns": "^2.14.0",
     "graphql": "^15.2.0",
     "humps": "^2.0.1",

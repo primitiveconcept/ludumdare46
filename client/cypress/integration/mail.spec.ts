@@ -47,10 +47,6 @@ describe("mail", () => {
     }).as("mockServer");
   });
 
-  afterEach(() => {
-    cy.alias("mockServer").then(({ closeServer }) => closeServer());
-  });
-
   it("allows malicious links in emails to send commands", () => {
     cy.visit("/", {
       onBeforeLoad(win) {

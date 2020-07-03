@@ -18,11 +18,7 @@ const device = {
   commands: ["[infostealer](install|infostealer|199.201.159.101)"],
 };
 
-describe("install", () => {
-  afterEach(() => {
-    cy.alias("mockServer").then(({ closeServer }) => closeServer());
-  });
-
+describe("infostealer", () => {
   it("installs an infostealer onto a remote system", () => {
     createMockSocket(({ onCommand, sendMessage }) => {
       onCommand("internal_login threehams", () => {

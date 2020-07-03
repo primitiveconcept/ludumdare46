@@ -22,6 +22,8 @@ export const useStore = (username: string) => {
     commandHistory: [],
     processes: [],
     emails: [],
+    filesystems: {},
+    cwd: "/",
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 
@@ -64,6 +66,11 @@ export const useStore = (username: string) => {
     if (lastMessage.update === "Emails") {
       setState((draft) => {
         draft.emails = lastMessage.payload.emails;
+      });
+    }
+    if (lastMessage.update === "Filesystem") {
+      setState((draft) => {
+        draft.filesystems[lastMessage.payload.ip] = lastMessage.payload;
       });
     }
     if (
@@ -119,6 +126,14 @@ export const useStore = (username: string) => {
     },
     [setState],
   );
+  const setCwd = useCallback(
+    (cwd: string) => {
+      setState((draft) => {
+        draft.cwd = cwd;
+      });
+    },
+    [setState],
+  );
 
   return {
     addHistory,
@@ -128,5 +143,6 @@ export const useStore = (username: string) => {
     sendCommand,
     state,
     setState,
+    setCwd,
   };
 };
