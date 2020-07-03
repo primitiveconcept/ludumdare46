@@ -1,16 +1,8 @@
 import { useCallback } from "react";
-import { useFiles } from "./useFiles";
-import {
-  mailCommand,
-  helpCommand,
-  fgCommand,
-  psCommand,
-  cdCommand,
-  lsCommand,
-  bgCommand,
-} from "../commands";
-import { MailProcess } from "../types/MailProcess";
 import { State } from "../types";
+import { MailProcess } from "../types/MailProcess";
+import { useFiles } from "./useFiles";
+import { commands } from "../commands";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
@@ -35,11 +27,11 @@ export const useLocalCommands = (props: UseLocalCommands) => {
 
   const sendCommand = useCallback(
     (fullCommand: string): void => {
-      if (!fullCommand.trim()) {
+      const [command, ...args] = fullCommand.split(/ +/);
+      if (!command) {
         addMessage(prompt);
         return;
       }
-      const [command, ...args] = fullCommand.split(/ +/);
       const commandProps = {
         command,
         args,
@@ -49,20 +41,8 @@ export const useLocalCommands = (props: UseLocalCommands) => {
 
       addMessage(`${prompt} ${fullCommand}`);
       addHistory(fullCommand);
-      if (command === "help") {
-        return helpCommand(commandProps);
-      } else if (command === "mail" && !args.length) {
-        return mailCommand(commandProps);
-      } else if (command === "foreground" || command === "fg") {
-        return fgCommand(commandProps);
-      } else if (command === "background" || command === "bg") {
-        return bgCommand(commandProps);
-      } else if (command === "process" || command === "ps") {
-        return psCommand(commandProps);
-      } else if (command === "cd") {
-        return cdCommand(commandProps);
-      } else if (command === "ls") {
-        return lsCommand(commandProps);
+      if (commands[command]) {
+        commands[command]?.(commandProps);
       } else {
         sendCommandProp(fullCommand);
       }

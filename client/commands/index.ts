@@ -1,7 +1,23 @@
-export { bgCommand } from "./bgCommand";
-export { cdCommand } from "./cdCommand";
-export { fgCommand } from "./fgCommand";
-export { helpCommand } from "./helpCommand";
-export { lsCommand } from "./lsCommand";
-export { mailCommand } from "./mailCommand";
-export { psCommand } from "./psCommand";
+import { bgCommand } from "./bgCommand";
+import { cdCommand } from "./cdCommand";
+import { fgCommand } from "./fgCommand";
+import { helpCommand } from "./helpCommand";
+import { lsCommand } from "./lsCommand";
+import { mailCommand } from "./mailCommand";
+import { psCommand } from "./psCommand";
+import { CommandProps } from "./commandProps";
+
+type CommandFunc = (props: CommandProps) => void;
+export const commands: { [key: string]: CommandFunc | undefined } = {
+  background: bgCommand,
+  bg: bgCommand,
+  cd: cdCommand,
+  dir: lsCommand,
+  fg: fgCommand,
+  foreground: fgCommand,
+  help: helpCommand,
+  ls: lsCommand,
+  mail: mailCommand,
+  ps: psCommand,
+  process: psCommand,
+};

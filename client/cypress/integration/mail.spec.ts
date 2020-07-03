@@ -31,7 +31,7 @@ describe("mail", () => {
           },
         });
       });
-      onCommand("mail read 1", () => {
+      onCommand("sendmail read 1", () => {
         sendMessage(100, {
           update: "Emails",
           payload: {
