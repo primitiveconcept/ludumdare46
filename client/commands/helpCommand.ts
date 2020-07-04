@@ -1,4 +1,4 @@
-import { CommandHandler } from "./commandHandler";
+import { CommandHandler } from "./CommandHandler";
 
 const helpText = `Type [help](help) to see this list.
 

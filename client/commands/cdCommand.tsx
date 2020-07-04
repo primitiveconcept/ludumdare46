@@ -1,5 +1,5 @@
 import { joinPath } from "../lib/joinPath";
-import { CommandHandler } from "./commandHandler";
+import { CommandHandler } from "./CommandHandler";
 
 export const cdCommand: CommandHandler = ({
   addMessage,
@@ -9,12 +9,16 @@ export const cdCommand: CommandHandler = ({
   setCwd,
   state,
 }) => {
-  const path = args[0];
-  if (!path || path === ".") {
+  const rawPath = args[0];
+  if (!rawPath) {
     return;
   }
-  if (path === "/") {
+  if (rawPath === "/") {
     setCwd("/");
+    return;
+  }
+  const path = joinPath(rawPath);
+  if (path === ".") {
     return;
   }
   if (path === "..") {
@@ -23,19 +27,19 @@ export const cdCommand: CommandHandler = ({
     }
     const newPath = state.cwd.split("/").filter(Boolean).slice(0, -1).join("/");
     setCwd(`/${newPath}`);
+    return;
+  }
+  const newPath = joinPath(state.cwd, path);
+  if (
+    newPath === "/" ||
+    files?.find((file) => {
+      return (
+        file.type === "Folder" && newPath === joinPath(file.path, file.name)
+      );
+    })
+  ) {
+    setCwd(newPath);
   } else {
-    const newPath = joinPath(state.cwd, path);
-    if (
-      newPath === "/" ||
-      files?.find((file) => {
-        return (
-          file.type === "Folder" && newPath === joinPath(file.path, file.name)
-        );
-      })
-    ) {
-      setCwd(newPath);
-    } else {
-      addMessage(`${command}: ${path}: directory not found`);
-    }
+    addMessage(`${command}: ${path}: directory not found`);
   }
 };

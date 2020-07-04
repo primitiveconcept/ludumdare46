@@ -1,6 +1,10 @@
 export const joinPath = (...args: string[]) => {
-  if (!args[1]) {
-    return args[0];
+  const normalized = args.join("/").replace(/\/+/g, "/");
+  // root path is a special case for trailing slashes
+  // (no lookbehinds in many browsers)
+  if (normalized === "/") {
+    return normalized;
   }
-  return args.join("/").replace(/\/\//g, "/");
+  // otherwise, strip trailing slash
+  return normalized.replace(/\/$/, "");
 };

@@ -5,7 +5,7 @@ import { helpCommand } from "./helpCommand";
 import { lsCommand } from "./lsCommand";
 import { mailCommand } from "./mailCommand";
 import { psCommand } from "./psCommand";
-import { CommandHandler } from "./commandHandler";
+import { CommandHandler } from "./CommandHandler";
 
 export const commands: { [key: string]: CommandHandler | undefined } = {
   background: bgCommand,

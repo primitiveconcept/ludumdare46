@@ -1,4 +1,4 @@
-import { CommandHandler } from "./commandHandler";
+import { CommandHandler } from "./CommandHandler";
 
 export const mailCommand: CommandHandler = ({
   startProcess,

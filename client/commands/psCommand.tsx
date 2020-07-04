@@ -1,5 +1,5 @@
 import table from "markdown-table";
-import { CommandHandler } from "./commandHandler";
+import { CommandHandler } from "./CommandHandler";
 
 export const psCommand: CommandHandler = ({ addMessage, state }) => {
   return addMessage(

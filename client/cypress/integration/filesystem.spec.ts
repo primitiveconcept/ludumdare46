@@ -91,5 +91,10 @@ describe("filesystem", () => {
     );
     cy.get("body").type("cd /{enter}");
     cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.get("body").type("cd /warez///mp3/{enter}");
+    cy.getId("commandPrompt").should(
+      "contain.text",
+      "threehams@local:/warez/mp3$",
+    );
   });
 });
