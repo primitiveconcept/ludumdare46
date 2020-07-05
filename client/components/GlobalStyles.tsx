@@ -82,7 +82,6 @@ export const GlobalStyles = () => {
           table {
             border: none;
             border-spacing: 0;
-            margin-left: 24px;
           }
 
           td,

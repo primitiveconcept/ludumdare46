@@ -6,6 +6,7 @@ import { commands } from "../commands";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
+  clearHistory: () => void;
   addMessage: (message: string) => void;
   sendCommand: (command: string) => void;
   setCwd: (cwd: string) => void;

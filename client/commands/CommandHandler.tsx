@@ -5,6 +5,7 @@ import { useFiles } from "../hooks/useFiles";
 type CommandProps = {
   addHistory: (command: string) => void;
   addMessage: (message: string) => void;
+  clearHistory: () => void;
   args: Array<string | undefined>;
   command: string;
   files: ReturnType<typeof useFiles>;

@@ -40,6 +40,6 @@ export const useFiles = (filesystem: Filesystem | undefined) => {
       ];
     };
 
-    return root.flatMap((id) => addUiData(id));
+    return addUiData(root);
   }, [filesystem]);
 };

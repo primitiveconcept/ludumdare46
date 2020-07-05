@@ -95,6 +95,11 @@ export const useStore = (username: string) => {
   // This used to do more...
   const sendCommand = sendMessage;
 
+  const clearHistory = useCallback(() => {
+    setState((draft) => {
+      draft.messages = [];
+    });
+  }, [setState]);
   const addMessage = useCallback(
     (message: string) => {
       setState((draft) => {
@@ -138,6 +143,7 @@ export const useStore = (username: string) => {
   return {
     addHistory,
     addMessage,
+    clearHistory,
     startProcess,
     readyState,
     sendCommand,

@@ -29,6 +29,7 @@ export const Index = () => {
   const {
     addMessage,
     addHistory,
+    clearHistory,
     readyState,
     sendCommand: sendServerCommand,
     state,
@@ -43,6 +44,7 @@ export const Index = () => {
   const sendCommand = useLocalCommands({
     username,
     startProcess,
+    clearHistory,
     sendCommand: sendServerCommand,
     setOpenProcessId,
     addMessage,

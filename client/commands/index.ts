@@ -1,5 +1,6 @@
 import { bgCommand } from "./bgCommand";
 import { cdCommand } from "./cdCommand";
+import { clsCommand } from "./clsCommand";
 import { fgCommand } from "./fgCommand";
 import { helpCommand } from "./helpCommand";
 import { lsCommand } from "./lsCommand";
@@ -11,6 +12,7 @@ export const commands: { [key: string]: CommandHandler | undefined } = {
   background: bgCommand,
   bg: bgCommand,
   cd: cdCommand,
+  cls: clsCommand,
   dir: lsCommand,
   fg: fgCommand,
   foreground: fgCommand,

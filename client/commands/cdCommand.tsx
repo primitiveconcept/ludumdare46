@@ -29,7 +29,7 @@ export const cdCommand: CommandHandler = ({
     setCwd(`/${newPath}`);
     return;
   }
-  const newPath = joinPath(state.cwd, path);
+  const newPath = path.startsWith("/") ? path : joinPath(state.cwd, path);
   if (
     newPath === "/" ||
     files?.find((file) => {
