@@ -1,3 +1,5 @@
+export const FILESYSTEM_ROOT = "FILESYSTEM_ROOT";
+
 export const joinPath = (...args: string[]) => {
   const normalized = args.join("/").replace(/\/+/g, "/");
   // root path is a special case for trailing slashes
@@ -7,4 +9,8 @@ export const joinPath = (...args: string[]) => {
   }
   // otherwise, strip trailing slash
   return normalized.replace(/\/$/, "");
+};
+
+export const splitPath = (path: string) => {
+  return path.replace(/\/+/g, "/").split("/");
 };

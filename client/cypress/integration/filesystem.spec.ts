@@ -14,7 +14,7 @@ describe("filesystem", () => {
                 id: "1",
                 contents: ["2"],
                 type: "Folder",
-                name: "",
+                name: "FILESYSTEM_ROOT",
                 executable: true,
                 owner: "root",
                 size: 0,
@@ -75,7 +75,7 @@ describe("filesystem", () => {
     });
     cy.findByLabelText("Enter Username").type(`threehams{enter}`);
     cy.getId("messages").should("contain.text", "Logged in as threehams");
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
     cy.get("body").type("ls{enter}");
     cy.getId("messages").should("contain.text", "warez/");
     cy.get("body").type("cd warez{enter}");
@@ -92,7 +92,7 @@ describe("filesystem", () => {
     cy.getId("commandPrompt").should("contain.text", "threehams@local:/warez$");
 
     cy.get("body").type("cd ..{enter}");
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
     cy.get("body").type("ls{enter}");
   });
 
@@ -110,9 +110,9 @@ describe("filesystem", () => {
       "contain.text",
       "cd: nope: directory not found",
     );
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
     cy.get("body").type("cd ..{enter}");
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
 
     cy.get("body").type("ls{enter}");
     cy.getId("messages").should("contain.text", "warez/");
@@ -123,7 +123,7 @@ describe("filesystem", () => {
     );
 
     cy.get("body").type("cd /{enter}");
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
     cy.get("body").type("cd /warez///mp3/{enter}");
     cy.getId("commandPrompt").should(
       "contain.text",
@@ -131,7 +131,7 @@ describe("filesystem", () => {
     );
 
     cy.get("body").type("cd /{enter}");
-    cy.getId("commandPrompt").should("contain.text", "threehams@local:/$");
+    cy.getId("commandPrompt").should("contain.text", "threehams@local:$");
     cy.get("body").type("cd /warez/mp3{enter}");
     cy.getId("commandPrompt").should(
       "contain.text",

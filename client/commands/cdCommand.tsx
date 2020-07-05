@@ -1,4 +1,4 @@
-import { joinPath } from "../lib/joinPath";
+import { joinPath, splitPath, FILESYSTEM_ROOT } from "../lib/path";
 import { CommandHandler } from "./CommandHandler";
 
 export const cdCommand: CommandHandler = ({
@@ -13,23 +13,29 @@ export const cdCommand: CommandHandler = ({
   if (!rawPath) {
     return;
   }
+
   if (rawPath === "/") {
-    setCwd("/");
+    setCwd(FILESYSTEM_ROOT);
     return;
   }
+
   const path = joinPath(rawPath);
   if (path === ".") {
     return;
   }
+
   if (path === "..") {
-    if (state.cwd === "/") {
+    if (state.cwd === FILESYSTEM_ROOT) {
       return;
     }
-    const newPath = state.cwd.split("/").filter(Boolean).slice(0, -1).join("/");
-    setCwd(`/${newPath}`);
+    const newPath = splitPath(state.cwd).slice(0, -1).join("/");
+    setCwd(`${newPath}`);
     return;
   }
-  const newPath = path.startsWith("/") ? path : joinPath(state.cwd, path);
+
+  const newPath = path.startsWith("/")
+    ? joinPath(FILESYSTEM_ROOT, path)
+    : joinPath(state.cwd, path);
   if (
     newPath === "/" ||
     files?.find((file) => {

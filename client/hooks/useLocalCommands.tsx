@@ -3,6 +3,7 @@ import { State } from "../types";
 import { MailProcess } from "../types/MailProcess";
 import { useFiles } from "./useFiles";
 import { commands } from "../commands";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;
@@ -24,7 +25,7 @@ export const useLocalCommands = (props: UseLocalCommands) => {
     sendCommand: sendCommandProp,
   } = props;
   const files = useFiles(state.filesystems["8.8.8.8"]);
-  const prompt = `${username}@local:${state.cwd}$`;
+  const prompt = `${username}@local:${state.cwd.replace(FILESYSTEM_ROOT, "")}$`;
 
   const sendCommand = useCallback(
     (fullCommand: string): void => {

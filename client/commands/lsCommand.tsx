@@ -2,7 +2,7 @@ import { CommandHandler } from "./CommandHandler";
 import table from "markdown-table";
 import { format } from "date-fns";
 import { File, Folder } from "../types";
-import { joinPath } from "../lib/joinPath";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
 const rsplit = <T extends string>(
   text: T,
@@ -38,21 +38,17 @@ export const lsCommand: CommandHandler = ({
   const files = allFiles.filter((file) => file.path === state.cwd);
   if (args[0]?.includes("a")) {
     const current = allFiles.find((file) => {
-      if (state.cwd === "/") {
-        return !file.name;
+      if (state.cwd === FILESYSTEM_ROOT) {
+        return file.name === FILESYSTEM_ROOT;
       }
-      const parts = rsplit(state.cwd, "/", 1);
-      const path = joinPath("/", parts[0]);
-      const folder = parts[1];
+      const [path, folder] = rsplit(state.cwd, "/", 1);
       return file.path === path && folder === file.name;
     })!;
     const parent = allFiles.find((file) => {
-      if (state.cwd === "/") {
-        return !file.name;
+      if (state.cwd === FILESYSTEM_ROOT) {
+        return file.name === FILESYSTEM_ROOT;
       }
-      const parts = rsplit(state.cwd, "/", 2);
-      const path = joinPath("/", parts[0]);
-      const folder = parts[1] ?? "";
+      const [path, folder] = rsplit(state.cwd, "/", 2);
       return file.path === path && folder === file.name;
     })!;
     files.unshift({

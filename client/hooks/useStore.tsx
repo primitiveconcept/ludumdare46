@@ -4,6 +4,7 @@ import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { ReadyState } from "react-use-websocket";
 import { MailProcess } from "../types/MailProcess";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
 /**
  * Set up local state to hold onto messages received from the server.
@@ -23,7 +24,7 @@ export const useStore = (username: string) => {
     processes: [],
     emails: [],
     filesystems: {},
-    cwd: "/",
+    cwd: FILESYSTEM_ROOT,
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 

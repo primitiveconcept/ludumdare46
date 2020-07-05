@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Filesystem, Folder, File } from "../types";
+import { joinPath } from "../lib/path";
 
 export const useFiles = (filesystem: Filesystem | undefined) => {
   return useMemo(() => {
@@ -17,7 +18,7 @@ export const useFiles = (filesystem: Filesystem | undefined) => {
     const addUiData = (
       id: string,
       indent = 0,
-      cwd = "/",
+      cwd = "",
     ): Array<(File | Folder) & { indent: number; path: string }> => {
       const item = itemMap[id];
       const newItem = {
@@ -34,7 +35,7 @@ export const useFiles = (filesystem: Filesystem | undefined) => {
           addUiData(
             child,
             indent + 1,
-            `${cwd}${cwd.endsWith("/") ? "" : "/"}${newItem.name}`,
+            cwd ? joinPath(cwd, newItem.name) : newItem.name,
           ),
         ),
       ];
