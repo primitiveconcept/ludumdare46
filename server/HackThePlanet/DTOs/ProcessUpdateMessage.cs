@@ -1,10 +1,20 @@
 namespace HackThePlanet
 {
-    using Newtonsoft.Json;
-
-
     public class ProcessUpdateMessage : UpdateMessage<ProcessInfo>
     {
+        #region Constructors
+        public ProcessUpdateMessage(
+            int playerId, 
+            ProcessInfo processInfo,
+            IP? ip)
+        {
+            this.IP = ip;
+            this.Payload = processInfo;
+
+        }
+        #endregion
+
+
         #region Properties
         public override ProcessInfo Payload { get; set; }
 
@@ -14,18 +24,5 @@ namespace HackThePlanet
             get { return "ProcessUpdate"; }
         }
         #endregion
-
-
-        public static ProcessUpdateMessage Create(
-            int playerId, 
-            ProcessInfo processInfo,
-            IP? ip)
-        {
-            ProcessUpdateMessage message = new ProcessUpdateMessage();
-            message.IP = ip;
-            message.Payload = processInfo;
-
-            return message;
-        }
     }
 }

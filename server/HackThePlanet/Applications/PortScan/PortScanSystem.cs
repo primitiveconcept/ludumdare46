@@ -122,7 +122,7 @@ namespace HackThePlanet
             
             ProcessInfo processInfo = new ProcessInfo(portScan);
             ProcessUpdateMessage processUpdate =
-                ProcessUpdateMessage.Create(
+                new ProcessUpdateMessage(
                     player.Id,
                     processInfo,
                     player.GetPublicIP());
@@ -132,11 +132,12 @@ namespace HackThePlanet
             Game.SendMessageToClient(player.Id, processUpdate.ToJson());
 
             // TODO: Have debug config use this. 
-            //Game.SendMessageToClient(
-            //    player.Id,
-            //    TerminalUpdateMessage.Create(
-            //        $"Found open port: {(int)serverApplication.Port} "
-            //        + $"[{serverApplication.Port.ToString().ToUpper()}]"));
+            Game.SendMessageToClient(
+                player.Id,
+                new TerminalUpdateMessage(
+                        $"Found open port: {(int)serverApplication.Port} " 
+                        + $"[{serverApplication.Port.ToString().ToUpper()}]")
+                    .ToJson());
         }
 
 
