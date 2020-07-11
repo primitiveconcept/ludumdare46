@@ -1,8 +1,5 @@
 import "@testing-library/cypress/add-commands";
 import { Server } from "mock-socket";
-// Strange false positive, probably namespaces...
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { PickByValue } from "utility-types";
 
 type Aliases = {
   mockServer: { mockServer: Server; closeServer: () => void };

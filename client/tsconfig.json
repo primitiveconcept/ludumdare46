@@ -9,7 +9,6 @@
     "noEmit": true,
     "preserveConstEnums": true,
     "removeComments": false,
-    "skipLibCheck": false,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
@@ -17,8 +16,15 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "skipLibCheck": false
   },
   "exclude": ["node_modules", "./cypress/**/*.ts", "./cypress/**/*.tsx"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./typings/**/*.d.ts"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.tsx",
+    "./typings/**/*.d.ts"
+  ]
 }

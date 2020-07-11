@@ -29,10 +29,12 @@ export const Index = () => {
   const {
     addMessage,
     addHistory,
+    clearHistory,
     readyState,
     sendCommand: sendServerCommand,
     state,
     startProcess,
+    setCwd,
   } = useStore(username);
   const [command, setCommand] = useState("");
   const { setPrevCommand, setNextCommand } = useCommandHistory(
@@ -42,11 +44,13 @@ export const Index = () => {
   const sendCommand = useLocalCommands({
     username,
     startProcess,
+    clearHistory,
     sendCommand: sendServerCommand,
     setOpenProcessId,
     addMessage,
     addHistory,
     state,
+    setCwd,
   });
 
   const commandContextValue = useMemo(() => {
@@ -117,7 +121,7 @@ export const Index = () => {
                 <Status readyState={readyState} />
                 <TerminalProgram messages={state.messages} />
                 {username ? (
-                  <CommandPrompt username={username} />
+                  <CommandPrompt username={username} cwd={state.cwd} />
                 ) : (
                   <UsernamePrompt setUsername={setUsername} />
                 )}

@@ -13,7 +13,7 @@ type LinkProps = {
 } & SpaceProps;
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({ href: hrefProp, onClick, children, block, ...rest }, ref) => {
-    const href = hrefProp.replace(SPACE_CHARACTER, " ");
+    const href = hrefProp.replaceAll(SPACE_CHARACTER, " ");
     return (
       <Anchor
         ref={ref}

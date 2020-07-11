@@ -4,6 +4,7 @@ import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { ReadyState } from "react-use-websocket";
 import { MailProcess } from "../types/MailProcess";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
 /**
  * Set up local state to hold onto messages received from the server.
@@ -22,6 +23,8 @@ export const useStore = (username: string) => {
     commandHistory: [],
     processes: [],
     emails: [],
+    filesystems: {},
+    cwd: FILESYSTEM_ROOT,
   });
   const { lastMessage, readyState, sendMessage } = useSocket();
 
@@ -66,6 +69,11 @@ export const useStore = (username: string) => {
         draft.emails = lastMessage.payload.emails;
       });
     }
+    if (lastMessage.update === "Filesystem") {
+      setState((draft) => {
+        draft.filesystems[lastMessage.payload.ip] = lastMessage.payload;
+      });
+    }
     if (
       lastMessage.update === "PortscanProcess" ||
       lastMessage.update === "SshCrackProcess" ||
@@ -88,6 +96,11 @@ export const useStore = (username: string) => {
   // This used to do more...
   const sendCommand = sendMessage;
 
+  const clearHistory = useCallback(() => {
+    setState((draft) => {
+      draft.messages = [];
+    });
+  }, [setState]);
   const addMessage = useCallback(
     (message: string) => {
       setState((draft) => {
@@ -119,14 +132,24 @@ export const useStore = (username: string) => {
     },
     [setState],
   );
+  const setCwd = useCallback(
+    (cwd: string) => {
+      setState((draft) => {
+        draft.cwd = cwd;
+      });
+    },
+    [setState],
+  );
 
   return {
     addHistory,
     addMessage,
+    clearHistory,
     startProcess,
     readyState,
     sendCommand,
     state,
     setState,
+    setCwd,
   };
 };

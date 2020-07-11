@@ -19,7 +19,7 @@ export const CommandLink = ({
   ...rest
 }: CommandLinkProps) => {
   const { sendCommand } = useContext(CommandContext);
-  const href = hrefProp.replace(SPACE_CHARACTER, " ");
+  const href = hrefProp.replaceAll(SPACE_CHARACTER, " ");
   return (
     <Anchor
       css={css`

@@ -3,16 +3,20 @@ import { css } from "@emotion/react";
 import { Box } from ".";
 import { CommandContext } from "./CommandContext";
 import { useInputFocus } from "../hooks/useInputFocus";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
 const CURSOR = "█";
 
 type CommandPromptProps = {
   username: string;
+  cwd: string;
 };
-export const CommandPrompt = ({ username }: CommandPromptProps) => {
+export const CommandPrompt = ({ username, cwd }: CommandPromptProps) => {
   const { command, setCommand, sendCommand } = useContext(CommandContext);
   const inputRef = createRef<HTMLInputElement>();
-  const prompt = username ? `${username}@local$` : `username?`;
+  const prompt = username
+    ? `${username}@local:${cwd.replace(FILESYSTEM_ROOT, "")}$`
+    : `username?`;
 
   const onSubmit = useCallback(() => {
     sendCommand(command);
@@ -26,6 +30,7 @@ export const CommandPrompt = ({ username }: CommandPromptProps) => {
         position: relative;
         width: 100%;
       `}
+      data-test="commandPrompt"
     >
       {prompt} {command}
       {CURSOR}

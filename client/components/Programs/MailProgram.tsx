@@ -69,7 +69,7 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
             key={email.id}
             email={email}
             onClick={() => {
-              sendCommand(`mail read ${email.id}`);
+              sendCommand(`sendmail read ${email.id}`);
               setSelectedId(email.id);
             }}
           />

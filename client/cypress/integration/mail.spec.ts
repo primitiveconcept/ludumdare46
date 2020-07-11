@@ -31,7 +31,7 @@ describe("mail", () => {
           },
         });
       });
-      onCommand("mail read 1", () => {
+      onCommand("sendmail read 1", () => {
         sendMessage(100, {
           update: "Emails",
           payload: {
@@ -45,10 +45,6 @@ describe("mail", () => {
         });
       });
     }).as("mockServer");
-  });
-
-  afterEach(() => {
-    cy.alias("mockServer").then(({ closeServer }) => closeServer());
   });
 
   it("allows malicious links in emails to send commands", () => {
