@@ -1,4 +1,4 @@
-namespace HackThePlanet
+namespace PrimitiveEngine
 {
     public interface IGraphNodeConnection<T>
     {

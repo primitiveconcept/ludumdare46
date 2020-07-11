@@ -21,13 +21,18 @@ namespace HackThePlanet
             {
                 if (Process(originEntity, process, originComputer))
                     continue;
-                
+             
+                // Clean up if application is finished.
                 processPool.KillProcess(process.ProcessId);
                 originComputer.RunningApplications.Remove(process.ProcessId);
             }
         }
 
 
+        /// <summary>
+        /// Process each porstcan application.
+        /// </summary>
+        /// <returns>Whether system should continue processing after this iteration.</returns>
         public bool Process(
             Entity originEntity,
             PortScanApplication portScan,
@@ -39,7 +44,7 @@ namespace HackThePlanet
                 return true;
             }
 
-            PlayerComponent player = originComputer.GetSiblingComponent<PlayerComponent>();
+            PlayerComponent player = originEntity.GetComponent<PlayerComponent>();
             ComputerComponent targetComputer = Game.World.GetEntityById(portScan.TargetEntityId)?
                 .GetComponent<ComputerComponent>();
 
@@ -57,22 +62,11 @@ namespace HackThePlanet
 
             if (!IncrementCurrentPort(portScan))
             {
-                FinishPortScan(
-                    portscanEntity: originEntity, 
-                    player: player);
+                
                 return false;
             }
 
             return true;
-        }
-
-
-        private static void FinishPortScan(Entity portscanEntity, PlayerComponent player)
-        {
-            Game.SendMessageToClient(
-                player.Id,
-                TerminalUpdateMessage.Create("Finished port scan"));
-            
         }
 
 
@@ -154,7 +148,7 @@ namespace HackThePlanet
             {
                 Game.SendMessageToClient(
                     player.Id,
-                    TerminalUpdateMessage.Create($"Timed out connecting to host."));
+                    new TerminalUpdateMessage($"Timed out connecting to host.").ToJson());
                 return false;
             }
 

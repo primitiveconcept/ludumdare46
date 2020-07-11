@@ -1,6 +1,8 @@
 namespace HackThePlanet
 {
-    
+    using PrimitiveEngine;
+
+
     public class NetworkConnection : IGraphNodeConnection<NetworkInterface>
     {
         public NetworkInterface Source { get; set; }

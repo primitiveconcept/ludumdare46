@@ -10,11 +10,15 @@ namespace HackThePlanet
         public object Payload;
 
 
-        public static string Create(string message)
+        public TerminalUpdateMessage(string message)
         {
-            TerminalUpdateMessage update = new TerminalUpdateMessage();
-            update.Payload = new { Message = message };
-            return JsonConvert.SerializeObject(update);
+            this.Payload = new { Message = message }; 
+        }
+
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

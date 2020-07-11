@@ -32,7 +32,7 @@ namespace HackThePlanet
             result.Append("<tr><th>HOP</th><th>RTT1</th><th>RTT2</th><th>RTT3</th><th>IP</th></tr>");
             for (int hop = 0; hop < route.Count; hop++)
             {
-                // Reference: Hop RTT1 RTT2 IP
+                // Reference: Hop RTT1 RTT2 RTT3 IP
                 result.Append($"<tr><td>{hop + 1}</td><td>30ms</td><td>30ms</td><td>30ms</td><td>{route[hop].IP}</td></tr>");
             }
             result.Append("<table>");

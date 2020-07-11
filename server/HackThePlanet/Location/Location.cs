@@ -1,5 +1,6 @@
 namespace HackThePlanet
 {
+    using GeoCoordinatePortable;
     using PrimitiveEngine;
 
     public class Location : IEntityComponent
@@ -9,6 +10,11 @@ namespace HackThePlanet
         #endregion
 
 
+        /// <summary>
+        /// Get the distance to another Location, in meters.
+        /// </summary>
+        /// <param name="otherLocation"></param>
+        /// <returns></returns>
         public double GetDistanceTo(Location otherLocation)
         {
             return this.Coordinates.GetDistanceTo(otherLocation.Coordinates);

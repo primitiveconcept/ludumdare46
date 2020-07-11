@@ -122,14 +122,9 @@ namespace HackThePlanet
 
                     if (!string.IsNullOrEmpty(response))
                     {
-                        var result = new
-                                         {
-                                             Update = "Terminal",
-                                             Payload = new {
-                                                                   Message = response,
-                                                               }
-                                         };
-                        SendMessageToClient(playerId, JsonConvert.SerializeObject(result));
+                        SendMessageToClient(
+                            playerId, 
+                            new TerminalUpdateMessage(response).ToJson());
                     }
                 }
                 
@@ -137,7 +132,7 @@ namespace HackThePlanet
             }
         }
 
-        
+
         internal static void SendMessageToClient(int playerId, string playerStateJson)
         {
             Instance.messageForClient.Raise(playerId, playerStateJson);
