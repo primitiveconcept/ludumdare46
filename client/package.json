@@ -28,7 +28,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cypress/webpack-preprocessor": "^5.4.1",
+    "@cypress/webpack-preprocessor": "^5.4.2",
     "@emotion/babel-plugin": "^11.0.0-next.12",
     "@emotion/babel-preset-css-prop": "^11.0.0-next.10",
     "@emotion/react": "^11.0.0-next.12",
@@ -50,7 +50,7 @@
     "consolidated-events": "^2.0.2",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
-    "cypress": "4.9.0",
+    "cypress": "4.12.1",
     "date-fns": "^2.14.0",
     "graphql": "^15.2.0",
     "humps": "^2.0.1",
