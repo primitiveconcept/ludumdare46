@@ -17,7 +17,6 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
       <Box paddingBottom={1}>
         <Box marginBottom={1}>Detail</Box>
         <div>{device.ip}</div>
-        <Box paddingLeft={1}>{device.status}</Box>
         <Box paddingLeft={1}>
           <DeviceDetail
             device={device}
@@ -44,7 +43,6 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
             >
               {dev.ip}
             </Link>
-            <Box paddingLeft={1}>{dev.status}</Box>
           </React.Fragment>
         );
       })}

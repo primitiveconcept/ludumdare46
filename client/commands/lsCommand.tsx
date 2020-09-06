@@ -3,17 +3,7 @@ import table from "markdown-table";
 import { format } from "date-fns";
 import { File, Folder } from "../types";
 import { FILESYSTEM_ROOT } from "../lib/path";
-
-const rsplit = <T extends string>(
-  text: T,
-  separator: string,
-  limit?: number,
-) => {
-  const split = text.split(separator);
-  return limit
-    ? [split.slice(0, -limit).join(separator)].concat(split.slice(-limit))
-    : split;
-};
+import { rsplit } from "../lib/rsplit";
 
 const displayName = (file: File | Folder) => {
   if (file.type === "Folder") {
