@@ -1,39 +1,66 @@
-import seedrandom from "seedrandom";
-import { range } from "lodash";
+import { alea as seedrandom } from "seedrandom";
+import { zip, range } from "lodash";
 
 const SEED = "42";
+type Connection = {
+  ip: string;
+  latency: number;
+};
 
-export const findPath = (source: string, target: string) => {
-  return traverse(source).reverse().concat(traverse(target));
+export const findPath = (source: string, target: string): Connection[] => {
+  if (source === target) {
+    return [{ ip: target, latency: 0 }];
+  }
+  const upPath: Connection[] = [];
+  const downPath: Connection[] = [];
+  const up = traverse(source);
+  const down = traverse(target);
+  let last: Connection | undefined;
+  zip(up, down).map(([upConnection, downConnection]) => {
+    if (upConnection?.ip === downConnection?.ip) {
+      last = upConnection;
+    } else {
+      if (last) {
+        upPath.push(last);
+      }
+      if (upConnection) {
+        upPath.push(upConnection);
+      }
+      if (downConnection) {
+        downPath.push(downConnection);
+      }
+      last = undefined;
+    }
+  });
+  return upPath.reverse().concat(downPath);
 };
 
 export const traverse = (
   target: string,
   assigned?: string,
   ranges: string[] = DEFAULT_RANGE,
-  path: string[] = [],
-): string[] => {
-  if (targetMatchesRange(assigned, target)) {
-    console.log(ranges);
-    if (path[path.length - 1] === target) {
+  path: Connection[] = [],
+): Connection[] => {
+  const depth = path.length;
+  const random = seedrandom(`${SEED}${assigned}`);
+  if (targetMatchesBlock(assigned, target)) {
+    if (path[path.length - 1]?.ip === target) {
       return path;
     }
-    return [...path, target];
+    return [...path, { ip: target, latency: latencyFor(random, depth) }];
   }
-  const random = seedrandom(`${SEED}${assigned}`);
   const availableBlocks = ranges.flatMap((block) => {
     return breakRange(block, random);
   });
-  const depth = path.length;
   shuffle(availableBlocks, SEED);
   const maxConnections = Math.floor(random() * availableBlocks.length);
   const connectionCount = Math.min(maxConnections + 1, availableBlocks.length);
-  const nodes: [string, string[]][] = [];
+  const nodes: Array<[string, string[]]> = [];
 
   let foundIndex: number | undefined;
   range(0, connectionCount).forEach((index) => {
     const block = availableBlocks[index];
-    if (!foundIndex && targetMatchesRange(block, target)) {
+    if (!foundIndex && targetMatchesBlock(block, target)) {
       foundIndex = index;
     }
     nodes.push([block, []]);
@@ -44,7 +71,7 @@ export const traverse = (
       return;
     }
     const block = availableBlocks[index];
-    if (!foundIndex && targetMatchesRange(block, target)) {
+    if (!foundIndex && targetMatchesBlock(block, target)) {
       foundIndex = bucket;
     }
     nodes[bucket][1].push(block);
@@ -53,7 +80,21 @@ export const traverse = (
     throw new Error("Target was not found in any available ranges");
   }
   const next = nodes[foundIndex];
-  return traverse(target, next[0], next[1], [...path, findGateway(next[0])]);
+  return traverse(target, next[0], next[1], [
+    ...path,
+    {
+      ip: findGateway(next[0]),
+      latency: latencyFor(random, depth),
+    },
+  ]);
+};
+
+const latencyFor = (random: () => number, depth: number) => {
+  return randomInt(random, depth, Math.floor(10 * (1 / (depth + 0.5) ** 1.5)));
+};
+
+const randomInt = (random: () => number, low: number, high: number) => {
+  return Math.floor(random() * (high + low)) + low;
 };
 
 const shuffle = <T>(arr: T[], seed: string) => {
@@ -79,14 +120,11 @@ const breakRange = (ipRange: string, random: () => number) => {
   });
 };
 
-export const targetMatchesRange = (
-  range: string | undefined,
-  target: string,
-) => {
-  if (!range) {
+const targetMatchesBlock = (block: string | undefined, target: string) => {
+  if (!block) {
     return false;
   }
-  return target.startsWith(range) && target[range.length] === ".";
+  return target.startsWith(block) && target[block.length] === ".";
 };
 
 const DEFAULT_RANGE = range(0, 255).map((num) => num.toString());

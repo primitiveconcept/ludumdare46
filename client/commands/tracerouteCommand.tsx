@@ -6,9 +6,13 @@ export const tracerouteCommand: CommandHandler = ({ addMessage, args }) => {
   if (!ip) {
     return "usage: traceroute [ip]";
   }
-  addMessage(`traceroute to ${ip}, 64 hops max, 52 byte packages`);
   const path = findPath("199.201.159.1", ip);
-  path.map((address, index) => {
-    addMessage(`${index + 1}  ${address}`);
-  });
+  const message = path
+    .map((connection, index) => {
+      return `* ${index + 1}  ${connection.ip} ${connection.latency}ms`;
+    })
+    .join("\n");
+  addMessage(`traceroute to ${ip}, 64 hops max, 52 byte packages
+
+${message}`);
 };
