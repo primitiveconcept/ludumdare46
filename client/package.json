@@ -9,6 +9,9 @@
   "scripts": {
     "format:all": "prettier --write \"{components,pages,static,types}/**/*.{js,ts,tsx}\"",
     "dev": "next",
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "build": "next build",
     "start": "next start -p 3000",
     "build:start": "cross-env yarn build && yarn start",
@@ -43,14 +46,14 @@
     "jest": "^26.1.0",
     "keycode": "^2.2.0",
     "lodash": "^4.17.15",
+    "lodash-es": "^4.17.15",
     "markdown-table": "^2.0.0",
     "markdown-to-jsx": "^6.11.4",
     "mock-socket": "^9.0.3",
-    "next": "^9.4.4",
+    "next": "^9.5.3",
     "react": "16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "16.13.1",
-    "react-use-websocket": "^2.0.3",
     "runtypes": "^4.3.0",
     "seedrandom": "^3.0.5",
     "styled-system": "^5.1.5",
@@ -60,6 +63,7 @@
     "ws": "^7.3.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^9.5.3",
     "@testing-library/cypress": "^6.0.1",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
@@ -88,6 +92,7 @@
     "prettier": "2.0.5",
     "start-server-and-test": "^1.11.0",
     "ts-jest": "^26.1.1",
-    "typescript": "^4.0.0-beta"
+    "typescript": "^4.0.2",
+    "worker-plugin": "^5.0.0"
   }
 }

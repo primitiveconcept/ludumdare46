@@ -1,5 +1,6 @@
 import { alea as seedrandom } from "seedrandom";
 import { zip, range } from "lodash";
+import { breakRange } from "./breakRange";
 
 const SEED = "42";
 type Connection = {
@@ -35,7 +36,7 @@ export const findPath = (source: string, target: string): Connection[] => {
   return upPath.reverse().concat(downPath);
 };
 
-export const traverse = (
+const traverse = (
   target: string,
   assigned?: string,
   ranges: string[] = DEFAULT_RANGE,
@@ -107,19 +108,6 @@ const shuffle = <T>(arr: T[], seed: string) => {
   }
 };
 
-const breakRange = (ipRange: string, random: () => number) => {
-  if (random() < 0.9) {
-    return ipRange;
-  }
-  const length = ipRange.split(".").length + 1;
-  if (length >= 4) {
-    return [ipRange];
-  }
-  return range(1, 255).map((part) => {
-    return `${ipRange}.${part}`;
-  });
-};
-
 const targetMatchesBlock = (block: string | undefined, target: string) => {
   if (!block) {
     return false;
@@ -127,14 +115,16 @@ const targetMatchesBlock = (block: string | undefined, target: string) => {
   return target.startsWith(block) && target[block.length] === ".";
 };
 
-const DEFAULT_RANGE = range(0, 255).map((num) => num.toString());
+const DEFAULT_RANGE = range(0, 10)
+  .concat(range(11, 254))
+  .map((num) => num.toString());
 
 const findGateway = (ipRange: string) => {
   const random = seedrandom(`${ipRange}${SEED}`);
   const length = ipRange.split(".").length + 1;
   const suffix = range(0, 5 - length)
     .map(() => {
-      return Math.floor(random() * 255);
+      return Math.floor(random() * 253) + 1;
     })
     .join(".");
   return [ipRange, suffix].join(".");

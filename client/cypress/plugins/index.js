@@ -10,30 +10,5 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const webpack = require("@cypress/webpack-preprocessor");
 
-module.exports = (on) => {
-  on(
-    "file:preprocessor",
-    webpack({
-      webpackOptions: {
-        module: {
-          rules: [
-            {
-              test: /\.tsx?$/,
-              exclude: [/node_modules/],
-              use: [
-                {
-                  loader: "babel-loader",
-                },
-              ],
-            },
-          ],
-        },
-        resolve: {
-          extensions: [".js", ".ts", ".tsx", ".json"],
-        },
-      },
-    }),
-  );
-};
+module.exports = (on) => {};

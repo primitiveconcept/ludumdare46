@@ -6,7 +6,6 @@ import { helpCommand } from "./helpCommand";
 import { lsCommand } from "./lsCommand";
 import { mailCommand } from "./mailCommand";
 import { psCommand } from "./psCommand";
-import { tracerouteCommand } from "./tracerouteCommand";
 import { CommandHandler } from "./CommandHandler";
 
 export const commands: { [key: string]: CommandHandler | undefined } = {
@@ -22,5 +21,4 @@ export const commands: { [key: string]: CommandHandler | undefined } = {
   mail: mailCommand,
   ps: psCommand,
   process: psCommand,
-  traceroute: tracerouteCommand,
 };

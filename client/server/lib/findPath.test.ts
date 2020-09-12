@@ -1,4 +1,4 @@
-import { findPath } from "./generate";
+import { findPath } from "./findPath";
 
 describe("findPath", () => {
   it("generates an Internet backbone", () => {

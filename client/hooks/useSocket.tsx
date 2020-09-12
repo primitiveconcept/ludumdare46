@@ -1,10 +1,33 @@
-import { useMemo } from "react";
-import useWebSocket from "react-use-websocket";
+import { useMemo, useRef, useEffect, useState, useCallback } from "react";
 import { Message } from "../types/Message";
-import { camelizeKeys } from "humps";
-import { useRouter } from "next/router";
 
-type UnsafeMessage = Pick<Message, "update"> | { update?: string };
+const useWorker = () => {
+  const workerRef = useRef<Worker>();
+  const [lastMessage, setLastMessage] = useState<Message | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    workerRef.current = new Worker("../server/worker.ts", { type: "module" });
+  }, []);
+
+  if (workerRef.current) {
+    workerRef.current.onmessage = (message) => {
+      setLastMessage(message.data);
+    };
+  }
+
+  const sendMessage = useCallback((message) => {
+    console.log(workerRef.current);
+    workerRef.current?.postMessage(message);
+  }, []);
+
+  return {
+    sendMessage,
+    lastMessage,
+    ready: !!workerRef.current,
+  };
+};
 
 /**
  * Connect to the Websocket endpoint and hide away the
@@ -17,38 +40,7 @@ type UnsafeMessage = Pick<Message, "update"> | { update?: string };
  *
  */
 export const useSocket = () => {
-  let hostname = "";
-  if (typeof window !== "undefined") {
-    hostname = window.location.hostname;
-  }
-  const router = useRouter();
-  const forceLocal = router.query.forceLocal;
-  const forceProduction = router.query.forceProduction;
-
-  // Intentionally prevent rerender after changing this
-  // Otherwise we'll ask the server twice for state
-  const options = useMemo(
-    () => ({
-      shouldReconnect: () => true,
-      reconnectAttempts: 10,
-      reconnectInterval: 3000,
-    }),
-    [],
-  );
-
-  let url;
-  if (forceLocal) {
-    url = "ws://localhost:31337/game";
-  } else if (forceProduction) {
-    url = "ws://dev.primitiveconcept.com:31337/game";
-  } else {
-    url = `ws://${hostname}:31337/game`;
-  }
-  const {
-    sendMessage,
-    lastMessage: lastMessageUnsafe,
-    readyState,
-  } = useWebSocket(url, options);
+  const { sendMessage, lastMessage: lastMessageUnsafe, ready } = useWorker();
   const lastMessage = useMemo(() => {
     if (!lastMessageUnsafe) {
       return null;
@@ -57,15 +49,12 @@ export const useSocket = () => {
     const updateNames = Message.alternatives.map(
       (record) => record.fields.update.value,
     );
-    const camelized = camelizeKeys(
-      JSON.parse(lastMessageUnsafe.data),
-    ) as UnsafeMessage;
-    const update = camelized.update;
+    const update = lastMessageUnsafe?.update;
     if (!update || !updateNames.includes(update)) {
       // eslint-disable-next-line no-console
       console.error(
         `Received unknown update type ${update}. Known updates: ${updateNames}. Message received:`,
-        camelized,
+        lastMessageUnsafe,
       );
       return null;
     }
@@ -74,7 +63,7 @@ export const useSocket = () => {
     )!;
 
     try {
-      return Record.check(camelized);
+      return Record.check(lastMessageUnsafe);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(
@@ -83,15 +72,14 @@ export const useSocket = () => {
         "in",
         err.key,
         "in message",
-        camelized,
+        lastMessageUnsafe,
       );
       return null;
     }
   }, [lastMessageUnsafe]);
-  const result = useMemo(() => ({ lastMessage, sendMessage, readyState }), [
+  return useMemo(() => ({ lastMessage, sendMessage, ready }), [
     lastMessage,
-    readyState,
+    ready,
     sendMessage,
   ]);
-  return result;
 };

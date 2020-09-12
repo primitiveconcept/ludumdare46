@@ -2,7 +2,6 @@ import { useImmer } from "use-immer";
 import { State } from "../types/State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
-import { ReadyState } from "react-use-websocket";
 import { MailProcess } from "../types/MailProcess";
 import { FILESYSTEM_ROOT } from "../lib/path";
 
@@ -26,14 +25,14 @@ export const useStore = (username: string) => {
     filesystems: {},
     cwd: FILESYSTEM_ROOT,
   });
-  const { lastMessage, readyState, sendMessage } = useSocket();
+  const { lastMessage, ready, sendMessage } = useSocket();
 
   useEffect(() => {
     if (!username) {
       return;
     }
 
-    if (readyState === ReadyState.OPEN) {
+    if (ready) {
       sendMessage(`internal_login ${username}`);
       if (!initial.current) {
         setState((draft) => {
@@ -48,7 +47,7 @@ export const useStore = (username: string) => {
       }
       initial.current = true;
     }
-  }, [readyState, setState, sendMessage, username]);
+  }, [ready, setState, sendMessage, username]);
 
   useEffect(() => {
     if (!lastMessage) {
@@ -146,7 +145,7 @@ export const useStore = (username: string) => {
     addMessage,
     clearHistory,
     startProcess,
-    readyState,
+    ready,
     sendCommand,
     state,
     setState,

@@ -1,7 +1,10 @@
-import { CommandHandler } from "./CommandHandler";
-import { findPath } from "../lib/internetGenerator/generate";
+import { findPath } from "../lib/findPath";
+import { ServerCommandHandler } from "./ServerCommandHandler";
 
-export const tracerouteCommand: CommandHandler = ({ addMessage, args }) => {
+export const tracerouteCommand: ServerCommandHandler = ({
+  args,
+  addMessage,
+}) => {
   const ip = args[0];
   if (!ip) {
     return "usage: traceroute [ip]";

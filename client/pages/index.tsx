@@ -1,5 +1,4 @@
 import { css, useTheme } from "@emotion/react";
-import "core-js/stable";
 import React, { useMemo, useState } from "react";
 import {
   Box,
@@ -30,7 +29,7 @@ export const Index = () => {
     addMessage,
     addHistory,
     clearHistory,
-    readyState,
+    ready,
     sendCommand: sendServerCommand,
     state,
     startProcess,
@@ -118,7 +117,7 @@ export const Index = () => {
             )}
             {!openProcess && (
               <>
-                <Status readyState={readyState} />
+                <Status ready={ready} />
                 <TerminalProgram messages={state.messages} />
                 {username ? (
                   <CommandPrompt username={username} cwd={state.cwd} />
