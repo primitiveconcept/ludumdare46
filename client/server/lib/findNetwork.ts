@@ -3,7 +3,8 @@ import { breakRange } from "./breakRange";
 
 export const findNetwork = (range: string) => {
   const random = seedrandom(range);
-  const ips = breakRange(range, random);
+  const ips = breakRange(range);
+  return ips;
 };
 
 // https://www.youtube.com/watch?v=kHA-Mtkuzno

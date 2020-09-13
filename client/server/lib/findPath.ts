@@ -51,7 +51,10 @@ const traverse = (
     return [...path, { ip: target, latency: latencyFor(random, depth) }];
   }
   const availableBlocks = ranges.flatMap((block) => {
-    return breakRange(block, random);
+    if (random() < 0.6) {
+      return block;
+    }
+    return breakRange(block);
   });
   shuffle(availableBlocks, SEED);
   const maxConnections = Math.floor(random() * availableBlocks.length);

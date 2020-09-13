@@ -1,10 +1,7 @@
 import { range } from "lodash";
 
-export const breakRange = (ipRange: string, random: () => number) => {
-  if (random() < 0.9) {
-    return ipRange;
-  }
-  const length = ipRange.split(".").length + 1;
+export const breakRange = (ipRange: string) => {
+  const length = ipRange.split(".").length;
   if (length >= 4) {
     return [ipRange];
   }
