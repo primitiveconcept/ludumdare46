@@ -19,7 +19,6 @@ module.exports = {
   rules: {
     "object-shorthand": [warnOnLocal, "always"],
     "no-console": warnOnLocal,
-    "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-array-constructor": "error",
     "@typescript-eslint/no-empty-interface": "error",

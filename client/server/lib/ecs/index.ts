@@ -1,1 +1,1 @@
-export { ecs, findComponent } from "./ecs";
+export { ecs } from "./ecs";

@@ -1,17 +1,13 @@
 import { Message } from "../types";
 import { tracerouteCommand } from "./commands/tracerouteCommand";
 import { Component } from "./components";
-import { Entity } from "./types/Entity";
-import { v4 as uuid } from "uuid";
-import { ecs, findComponent } from "./lib/ecs";
+import { ecs } from "./lib/ecs";
 
 const worker = (self as unknown) as Worker;
 
-const data: Array<Entity<any>> = [
-  { id: uuid(), components: [{ type: "Events", events: [] }] },
-  { id: uuid(), components: [{ type: "Player" }] },
-];
-const entities = ecs(data);
+const entities = ecs([]);
+entities.createEntity({ Events: { type: "Events", events: [] } });
+entities.createEntity({ Player: { type: "Player" } });
 
 worker.addEventListener("message", (event: { data: string }) => {
   const messages: string[] = [];
@@ -20,7 +16,7 @@ worker.addEventListener("message", (event: { data: string }) => {
   };
   const addEvent = (component: Component) => {
     const eventEntity = entities.withComponents("Events")[0];
-    const eventComponent = findComponent(eventEntity, "Events");
+    const eventComponent = eventEntity.components.Events;
     eventComponent.events.push(component);
   };
 
