@@ -9,7 +9,7 @@
     "noEmit": true,
     "preserveConstEnums": true,
     "removeComments": false,
-    "sourceMap": true,
+    "inlineSourceMap": true,
     "strict": true,
     "target": "esnext",
     "types": ["webpack-env", "jest"],

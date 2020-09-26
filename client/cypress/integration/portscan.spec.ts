@@ -4,20 +4,6 @@ import { createMockSocket } from "../support/createMockSocket";
 describe("portscan", () => {
   it("completes a portscan", () => {
     createMockSocket(({ onCommand, sendMessage }) => {
-      onCommand("internal_login threehams", () => {
-        sendMessage(100, {
-          update: "Devices",
-          payload: {
-            devices: [
-              {
-                ip: "199.201.159.101",
-                status: "disconnected",
-                commands: ["[portscan](portscan|199.201.159.101)"],
-              },
-            ],
-          },
-        });
-      });
       onCommand("portscan 199.201.159.101", () => {
         sendMessage(100, {
           update: "Devices",
@@ -83,10 +69,10 @@ describe("portscan", () => {
     cy.findByLabelText("Enter Username").type(`threehams{enter}`);
     cy.getId("messages").should("contain.text", "Logged in as threehams");
     cy.findByText("Known Devices");
-    cy.findByText("199.201.159.101").click();
+    cy.findByText("8.8.8.8").click();
     cy.findByText("portscan").click();
     cy.findByText("portscan").should("not.exist");
-    cy.getId("messages").should("contain.text", `$ portscan 199.201.159.101`);
+    cy.getId("messages").should("contain.text", `$ portscan 8.8.8.8`);
     cy.findByText(/portscan \([0-9]+%\)/).click();
     cy.getId("portscanProgram").should("contain.text", "23/tcp");
     cy.getId("portscanProgram").should("contain.text", "80/tcp");

@@ -1,8 +1,8 @@
-import seedrandom from "seedrandom";
+// import seedrandom from "seedrandom";
 import { breakRange } from "./breakRange";
 
 export const findNetwork = (range: string) => {
-  const random = seedrandom(range);
+  // const random = seedrandom(range);
   const ips = breakRange(range);
   return ips;
 };

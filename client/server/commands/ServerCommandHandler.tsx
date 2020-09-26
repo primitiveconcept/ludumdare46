@@ -1,11 +1,9 @@
-import { WorkerState } from "../types/WorkerState";
-import { Draft } from "immer";
+import { Component } from "../components";
 
 type CommandProps = {
   args: Array<string | undefined>;
   addMessage: (message: string) => void;
+  addEvent: (component: Component) => void;
   command: string;
-  // startProcess: (process: MailProcess) => void;
-  draft: Draft<WorkerState>;
 };
 export type ServerCommandHandler = (props: CommandProps) => void;

@@ -91,10 +91,10 @@ describe("dictionary", () => {
     cy.getId("messages").should("contain.text", "Logged in as threehams");
 
     cy.findByText("Known Devices");
-    cy.findByText("199.201.159.101").click();
+    cy.findByText("8.8.8.8").click();
     cy.findByText("sshcrack").click();
     cy.findByText("sshcrack").should("not.exist");
-    cy.getId("messages").should("contain.text", `$ sshcrack 199.201.159.101`);
+    cy.getId("messages").should("contain.text", `$ sshcrack 8.8.8.8`);
     cy.findByText(/sshcrack \([0-9]+%\)/).click();
     cy.getId("sshCrackProgram").should(
       "contain.text",
