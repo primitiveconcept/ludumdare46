@@ -1,13 +1,25 @@
 import { Message } from "../types";
-import { tracerouteCommand } from "./commands/tracerouteCommand";
+import { portscanCommand, tracerouteCommand } from "./commands";
 import { Component } from "./components";
 import { ecs } from "./lib/ecs";
+import { clearEventsSystem, portscanSystem } from "./systems";
 
 const worker = (self as unknown) as Worker;
 
-const entities = ecs([]);
-entities.createEntity({ Events: { type: "Events", events: [] } });
-entities.createEntity({ Player: { type: "Player" } });
+const world = ecs([]);
+world.createEntity(undefined, { Events: { type: "Events", events: [] } });
+world.createEntity(undefined, {
+  Player: { type: "Player" },
+  Location: {
+    ip: "199.201.159.1",
+    type: "Location",
+  },
+  KnownDevices: {
+    items: [],
+    type: "KnownDevices",
+  },
+});
+const systems = [portscanSystem, clearEventsSystem];
 
 worker.addEventListener("message", (event: { data: string }) => {
   const messages: string[] = [];
@@ -15,7 +27,7 @@ worker.addEventListener("message", (event: { data: string }) => {
     messages.push(message);
   };
   const addEvent = (component: Component) => {
-    const eventEntity = entities.withComponents("Events")[0];
+    const eventEntity = world.with("Events")[0];
     const eventComponent = eventEntity.components.Events;
     eventComponent.events.push(component);
   };
@@ -24,6 +36,10 @@ worker.addEventListener("message", (event: { data: string }) => {
   switch (command) {
     case "traceroute": {
       tracerouteCommand({ args, command, addMessage, addEvent });
+      break;
+    }
+    case "portscan": {
+      portscanCommand({ args, command, addMessage, addEvent });
       break;
     }
     default: {
@@ -42,8 +58,27 @@ worker.addEventListener("message", (event: { data: string }) => {
   }
 });
 
-const INTERVAL = 50;
+const INTERVAL = 250;
 const gameLoop = () => {
+  const messages: string[] = [];
+  const addMessage = (message: string) => {
+    messages.push(message);
+  };
+
+  systems.forEach((system) => {
+    system({ world, addMessage });
+  });
+
+  if (messages.length) {
+    const message: Message = {
+      update: "Terminal",
+      payload: {
+        message: messages.join("\n"),
+      },
+    };
+    worker.postMessage(message);
+  }
+
   // Normally a terrible idea, but we don't need per-frame
   // updates, or even consistent timing between frames.
   // Save some cycles.

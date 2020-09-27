@@ -18,4 +18,5 @@ export const workstationDevice: DeviceConfig = {
     min: 40,
     max: 80,
   },
+  openPorts: [22, 3389],
 };

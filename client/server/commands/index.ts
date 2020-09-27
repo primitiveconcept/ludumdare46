@@ -1,7 +1,2 @@
-import { portscanCommand } from "./portscanCommand";
-import { tracerouteCommand } from "./tracerouteCommand";
-
-export const commands = {
-  portscan: portscanCommand,
-  traceroute: tracerouteCommand,
-};
+export { portscanCommand } from "./portscanCommand";
+export { tracerouteCommand } from "./tracerouteCommand";

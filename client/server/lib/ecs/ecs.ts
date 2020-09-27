@@ -7,7 +7,10 @@ export const ecs = <TEntities extends Entity<Component["type"]>[]>(
   entities: TEntities,
 ) => {
   return {
-    withComponents: <TNames extends Component["type"][]>(
+    find: (id: string) => {
+      return entities.find((entity) => entity.id === id);
+    },
+    with: <TNames extends Component["type"][]>(
       ...names: TNames
     ): Array<Entity<ValuesType<TNames>>> => {
       // TODO incredibly inefficient, switch to an iterator, or cache, or both?
@@ -17,18 +20,26 @@ export const ecs = <TEntities extends Entity<Component["type"]>[]>(
     },
 
     createEntity: (
+      id: string | undefined,
       components: Partial<
         { [Key in Component["type"]]: Extract<Component, { type: Key }> }
       >,
     ) => {
       const entity = {
-        id: uuid(),
+        id: id ?? uuid(),
         components,
         // TODO could improve this by making all undefined properties optional
         // in Entity, or by extracting
       } as Entity<any>;
       entities.push(entity);
       return entity;
+    },
+
+    removeEntity: (id: string) => {
+      const index = entities.findIndex((entity) => entity.id === id);
+      if (index !== -1) {
+        entities.splice(index, 1);
+      }
     },
   };
 };

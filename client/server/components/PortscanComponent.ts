@@ -1,5 +1,6 @@
 export type PortscanComponent = {
   type: "Portscan";
-  progress: number;
-  ports: number[];
+  source: string;
+  startedAt: number;
+  lastPortScanned: Number;
 };

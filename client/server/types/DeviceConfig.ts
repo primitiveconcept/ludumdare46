@@ -12,4 +12,5 @@ export type DeviceConfig = {
   database: Weights;
   keylogging: Weights;
   browsing: Weights;
+  openPorts: number[];
 };

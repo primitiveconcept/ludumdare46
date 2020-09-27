@@ -18,7 +18,6 @@ const useWorker = () => {
   }
 
   const sendMessage = useCallback((message) => {
-    console.log(workerRef.current);
     workerRef.current?.postMessage(message);
   }, []);
 

@@ -1,4 +1,5 @@
 import type { EventsComponent } from "./EventsComponent";
+import type { KnownDevicesComponent } from "./KnownDevicesComponent";
 import type { LocationComponent } from "./LocationComponent";
 import type { NetworkComponent } from "./NetworkComponent";
 import type { PlayerComponent } from "./PlayerComponent";
@@ -12,6 +13,7 @@ export type {
   StartPortscanComponent,
   EventsComponent,
   PlayerComponent,
+  KnownDevicesComponent,
 };
 
 export type Component =
@@ -20,4 +22,5 @@ export type Component =
   | PortscanComponent
   | StartPortscanComponent
   | PlayerComponent
-  | EventsComponent;
+  | EventsComponent
+  | KnownDevicesComponent;

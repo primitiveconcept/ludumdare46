@@ -1,11 +1,6 @@
-import { ValuesType } from "utility-types";
-import { Component } from "../components";
-import { Entity } from "../types/Entity";
+import { ecs } from "../lib/ecs";
 
 export type System = {
-  entities: {
-    withComponents: <TNames extends Component["type"][]>(
-      ...names: TNames
-    ) => Array<Entity<ValuesType<TNames>>>;
-  };
+  world: ReturnType<typeof ecs>;
+  addMessage: (message: string) => void;
 };

@@ -1,1 +1,2 @@
-export const processes = {};
+export * from "./portscanSystem";
+export * from "./clearEventsSystem";
