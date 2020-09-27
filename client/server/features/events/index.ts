@@ -1,2 +1,2 @@
-export * from "./portscanSystem";
 export * from "./clearEventsSystem";
+export * from "./EventsComponent";

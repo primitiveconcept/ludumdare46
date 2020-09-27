@@ -1,8 +1,9 @@
 import { Message } from "../types";
-import { portscanCommand, tracerouteCommand } from "./commands";
 import { Component } from "./components";
+import { clearEventsSystem } from "./features/events";
+import { portscanCommand, portscanSystem } from "./features/portscan";
+import { tracerouteCommand } from "./features/traceroute";
 import { ecs } from "./lib/ecs";
-import { clearEventsSystem, portscanSystem } from "./systems";
 
 const worker = (self as unknown) as Worker;
 

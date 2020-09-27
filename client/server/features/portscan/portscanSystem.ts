@@ -1,6 +1,6 @@
-import { findDevice } from "../lib/findDevice";
-import { findPath } from "../lib/findPath";
-import { System } from "./System";
+import { findDevice } from "../../lib/findDevice";
+import { findPath } from "../../lib/findPath";
+import { System } from "../../types/System";
 
 export const portscanSystem = ({ world, addMessage }: System) => {
   const eventsComponent = world.with("Events")[0].components.Events;

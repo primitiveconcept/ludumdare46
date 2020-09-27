@@ -1,4 +1,4 @@
-import { ServerCommandHandler } from "./ServerCommandHandler";
+import { ServerCommandHandler } from "../../types/ServerCommandHandler";
 
 export const portscanCommand: ServerCommandHandler = ({
   args,

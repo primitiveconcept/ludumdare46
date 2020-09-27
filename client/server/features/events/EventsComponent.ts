@@ -1,4 +1,4 @@
-import { Component } from ".";
+import { Component } from "../../components";
 
 export type EventsComponent = {
   type: "Events";

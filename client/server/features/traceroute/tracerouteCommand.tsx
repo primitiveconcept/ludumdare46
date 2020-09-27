@@ -1,5 +1,5 @@
-import { findPath } from "../lib/findPath";
-import { ServerCommandHandler } from "./ServerCommandHandler";
+import { findPath } from "../../lib/findPath";
+import { ServerCommandHandler } from "../../types/ServerCommandHandler";
 
 export const tracerouteCommand: ServerCommandHandler = ({
   args,
