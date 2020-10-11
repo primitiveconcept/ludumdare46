@@ -1,5 +1,5 @@
+import { range, zip } from "lodash";
 import { alea as seedrandom } from "seedrandom";
-import { zip, range } from "lodash";
 import { breakRange } from "./breakRange";
 
 const SEED = "42";
@@ -8,7 +8,7 @@ type Connection = {
   latency: number;
 };
 
-export const findPath = (source: string, target: string): Connection[] => {
+export const findPath = (source: string, target: string): Connection[] | undefined => {
   if (source === target) {
     return [{ ip: target, latency: 0 }];
   }
@@ -16,6 +16,9 @@ export const findPath = (source: string, target: string): Connection[] => {
   const downPath: Connection[] = [];
   const up = traverse(source);
   const down = traverse(target);
+  if (!up || !down) {
+    return undefined;
+  }
   let last: Connection | undefined;
   zip(up, down).map(([upConnection, downConnection]) => {
     if (upConnection?.ip === downConnection?.ip) {
@@ -41,7 +44,7 @@ const traverse = (
   assigned?: string,
   ranges: string[] = DEFAULT_RANGE,
   path: Connection[] = [],
-): Connection[] => {
+): Connection[] | undefined  => {
   const depth = path.length;
   const random = seedrandom(`${SEED}${assigned}`);
   if (targetMatchesBlock(assigned, target)) {
@@ -81,7 +84,8 @@ const traverse = (
     nodes[bucket][1].push(block);
   });
   if (foundIndex === undefined) {
-    throw new Error("Target was not found in any available ranges");
+    // IP doesn't exist
+    return undefined;
   }
   const next = nodes[foundIndex];
   return traverse(target, next[0], next[1], [

@@ -55,6 +55,17 @@ export const GlobalStyles = () => {
             padding-left: 0;
           }
 
+          h1,
+          h2,
+          h3 {
+            font-family: inherit;
+            line-height: inherit;
+            margin-top: 0;
+            font-weight: inherit;
+            font-size: inherit;
+            margin-bottom: 27px;
+          }
+
           p {
             margin-top: 0;
             margin-bottom: 27px;

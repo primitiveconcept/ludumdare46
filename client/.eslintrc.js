@@ -1,3 +1,5 @@
+const { warn } = require("console");
+
 const warnOnLocal = process.env.LINT_ERRORS ? "error" : "warn";
 
 module.exports = {

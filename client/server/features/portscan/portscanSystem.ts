@@ -1,4 +1,5 @@
 import { findDevice } from "../../lib/findDevice";
+import { findOrCreate } from "../../lib/findOrCreate";
 import { findPath } from "../../lib/findPath";
 import { System } from "../../types/System";
 
@@ -27,16 +28,7 @@ export const portscanSystem = ({ world, addMessage }: System) => {
         type: "Portscan",
         startedAt: new Date().getTime(),
       };
-      let knownDevice = player.components.KnownDevices.items.find(
-        (device) => device.ip === target.id,
-      );
-      if (!knownDevice) {
-        knownDevice = {
-          ip: event.target,
-          ports: [],
-        };
-        player.components.KnownDevices.items.push(knownDevice);
-      }
+      findOrCreate(player.components.KnownDevices.items, { ip: event.target, ports: [] }, "ip")
     }
   });
 
@@ -44,6 +36,11 @@ export const portscanSystem = ({ world, addMessage }: System) => {
     const player = world.with("Player", "KnownDevices")[0];
     const { source, startedAt, lastPortScanned } = entity.components.Portscan;
     const path = findPath(source, entity.id);
+    if (!path) {
+      entity.components.Portscan = undefined!;
+      addMessage(`portscan: no path to destination`);
+      return;
+    }
     const latency = path.reduce((sum, node) => {
       return sum + node.latency;
     }, 0);

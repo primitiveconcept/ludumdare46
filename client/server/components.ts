@@ -1,16 +1,21 @@
-import type { EventsComponent } from "./features/events/EventsComponent";
-import type { KnownDevicesComponent } from "./features/player/KnownDevicesComponent";
-import type { LocationComponent } from "./components/LocationComponent";
-import type { NetworkComponent } from "./components/NetworkComponent";
-import type { PlayerComponent } from "./features/player/PlayerComponent";
-import type { PortscanComponent } from "./features/portscan/PortscanComponent";
-import type { StartPortscanComponent } from "./features/portscan/StartPortscanComponent";
+import type { EventsComponent } from "./features/events";
+import type { LocationComponent } from "./features/location";
+import type { KnownDevicesComponent, PlayerComponent } from "./features/player";
+import type {
+  PortscanComponent,
+  StartPortscanComponent
+} from "./features/portscan";
+import type {
+  StartTracerouteComponent,
+  TracerouteComponent
+} from "./features/traceroute";
 
 export type {
   LocationComponent,
-  NetworkComponent,
   PortscanComponent,
   StartPortscanComponent,
+  TracerouteComponent,
+  StartTracerouteComponent,
   EventsComponent,
   PlayerComponent,
   KnownDevicesComponent,
@@ -18,9 +23,10 @@ export type {
 
 export type Component =
   | LocationComponent
-  | NetworkComponent
   | PortscanComponent
   | StartPortscanComponent
+  | TracerouteComponent
+  | StartTracerouteComponent
   | PlayerComponent
   | EventsComponent
   | KnownDevicesComponent;

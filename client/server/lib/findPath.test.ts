@@ -3,7 +3,7 @@ import { findPath } from "./findPath";
 describe("findPath", () => {
   it("generates an Internet backbone", () => {
     expect(
-      findPath("199.201.159.1", "8.8.8.8").map((connection) => connection.ip),
+      findPath("199.201.159.1", "8.8.8.8")!.map((connection) => connection.ip),
     ).toEqual([
       "199.201.159.1",
       "199.91.46.82",
@@ -15,7 +15,7 @@ describe("findPath", () => {
 
   it("takes a shorter path if the target matches part of the path", () => {
     expect(
-      findPath("199.201.159.1", "236.220.134.224").map(
+      findPath("199.201.159.1", "236.220.134.224")!.map(
         (connection) => connection.ip,
       ),
     ).toEqual([
@@ -33,7 +33,7 @@ describe("findPath", () => {
 
   it("paths directly to a node if it along the path up", () => {
     expect(
-      findPath("199.201.159.1", "236.220.134.224").map(
+      findPath("199.201.159.1", "236.220.134.224")!.map(
         (connection) => connection.ip,
       ),
     ).toEqual([
@@ -51,7 +51,7 @@ describe("findPath", () => {
 
   it("returns the target if the source and target are the same", () => {
     expect(
-      findPath("199.201.159.1", "199.201.159.1").map(
+      findPath("199.201.159.1", "199.201.159.1")!.map(
         (connection) => connection.ip,
       ),
     ).toEqual(["199.201.159.1"]);

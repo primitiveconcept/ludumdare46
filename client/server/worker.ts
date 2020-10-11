@@ -2,7 +2,7 @@ import { Message } from "../types";
 import { Component } from "./components";
 import { clearEventsSystem } from "./features/events";
 import { portscanCommand, portscanSystem } from "./features/portscan";
-import { tracerouteCommand } from "./features/traceroute";
+import { tracerouteCommand, tracerouteSystem } from "./features/traceroute";
 import { ecs } from "./lib/ecs";
 
 const worker = (self as unknown) as Worker;
@@ -16,11 +16,16 @@ world.createEntity(undefined, {
     type: "Location",
   },
   KnownDevices: {
-    items: [],
+    items: [
+      {
+        ip: "8.8.8.8",
+        ports: [],
+      },
+    ],
     type: "KnownDevices",
   },
 });
-const systems = [portscanSystem, clearEventsSystem];
+const systems = [portscanSystem, tracerouteSystem, clearEventsSystem];
 
 worker.addEventListener("message", (event: { data: string }) => {
   const messages: string[] = [];
@@ -80,6 +85,21 @@ const gameLoop = () => {
     worker.postMessage(message);
   }
 
+  const player = world.with("Player", "Location", "KnownDevices")[0];
+  const updateDevicesMessage: Message = {
+    update: "Devices",
+    payload: {
+      devices: player.components.KnownDevices.items.map(device => {
+        return {
+          ip: device.ip,
+          status: "",
+          commands: [`[portscan](portscan|${device.ip})`, `[traceroute](traceroute|${device.ip})`],
+        }
+      })
+    }
+  }
+  worker.postMessage(updateDevicesMessage);
+
   // Normally a terrible idea, but we don't need per-frame
   // updates, or even consistent timing between frames.
   // Save some cycles.
@@ -95,7 +115,10 @@ const initialMessage: Message = {
       {
         ip: "8.8.8.8",
         status: "disconnected",
-        commands: ["[portscan](portscan|8.8.8.8)"],
+        commands: [
+          "[portscan](portscan|8.8.8.8)",
+          "[traceroute](traceroute|8.8.8.8)",
+        ],
       },
     ],
   },

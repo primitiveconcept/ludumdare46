@@ -35,6 +35,7 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
         return (
           <React.Fragment key={dev.ip}>
             <Link
+              block
               href={dev.ip}
               data-test="knownIp"
               onClick={() => {
