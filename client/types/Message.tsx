@@ -14,13 +14,21 @@ export const TerminalMessage = Record({
 });
 export type TerminalMessage = Static<typeof TerminalMessage>;
 
-export const ResourcesMessage = Record({
+export const DevicesMessage = Record({
   update: Literal("Devices"),
   payload: Record({
     devices: Array(Device),
   }),
 });
-export type ResourcesMessage = Static<typeof ResourcesMessage>;
+export type DevicesMessage = Static<typeof DevicesMessage>;
+
+export const PlayerMessage = Record({
+  update: Literal("Player"),
+  payload: Record({
+    location: String,
+  }),
+});
+export type PlayerMessage = Static<typeof PlayerMessage>;
 
 export const EmailsMessage = Record({
   update: Literal("Emails"),
@@ -58,8 +66,9 @@ export type FilesystemMessage = Static<typeof FilesystemMessage>;
 
 export const Message = Union(
   TerminalMessage,
-  ResourcesMessage,
+  DevicesMessage,
   EmailsMessage,
+  PlayerMessage,
   PortscanProcessMessage,
   SshCrackProcessMessage,
   InfostealerProcessMessage,

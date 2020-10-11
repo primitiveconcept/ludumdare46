@@ -21,6 +21,7 @@ export const useStore = (username: string) => {
     resources: null,
     commandHistory: [],
     processes: [],
+    location: "local",
     emails: [],
     filesystems: {},
     cwd: FILESYSTEM_ROOT,
@@ -58,6 +59,11 @@ export const useStore = (username: string) => {
         draft.messages.push(lastMessage.payload.message);
       });
     }
+    if (lastMessage.update === "Player") {
+      setState((draft) => {
+        draft.location = lastMessage.payload.location;
+      });
+    }
     if (lastMessage.update === "Devices") {
       setState((draft) => {
         draft.devices = lastMessage.payload.devices;
@@ -93,6 +99,7 @@ export const useStore = (username: string) => {
   }, [lastMessage, setState]);
 
   // This used to do more...
+  const location = state.location;
   const sendCommand = sendMessage;
 
   const clearHistory = useCallback(() => {
@@ -144,6 +151,7 @@ export const useStore = (username: string) => {
     addHistory,
     addMessage,
     clearHistory,
+    location,
     startProcess,
     ready,
     sendCommand,

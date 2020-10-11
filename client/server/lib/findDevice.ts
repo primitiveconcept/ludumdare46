@@ -1,4 +1,5 @@
 import seedrandom from "seedrandom";
+import { dictionary } from "../features/sshcrack/dictionary";
 import { DeviceType } from "../types/DeviceConfig";
 import { devices } from "./devices";
 
@@ -9,10 +10,14 @@ import { devices } from "./devices";
 export const findDevice = (ip: string, type: DeviceType) => {
   const random = seedrandom(ip);
   const config = devices[type];
+  const badPassword = random() > 0.5;
   return {
     ip,
     ports: config.openPorts.filter(() => {
       return random() > 0.5;
     }),
+    password: badPassword
+      ? dictionary[Math.floor(random() * dictionary.length - 1)]
+      : "vekioavejrvoaeiveaiko",
   };
 };

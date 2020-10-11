@@ -7,7 +7,9 @@ describe("ecs", () => {
       entities.createEntity("1", {
         Location: { type: "Location", ip: "8.8.8.8" },
       });
-      entities.createEntity("2", { Player: { type: "Player" } });
+      entities.createEntity("2", {
+        Player: { type: "Player", homeIp: "199.201.159.1" },
+      });
       expect(entities.with("Location")).toEqual([
         {
           id: "1",
@@ -23,9 +25,11 @@ describe("ecs", () => {
       entities.createEntity("1", {
         Location: { type: "Location", ip: "8.8.8.8" },
       });
-      entities.createEntity("2", { Player: { type: "Player" } });
+      entities.createEntity("2", {
+        Player: { type: "Player", homeIp: "199.201.159.1" },
+      });
       entities.createEntity("3", {
-        Player: { type: "Player" },
+        Player: { type: "Player", homeIp: "199.201.159.1" },
         Location: { ip: "10.1.20.42", type: "Location" },
       });
       expect(entities.with("Location", "Player")).toEqual([

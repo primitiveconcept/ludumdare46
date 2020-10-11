@@ -21,6 +21,7 @@ export const State = Record({
   processes: Array(Process),
   emails: Array(Email),
   filesystems: Dictionary(Filesystem),
+  location: String,
   cwd: String,
 });
 export type State = Static<typeof State>;

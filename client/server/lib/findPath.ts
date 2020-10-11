@@ -5,13 +5,17 @@ import { breakRange } from "./breakRange";
 const SEED = "42";
 type Connection = {
   ip: string;
+  type: "workstation";
   latency: number;
 };
 
-export const findPath = (source: string, target: string): Connection[] | undefined => {
-  if (source === target) {
-    return [{ ip: target, latency: 0 }];
-  }
+export const findPath = (
+  source: string,
+  target: string,
+): Connection[] | undefined => {
+  // if (source === target) {
+  //   return [{ ip: target, type: "workstation", latency: 0 }];
+  // }
   const upPath: Connection[] = [];
   const downPath: Connection[] = [];
   const up = traverse(source);
@@ -44,14 +48,17 @@ const traverse = (
   assigned?: string,
   ranges: string[] = DEFAULT_RANGE,
   path: Connection[] = [],
-): Connection[] | undefined  => {
+): Connection[] | undefined => {
   const depth = path.length;
   const random = seedrandom(`${SEED}${assigned}`);
   if (targetMatchesBlock(assigned, target)) {
     if (path[path.length - 1]?.ip === target) {
       return path;
     }
-    return [...path, { ip: target, latency: latencyFor(random, depth) }];
+    return [
+      ...path,
+      { ip: target, type: "workstation", latency: latencyFor(random, depth) },
+    ];
   }
   const availableBlocks = ranges.flatMap((block) => {
     if (random() < 0.6) {
@@ -92,6 +99,7 @@ const traverse = (
     ...path,
     {
       ip: findGateway(next[0]),
+      type: "workstation",
       latency: latencyFor(random, depth),
     },
   ]);

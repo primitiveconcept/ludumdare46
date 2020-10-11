@@ -5,4 +5,5 @@ export type KnownDevicesComponent = {
 type KnownDevice = {
   ip: string;
   ports: number[];
+  password?: string;
 };

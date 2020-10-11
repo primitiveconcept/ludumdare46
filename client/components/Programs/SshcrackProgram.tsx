@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { Markdown } from "../library/Markdown";
 import { SshCrackProcess } from "../../types/SshCrackProcess";
 import { CommandLink } from "../library/CommandLink";
-import { dictionary } from "../../lib/dictionary";
+import { dictionary } from "../../server/features/sshcrack/dictionary";
 import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 
 type TemplateValues = {
@@ -20,7 +20,7 @@ const template = ({
   complete,
   error,
 }: TemplateValues): string => {
-  const header = `Brute v4.4 starting at ${format(startDate, "yyyy-mm-dd")}`;
+  const header = `brute v4.4 starting at ${format(startDate, "yyyy-mm-dd")}`;
   const attempts = dictionary
     .slice(0, (progress / 100) * Math.floor(dictionary.length - 1))
     .map((word) => {

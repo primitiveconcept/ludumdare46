@@ -2,6 +2,8 @@ import { Message } from "../types";
 import { Component } from "./components";
 import { clearEventsSystem } from "./features/events";
 import { portscanCommand, portscanSystem } from "./features/portscan";
+import { sshCommand, sshSystem } from "./features/ssh";
+import { sshCrackCommand, sshCrackSystem } from "./features/sshcrack";
 import { tracerouteCommand, tracerouteSystem } from "./features/traceroute";
 import { ecs } from "./lib/ecs";
 
@@ -10,13 +12,14 @@ const worker = (self as unknown) as Worker;
 const world = ecs([]);
 world.createEntity(undefined, { Events: { type: "Events", events: [] } });
 world.createEntity(undefined, {
-  Player: { type: "Player" },
+  Player: { type: "Player", homeIp: "199.201.159.1" },
   Location: {
     ip: "199.201.159.1",
     type: "Location",
   },
   KnownDevices: {
     items: [
+      { ip: "199.201.159.1", ports: [] },
       {
         ip: "8.8.8.8",
         ports: [],
@@ -25,7 +28,13 @@ world.createEntity(undefined, {
     type: "KnownDevices",
   },
 });
-const systems = [portscanSystem, tracerouteSystem, clearEventsSystem];
+const systems = [
+  portscanSystem,
+  sshCrackSystem,
+  sshSystem,
+  tracerouteSystem,
+  clearEventsSystem,
+];
 
 worker.addEventListener("message", (event: { data: string }) => {
   const messages: string[] = [];
@@ -48,6 +57,14 @@ worker.addEventListener("message", (event: { data: string }) => {
       portscanCommand({ args, command, addMessage, addEvent });
       break;
     }
+    case "sshcrack": {
+      sshCrackCommand({ args, command, addMessage, addEvent });
+      break;
+    }
+    case "ssh": {
+      sshCommand({ args, command, addMessage, addEvent });
+      break;
+    }
     default: {
       messages.push(`${command}: command not found`);
     }
@@ -63,6 +80,12 @@ worker.addEventListener("message", (event: { data: string }) => {
     worker.postMessage(message);
   }
 });
+
+const isTruthy = <T>(
+  item: T,
+): item is Exclude<T, false | 0 | null | undefined | ""> => {
+  return !!item;
+};
 
 const INTERVAL = 250;
 const gameLoop = () => {
@@ -89,16 +112,32 @@ const gameLoop = () => {
   const updateDevicesMessage: Message = {
     update: "Devices",
     payload: {
-      devices: player.components.KnownDevices.items.map(device => {
+      devices: player.components.KnownDevices.items.map((device) => {
         return {
           ip: device.ip,
           status: "",
-          commands: [`[portscan](portscan|${device.ip})`, `[traceroute](traceroute|${device.ip})`],
-        }
-      })
-    }
-  }
+          commands: [
+            `[portscan](portscan|${device.ip})`,
+            `[traceroute](traceroute|${device.ip})`,
+            device.ports.includes(22) &&
+              !device.password &&
+              `[sshcrack](sshcrack|${device.ip})`,
+            device.password &&
+              player.components.Location.ip !== device.ip &&
+              `[ssh](ssh|${device.ip})`,
+          ].filter(isTruthy),
+        };
+      }),
+    },
+  };
   worker.postMessage(updateDevicesMessage);
+  const playerMessage: Message = {
+    update: "Player",
+    payload: {
+      location: player.components.Location.ip,
+    },
+  };
+  worker.postMessage(playerMessage);
 
   // Normally a terrible idea, but we don't need per-frame
   // updates, or even consistent timing between frames.
@@ -107,20 +146,3 @@ const gameLoop = () => {
 };
 
 gameLoop();
-
-const initialMessage: Message = {
-  update: "Devices",
-  payload: {
-    devices: [
-      {
-        ip: "8.8.8.8",
-        status: "disconnected",
-        commands: [
-          "[portscan](portscan|8.8.8.8)",
-          "[traceroute](traceroute|8.8.8.8)",
-        ],
-      },
-    ],
-  },
-};
-worker.postMessage(initialMessage);

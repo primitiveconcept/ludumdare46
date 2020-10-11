@@ -29,6 +29,7 @@ export const Index = () => {
     addMessage,
     addHistory,
     clearHistory,
+    location,
     ready,
     sendCommand: sendServerCommand,
     state,
@@ -120,7 +121,11 @@ export const Index = () => {
                 <Status ready={ready} />
                 <TerminalProgram messages={state.messages} />
                 {username ? (
-                  <CommandPrompt username={username} cwd={state.cwd} />
+                  <CommandPrompt
+                    username={username}
+                    cwd={state.cwd}
+                    location={location}
+                  />
                 ) : (
                   <UsernamePrompt setUsername={setUsername} />
                 )}

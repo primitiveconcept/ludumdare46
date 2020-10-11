@@ -10,12 +10,17 @@ const CURSOR = "█";
 type CommandPromptProps = {
   username: string;
   cwd: string;
+  location: string;
 };
-export const CommandPrompt = ({ username, cwd }: CommandPromptProps) => {
+export const CommandPrompt = ({
+  location,
+  username,
+  cwd,
+}: CommandPromptProps) => {
   const { command, setCommand, sendCommand } = useContext(CommandContext);
   const inputRef = createRef<HTMLInputElement>();
   const prompt = username
-    ? `${username}@local:${cwd.replace(FILESYSTEM_ROOT, "")}$`
+    ? `${username}@${location}:${cwd.replace(FILESYSTEM_ROOT, "")}$`
     : `username?`;
 
   const onSubmit = useCallback(() => {

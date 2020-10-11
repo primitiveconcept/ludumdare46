@@ -3,11 +3,13 @@ import type { LocationComponent } from "./features/location";
 import type { KnownDevicesComponent, PlayerComponent } from "./features/player";
 import type {
   PortscanComponent,
-  StartPortscanComponent
+  StartPortscanComponent,
 } from "./features/portscan";
+import { StartSshSessionComponent } from "./features/ssh";
+import { SshCrackComponent, StartSshCrackComponent } from "./features/sshcrack";
 import type {
   StartTracerouteComponent,
-  TracerouteComponent
+  TracerouteComponent,
 } from "./features/traceroute";
 
 export type {
@@ -16,6 +18,9 @@ export type {
   StartPortscanComponent,
   TracerouteComponent,
   StartTracerouteComponent,
+  StartSshCrackComponent,
+  StartSshSessionComponent,
+  SshCrackComponent,
   EventsComponent,
   PlayerComponent,
   KnownDevicesComponent,
@@ -27,6 +32,9 @@ export type Component =
   | StartPortscanComponent
   | TracerouteComponent
   | StartTracerouteComponent
+  | StartSshCrackComponent
+  | StartSshSessionComponent
+  | SshCrackComponent
   | PlayerComponent
   | EventsComponent
   | KnownDevicesComponent;
