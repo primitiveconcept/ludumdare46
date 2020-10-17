@@ -34,7 +34,6 @@ export const useStore = (username: string) => {
     }
 
     if (ready) {
-      sendMessage(`internal_login ${username}`);
       if (!initial.current) {
         setState((draft) => {
           draft.messages.push(

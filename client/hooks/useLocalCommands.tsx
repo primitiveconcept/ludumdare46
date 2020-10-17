@@ -15,17 +15,22 @@ type UseLocalCommands = {
   startProcess: (process: MailProcess) => void;
   state: State;
   username: string;
+  location: string;
 };
 export const useLocalCommands = (props: UseLocalCommands) => {
   const {
     username,
     state,
+    location,
     addMessage,
     addHistory,
     sendCommand: sendCommandProp,
   } = props;
   const files = useFiles(state.filesystems["8.8.8.8"]);
-  const prompt = `${username}@local:${state.cwd.replace(FILESYSTEM_ROOT, "")}$`;
+  const prompt = `${username}@${location}:${state.cwd.replace(
+    FILESYSTEM_ROOT,
+    "",
+  )}$`;
 
   const sendCommand = useCallback(
     (fullCommand: string): void => {

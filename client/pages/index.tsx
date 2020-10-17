@@ -42,6 +42,7 @@ export const Index = () => {
     setCommand,
   );
   const sendCommand = useLocalCommands({
+    location,
     username,
     startProcess,
     clearHistory,

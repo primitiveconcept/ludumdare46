@@ -11,7 +11,6 @@ describe("portscan", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "portscanning",
                 commands: ["[sshcrack](sshcrack|199.201.159.1)"],
               },
             ],
@@ -36,7 +35,6 @@ describe("portscan", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "disconnected",
                 commands: ["[sshcrack](sshcrack|199.201.159.101)"],
               },
             ],

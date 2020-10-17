@@ -22,7 +22,6 @@ describe("dictionary", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "disconnected",
                 commands: ["[sshcrack](sshcrack|199.201.159.101)"],
               },
             ],
@@ -37,7 +36,6 @@ describe("dictionary", () => {
             devices: [
               {
                 ip: "199.201.159.101",
-                status: "cracking (0%)",
                 commands: [],
               },
             ],

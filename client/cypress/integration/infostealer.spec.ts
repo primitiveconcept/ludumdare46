@@ -14,7 +14,6 @@ const process: InfostealerProcess = {
 
 const device = {
   ip: "199.201.159.101",
-  status: "connected",
   commands: ["[infostealer](install|infostealer|199.201.159.101)"],
 };
 

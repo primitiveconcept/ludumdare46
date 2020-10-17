@@ -115,7 +115,6 @@ const gameLoop = () => {
       devices: player.components.KnownDevices.items.map((device) => {
         return {
           ip: device.ip,
-          status: "",
           commands: [
             `[portscan](portscan|${device.ip})`,
             `[traceroute](traceroute|${device.ip})`,

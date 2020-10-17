@@ -23,9 +23,9 @@ export const ecs = <TEntities extends Entity<Component["type"]>[]>(
     id: string | undefined,
     components: Partial<
       {
-        [Key in Component["type"]]: Extract<Component, { type: Key; }>;
+        [Key in Component["type"]]: Extract<Component, { type: Key }>;
       }
-    >
+    >,
   ) => {
     const entity = {
       id: id ?? uuid(),
@@ -42,9 +42,7 @@ export const ecs = <TEntities extends Entity<Component["type"]>[]>(
     }
   };
 
-  const findOrCreate = (
-    id: string,
-  ) => {
+  const findOrCreate = (id: string) => {
     const existing = find(id);
     if (existing) {
       return existing;
