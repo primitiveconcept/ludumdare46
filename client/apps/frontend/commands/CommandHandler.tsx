@@ -1,4 +1,4 @@
-import { MailProcess } from "../types/MailProcess";
+import { MailProcess } from "@botnet/messages";
 import { State } from "../types";
 import { useFiles } from "../hooks/useFiles";
 

@@ -1,5 +1,5 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from "react";
-import { Message } from "../types/Message";
+import { Message } from "@botnet/messages";
 
 const useWorker = () => {
   const workerRef = useRef<Worker>();

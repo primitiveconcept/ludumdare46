@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { State } from "../types";
-import { MailProcess } from "../types/MailProcess";
+import { MailProcess } from "@botnet/messages";
 import { useFiles } from "./useFiles";
 import { commands } from "../commands";
 import { FILESYSTEM_ROOT } from "../lib/path";

@@ -2,7 +2,7 @@ import { useImmer } from "use-immer";
 import { State } from "../types/State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
-import { MailProcess } from "../types/MailProcess";
+import { MailProcess } from "@botnet/messages";
 import { FILESYSTEM_ROOT } from "../lib/path";
 
 /**

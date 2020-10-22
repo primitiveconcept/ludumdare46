@@ -1,7 +1,10 @@
-import { Device } from "./Device";
-import { Email } from "./Email";
-import { Resources } from "./Resources";
-import { Process } from "./Process";
+import {
+  Device,
+  Email,
+  Filesystem,
+  Resources,
+  Process,
+} from "@botnet/messages";
 import {
   Static,
   Record,
@@ -11,7 +14,6 @@ import {
   Array,
   Dictionary,
 } from "runtypes";
-import { Filesystem } from "./Filesystem";
 
 export const State = Record({
   messages: Array(String),

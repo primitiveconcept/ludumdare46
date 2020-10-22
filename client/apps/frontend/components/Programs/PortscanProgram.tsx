@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { Markdown } from "../library/Markdown";
-import { PortscanProcess } from "../../types/PortscanProcess";
+import { PortscanProcess } from "@botnet/messages";
 import { CommandLink } from "../library/CommandLink";
 import table from "markdown-table";
 

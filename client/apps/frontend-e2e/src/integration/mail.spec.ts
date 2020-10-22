@@ -1,7 +1,7 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
 import produce from "immer";
-import { Email } from "../../types/Email";
+import { Email } from "@botnet/messages";
 
 describe("mail", () => {
   beforeEach(() => {

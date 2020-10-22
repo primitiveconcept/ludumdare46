@@ -1,6 +1,6 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
-import { SshCrackProcess } from "../../types/SshCrackProcess";
+import { SshCrackProcess } from "@botnet/messages";
 import produce from "immer";
 
 describe("dictionary", () => {

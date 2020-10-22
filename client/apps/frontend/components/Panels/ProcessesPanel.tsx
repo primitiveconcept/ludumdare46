@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "..";
 import { CommandLink } from "../library/CommandLink";
-import { Process } from "../../types";
+import { Process } from "@botnet/messages";
 
 type ProcessesPanelProps = {
   processes: Process[];

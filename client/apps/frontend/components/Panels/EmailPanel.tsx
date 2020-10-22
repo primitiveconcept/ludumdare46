@@ -1,5 +1,5 @@
 import React from "react";
-import { Email } from "../../types";
+import { Email } from "@botnet/messages";
 import { Static } from "runtypes";
 import { CommandLink } from "../library/CommandLink";
 import { Box } from "..";

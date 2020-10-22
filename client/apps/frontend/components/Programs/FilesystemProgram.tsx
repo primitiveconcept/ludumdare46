@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Filesystem } from "../../types";
+import { Filesystem } from "@botnet/messages";
 import { Box } from "..";
 import { Link } from "../library/Link";
 import { useSet } from "../../hooks/useSet";

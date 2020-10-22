@@ -72,7 +72,8 @@ module.exports = {
     "jsx-a11y/tabindex-no-positive": "error",
     "mocha/no-exclusive-tests": "error",
     "no-sequences": "error",
-    "no-shadow": "error",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
     "padding-line-between-statements": [
       warnOnLocal,
       {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Markdown } from "../library/Markdown";
 import { Link } from "../library/Link";
 import { Box } from "..";
-import { Device } from "../../types";
+import { Device } from "@botnet/messages";
 
 type Category = "install";
 type DevicesPanelProps = {

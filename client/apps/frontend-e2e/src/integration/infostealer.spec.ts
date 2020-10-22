@@ -1,6 +1,6 @@
 import { WebSocket } from "mock-socket";
 import { createMockSocket } from "../support/createMockSocket";
-import { InfostealerProcess } from "../../types/InfostealerProcess";
+import { InfostealerProcess } from "@botnet/messages";
 import produce from "immer";
 
 const process: InfostealerProcess = {

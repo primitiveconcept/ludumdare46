@@ -1,5 +1,5 @@
 import React, { useState, useContext, forwardRef } from "react";
-import { Email } from "../../types";
+import { Email } from "@botnet/messages";
 import { Static } from "runtypes";
 import { Markdown } from "../library/Markdown";
 import { CommandLink } from "../library/CommandLink";

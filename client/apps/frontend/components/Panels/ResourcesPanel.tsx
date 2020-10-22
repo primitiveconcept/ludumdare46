@@ -1,5 +1,5 @@
 import React from "react";
-import { Resources } from "../../types";
+import { Resources } from "@botnet/messages";
 
 type ResourcesBarProps = {
   resources: Resources;

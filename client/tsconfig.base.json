@@ -10,7 +10,10 @@
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {},
+    "outDir": "./dist/out-tsc",
+    "paths": {
+      "@botnet/messages": ["libs/messages/src/index.ts"]
+    },
     "rootDir": ".",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,

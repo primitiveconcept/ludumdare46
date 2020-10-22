@@ -1,4 +1,4 @@
-import { Message } from "../types";
+import { Message } from "@botnet/messages";
 import { Component } from "./components";
 import { clearEventsSystem } from "./features/events";
 import { portscanCommand, portscanSystem } from "./features/portscan";

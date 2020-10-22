@@ -1,5 +1,5 @@
 import { WebSocket, Server } from "mock-socket";
-import { Message } from "../../types/Message";
+import { Message } from "@botnet/messages";
 
 export type CloseServer = () => void;
 type OnCommand = (
