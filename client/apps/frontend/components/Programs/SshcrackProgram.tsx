@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { format } from 'date-fns';
-import { Markdown } from '../library/Markdown';
-import { SshCrackProcess } from '../../types/SshCrackProcess';
-import { CommandLink } from '../library/CommandLink';
-import { dictionary } from '../../server/features/sshcrack/dictionary';
-import { useSteppedScroll } from '../../hooks/useSteppedScroll';
+import React, { useEffect } from "react";
+import { format } from "date-fns";
+import { Markdown } from "../library/Markdown";
+import { SshCrackProcess } from "../../types/SshCrackProcess";
+import { CommandLink } from "../library/CommandLink";
+import { dictionary } from "../../worker/features/sshcrack/dictionary";
+import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 
 type TemplateValues = {
   startDate: Date;
@@ -20,13 +20,13 @@ const template = ({
   complete,
   error,
 }: TemplateValues): string => {
-  const header = `brute v4.4 starting at ${format(startDate, 'yyyy-mm-dd')}`;
+  const header = `brute v4.4 starting at ${format(startDate, "yyyy-mm-dd")}`;
   const attempts = dictionary
     .slice(0, (progress / 100) * Math.floor(dictionary.length - 1))
     .map((word) => {
       return `- [-] ${ip} - Failed: 'user:${word}'`;
     })
-    .join('\n');
+    .join("\n");
   if (!complete) {
     return `${header}
 
@@ -35,7 +35,7 @@ ${attempts}`;
   return `${header}
 
 ${attempts}
-${!error ? `- [+] ${ip} - Success: 'msfadmin:Password123'  ` : ''}
+${!error ? `- [+] ${ip} - Success: 'msfadmin:Password123'  ` : ""}
 
 [*] Command shell session  
 [*] Scanned 1 of 1 hosts (100% complete)  

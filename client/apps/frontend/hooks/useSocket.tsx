@@ -8,7 +8,7 @@ const useWorker = () => {
   );
 
   useEffect(() => {
-    workerRef.current = new Worker("../server/worker.ts", { type: "module" });
+    workerRef.current = new Worker("../worker/worker.ts", { type: "module" });
   }, []);
 
   if (workerRef.current) {

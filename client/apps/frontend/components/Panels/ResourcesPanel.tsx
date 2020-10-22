@@ -1,5 +1,5 @@
-import React from 'react';
-import { Resources } from '../../types';
+import React from "react";
+import { Resources } from "../../types";
 
 type ResourcesBarProps = {
   resources: Resources;

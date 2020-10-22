@@ -27,10 +27,14 @@ export const tracerouteSystem = ({ world, addMessage }: System) => {
         type: "Traceroute",
         startedAt: new Date().getTime(),
       };
-      findOrCreate(player.components.KnownDevices.items, {
-        ip: event.target,
-        ports: [],
-      }, "ip");
+      findOrCreate(
+        player.components.KnownDevices.items,
+        {
+          ip: event.target,
+          ports: [],
+        },
+        "ip",
+      );
       addMessage(`## tracing ${target.id}, max 30 hops`);
     }
   });
@@ -60,7 +64,11 @@ export const tracerouteSystem = ({ world, addMessage }: System) => {
         addMessage(
           `[${node.ip}](traceroute|${node.ip}) ${totalLatency}ms ${totalLatency}ms ${totalLatency}ms`,
         );
-        findOrCreate(player.components.KnownDevices.items, { ip: node.ip, ports: [] }, "ip");
+        findOrCreate(
+          player.components.KnownDevices.items,
+          { ip: node.ip, ports: [] },
+          "ip",
+        );
       }
     }
     if (totalIndex !== lastPathIndex) {

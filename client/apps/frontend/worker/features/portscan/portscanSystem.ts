@@ -28,7 +28,11 @@ export const portscanSystem = ({ world, addMessage }: System) => {
         type: "Portscan",
         startedAt: new Date().getTime(),
       };
-      findOrCreate(player.components.KnownDevices.items, { ip: event.target, ports: [] }, "ip")
+      findOrCreate(
+        player.components.KnownDevices.items,
+        { ip: event.target, ports: [] },
+        "ip",
+      );
     }
   });
 

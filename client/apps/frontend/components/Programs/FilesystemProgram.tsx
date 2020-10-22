@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Filesystem } from '../../types';
-import { Box } from '..';
-import { Link } from '../library/Link';
-import { useSet } from '../../hooks/useSet';
-import { useFiles } from '../../hooks/useFiles';
-import { CommandLink } from '../library/CommandLink';
+import React, { useState } from "react";
+import { Filesystem } from "../../types";
+import { Box } from "..";
+import { Link } from "../library/Link";
+import { useSet } from "../../hooks/useSet";
+import { useFiles } from "../../hooks/useFiles";
+import { CommandLink } from "../library/CommandLink";
 
 type Props = {
   filesystem: Filesystem;
@@ -46,7 +46,7 @@ export const FilesystemProgram = ({ filesystem }: Props) => {
   return (
     <div>
       {items.map((item) => {
-        if (item.type === 'Folder') {
+        if (item.type === "Folder") {
           return (
             <Box key={item.id} paddingLeft={item.indent}>
               <Link
@@ -55,7 +55,7 @@ export const FilesystemProgram = ({ filesystem }: Props) => {
                   expanded.toggle(item.id);
                 }}
               >
-                {expanded.has(item.id) ? '˄' : '˅'} {item.name}
+                {expanded.has(item.id) ? "˄" : "˅"} {item.name}
               </Link>
             </Box>
           );

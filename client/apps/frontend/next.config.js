@@ -1,16 +1,16 @@
-const path = require('path');
-const WorkerPlugin = require('worker-plugin');
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const path = require("path");
+const WorkerPlugin = require("worker-plugin");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 module.exports = withBundleAnalyzer({
   exportPathMap: async function (
     defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
+    { dev, dir, outDir, distDir, buildId },
   ) {
     return {
-      '/': { page: '/' },
+      "/": { page: "/" },
     };
   },
   typescript: {
@@ -22,11 +22,11 @@ module.exports = withBundleAnalyzer({
       config.plugins.push(
         new WorkerPlugin({
           // use "self" as the global object when receiving hot updates.
-          globalObject: 'self',
-        })
+          globalObject: "self",
+        }),
       );
     }
-    config.resolve.alias['lodash'] = 'lodash-es';
+    config.resolve.alias["lodash"] = "lodash-es";
 
     return config;
   },

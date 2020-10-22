@@ -1,9 +1,9 @@
-import React from 'react';
-import { format } from 'date-fns';
-import { Markdown } from '../library/Markdown';
-import { PortscanProcess } from '../../types/PortscanProcess';
-import { CommandLink } from '../library/CommandLink';
-import table from 'markdown-table';
+import React from "react";
+import { format } from "date-fns";
+import { Markdown } from "../library/Markdown";
+import { PortscanProcess } from "../../types/PortscanProcess";
+import { CommandLink } from "../library/CommandLink";
+import table from "markdown-table";
 
 type TemplateValues = {
   startDate: Date;
@@ -12,14 +12,14 @@ type TemplateValues = {
   ports: Array<{ name: string; number: number }>;
 };
 const template = ({ startDate, ip, latency, ports }: TemplateValues) => `
-Starting pscan 4.3.3 at ${format(startDate, 'yyyy-mm-dd')}  
+Starting pscan 4.3.3 at ${format(startDate, "yyyy-mm-dd")}  
 Scan report for ${ip}  
 Host is up (latency ${latency}ms)  
 
 ${table([
-  ['PORT', 'STATE', 'SERVICE'],
+  ["PORT", "STATE", "SERVICE"],
   ...ports.map((port) => {
-    return [`${port.number}/tcp`, 'open', port.name];
+    return [`${port.number}/tcp`, "open", port.name];
   }),
 ])}
 `;

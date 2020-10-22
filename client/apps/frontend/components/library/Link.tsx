@@ -1,8 +1,8 @@
-import React from 'react';
-import { SPACE_CHARACTER } from './Markdown';
-import { Anchor } from './Anchor';
-import { css } from '@emotion/react';
-import { SpaceProps } from '../../lib/spaceProps';
+import React from "react";
+import { SPACE_CHARACTER } from "./Markdown";
+import { Anchor } from "./Anchor";
+import { css } from "@emotion/react";
+import { SpaceProps } from "../../lib/spaceProps";
 
 type LinkProps = {
   children: React.ReactNode;
@@ -13,12 +13,12 @@ type LinkProps = {
 } & SpaceProps;
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   ({ href: hrefProp, onClick, children, block, ...rest }, ref) => {
-    const href = hrefProp.replaceAll(SPACE_CHARACTER, ' ');
+    const href = hrefProp.replaceAll(SPACE_CHARACTER, " ");
     return (
       <Anchor
         ref={ref}
         css={css`
-          display: ${block ? 'block' : 'inline-block'};
+          display: ${block ? "block" : "inline-block"};
         `}
         href={href}
         onClick={(event) => {
@@ -30,5 +30,5 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         {children}
       </Anchor>
     );
-  }
+  },
 );

@@ -1,6 +1,6 @@
-import { MailProcess } from '../types/MailProcess';
-import { State } from '../types';
-import { useFiles } from '../hooks/useFiles';
+import { MailProcess } from "../types/MailProcess";
+import { State } from "../types";
+import { useFiles } from "../hooks/useFiles";
 
 type CommandProps = {
   addHistory: (command: string) => void;

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Markdown } from '../library/Markdown';
-import { Link } from '../library/Link';
-import { Box } from '..';
-import { Device } from '../../types';
+import React, { useState, useEffect } from "react";
+import { Markdown } from "../library/Markdown";
+import { Link } from "../library/Link";
+import { Box } from "..";
+import { Device } from "../../types";
 
-type Category = 'install';
+type Category = "install";
 type DevicesPanelProps = {
   devices: Device[];
 };
@@ -59,10 +59,10 @@ const DeviceDetail = ({ device, onClose }: DeviceDetailProps) => {
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const commands = {
     main: device.commands.filter((command) => {
-      return baseCommand(command) !== 'install';
+      return baseCommand(command) !== "install";
     }),
     install: device.commands.filter((command) => {
-      return baseCommand(command) === 'install';
+      return baseCommand(command) === "install";
     }),
   };
   const onBack = () => {
@@ -74,7 +74,7 @@ const DeviceDetail = ({ device, onClose }: DeviceDetailProps) => {
   };
 
   useEffect(() => {
-    if (currentCategory === 'install' && !commands.install.length) {
+    if (currentCategory === "install" && !commands.install.length) {
       setCurrentCategory(null);
     }
   }, [commands.install.length, currentCategory]);
@@ -110,7 +110,7 @@ const DeviceDetail = ({ device, onClose }: DeviceDetailProps) => {
           block
           href="install"
           onClick={() => {
-            setCurrentCategory('install');
+            setCurrentCategory("install");
           }}
         >
           Install Malware
@@ -131,8 +131,8 @@ const baseCommand = (markdown: string) => {
   const match = linkRegex.exec(markdown);
   if (!match) {
     throw new Error(
-      `Received a device command with no valid Markdown link: ${markdown}`
+      `Received a device command with no valid Markdown link: ${markdown}`,
     );
   }
-  return match[2].split('|')[0];
+  return match[2].split("|")[0];
 };

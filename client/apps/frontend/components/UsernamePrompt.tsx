@@ -1,10 +1,10 @@
-import React, { createRef, useContext, useCallback } from 'react';
-import { css } from '@emotion/react';
-import { Box } from '.';
-import { CommandContext } from './CommandContext';
-import { useInputFocus } from '../hooks/useInputFocus';
+import React, { createRef, useContext, useCallback } from "react";
+import { css } from "@emotion/react";
+import { Box } from ".";
+import { CommandContext } from "./CommandContext";
+import { useInputFocus } from "../hooks/useInputFocus";
 
-const CURSOR = '█';
+const CURSOR = "█";
 
 type UsernamePromptProps = {
   setUsername: (username: string) => void;
@@ -18,7 +18,7 @@ export const UsernamePrompt = ({ setUsername }: UsernamePromptProps) => {
       return;
     }
     setUsername(command);
-    setCommand('');
+    setCommand("");
   }, [command, setCommand, setUsername]);
   useInputFocus(onSubmit, inputRef);
 

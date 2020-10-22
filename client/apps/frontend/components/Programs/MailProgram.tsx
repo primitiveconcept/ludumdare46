@@ -1,14 +1,14 @@
-import React, { useState, useContext, forwardRef } from 'react';
-import { Email } from '../../types';
-import { Static } from 'runtypes';
-import { Markdown } from '../library/Markdown';
-import { CommandLink } from '../library/CommandLink';
-import { Link } from '../library/Link';
-import { css } from '@emotion/react';
-import { Box } from '..';
-import { CommandContext } from '../CommandContext';
-import { useFocusSwitching } from '../../hooks/useFocusSwitching';
-import { useKeyHandler } from '../../hooks/useHotKey';
+import React, { useState, useContext, forwardRef } from "react";
+import { Email } from "../../types";
+import { Static } from "runtypes";
+import { Markdown } from "../library/Markdown";
+import { CommandLink } from "../library/CommandLink";
+import { Link } from "../library/Link";
+import { css } from "@emotion/react";
+import { Box } from "..";
+import { CommandContext } from "../CommandContext";
+import { useFocusSwitching } from "../../hooks/useFocusSwitching";
+import { useKeyHandler } from "../../hooks/useHotKey";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;
@@ -19,11 +19,11 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
   const focusSwitchRef = useFocusSwitching(emails.length);
 
   useKeyHandler((keyCode) => {
-    if (keyCode === 'q') {
+    if (keyCode === "q") {
       if (selectedId) {
         setSelectedId(null);
       } else {
-        sendCommand('background');
+        sendCommand("background");
       }
     }
   });
@@ -92,10 +92,10 @@ const EmailListItem = forwardRef<HTMLAnchorElement, EmailListItemProps>(
             display: inline-block;
           `}
         >
-          {email.from.slice(0, 8).padEnd(8)} |{' '}
+          {email.from.slice(0, 8).padEnd(8)} |{" "}
         </pre>
         {email.subject}
       </Link>
     );
-  }
+  },
 );

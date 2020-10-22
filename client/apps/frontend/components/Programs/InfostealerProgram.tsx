@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { Markdown } from '../library/Markdown';
-import { CommandLink } from '../library/CommandLink';
-import { useSteppedScroll } from '../../hooks/useSteppedScroll';
-import { InfostealerProcess } from '../../types/InfostealerProcess';
-import { Login } from '../../types/Login';
+import React, { useEffect } from "react";
+import { Markdown } from "../library/Markdown";
+import { CommandLink } from "../library/CommandLink";
+import { useSteppedScroll } from "../../hooks/useSteppedScroll";
+import { InfostealerProcess } from "../../types/InfostealerProcess";
+import { Login } from "../../types/Login";
 
 type TemplateValues = {
   logins: Login[];
@@ -25,8 +25,8 @@ ${logins
     }
   })
   .filter(Boolean)
-  .join('\n  ')}
-  ${error ? '[process terminated]' : ''}
+  .join("\n  ")}
+  ${error ? "[process terminated]" : ""}
 `;
 
 type Props = {
