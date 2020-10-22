@@ -2,8 +2,7 @@ import { CommandHandler } from "./CommandHandler";
 import table from "markdown-table";
 import { format } from "date-fns";
 import { File, Folder } from "@botnet/messages";
-import { FILESYSTEM_ROOT } from "../lib/path";
-import { rsplit } from "../lib/rsplit";
+import { FILESYSTEM_ROOT, rsplit } from "@botnet/utils";
 
 const displayName = (file: File | Folder) => {
   if (file.type === "Folder") {

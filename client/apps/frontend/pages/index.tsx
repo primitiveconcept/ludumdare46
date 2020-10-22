@@ -1,7 +1,6 @@
 import { css, useTheme } from "@emotion/react";
 import React, { useMemo, useState } from "react";
 import {
-  Box,
   CommandPrompt,
   DevicesPanel,
   TerminalProgram,
@@ -10,17 +9,17 @@ import {
   Status,
   UsernamePrompt,
 } from "../components";
-import { CommandContext } from "../components/CommandContext";
+import { CommandContext, useLocalCommands } from "@botnet/commands";
 import { EmailPanel } from "../components/Panels/EmailPanel";
 import { TerminalOverlay } from "../components/TerminalOverlay";
 import { useCommandHistory } from "../hooks/useCommandHistory";
-import { useLocalCommands } from "../hooks/useLocalCommands";
 import { useSession } from "../hooks/useSession";
-import { useStore } from "../hooks/useStore";
+import { useStore } from "@botnet/store";
 import { PortscanProgram } from "../components/Programs/PortscanProgram";
 import { MailProgram } from "../components/Programs/MailProgram";
 import { SshCrackProgram } from "../components/Programs/SshcrackProgram";
 import { InfostealerProgram } from "../components/Programs/InfostealerProgram";
+import { Box } from "@botnet/ui";
 
 export const Index = () => {
   const [username, setUsername] = useSession();

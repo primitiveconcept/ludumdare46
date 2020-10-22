@@ -1,8 +1,7 @@
 import React from "react";
 import { Email } from "@botnet/messages";
 import { Static } from "runtypes";
-import { CommandLink } from "../library/CommandLink";
-import { Box } from "..";
+import { Box, CommandLink } from "@botnet/ui";
 
 type EmailPanelProps = {
   emails: Array<Static<typeof Email>>;

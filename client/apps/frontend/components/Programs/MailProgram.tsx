@@ -1,14 +1,11 @@
 import React, { useState, useContext, forwardRef } from "react";
 import { Email } from "@botnet/messages";
 import { Static } from "runtypes";
-import { Markdown } from "../library/Markdown";
-import { CommandLink } from "../library/CommandLink";
-import { Link } from "../library/Link";
 import { css } from "@emotion/react";
-import { Box } from "..";
-import { CommandContext } from "../CommandContext";
+import { CommandContext } from "@botnet/commands";
 import { useFocusSwitching } from "../../hooks/useFocusSwitching";
 import { useKeyHandler } from "../../hooks/useHotKey";
+import { Box, CommandLink, Link, Markdown } from "@botnet/ui";
 
 type MailProgramProps = {
   emails: Array<Static<typeof Email>>;

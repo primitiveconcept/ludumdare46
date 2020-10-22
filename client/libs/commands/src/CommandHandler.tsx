@@ -1,6 +1,6 @@
 import { MailProcess } from "@botnet/messages";
-import { State } from "../types";
-import { useFiles } from "../hooks/useFiles";
+import { State } from "@botnet/store";
+import { useFiles } from "./useFiles";
 
 type CommandProps = {
   addHistory: (command: string) => void;

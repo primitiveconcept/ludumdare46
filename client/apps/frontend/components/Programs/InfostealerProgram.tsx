@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Markdown } from "../library/Markdown";
-import { CommandLink } from "../library/CommandLink";
 import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 import { InfostealerProcess, Login } from "@botnet/messages";
+import { CommandLink, Markdown } from "@botnet/ui";
 
 type TemplateValues = {
   logins: Login[];

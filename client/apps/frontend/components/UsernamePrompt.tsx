@@ -1,8 +1,8 @@
 import React, { createRef, useContext, useCallback } from "react";
 import { css } from "@emotion/react";
-import { Box } from ".";
-import { CommandContext } from "./CommandContext";
+import { CommandContext } from "@botnet/commands";
 import { useInputFocus } from "../hooks/useInputFocus";
+import { Box } from "@botnet/ui";
 
 const CURSOR = "█";
 

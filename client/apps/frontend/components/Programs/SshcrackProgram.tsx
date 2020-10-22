@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { format } from "date-fns";
-import { Markdown } from "../library/Markdown";
 import { SshCrackProcess } from "@botnet/messages";
-import { CommandLink } from "../library/CommandLink";
 import { dictionary } from "../../worker/features/sshcrack/dictionary";
 import { useSteppedScroll } from "../../hooks/useSteppedScroll";
+import { CommandLink, Markdown } from "@botnet/ui";
 
 type TemplateValues = {
   startDate: Date;

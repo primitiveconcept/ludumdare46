@@ -1,4 +1,4 @@
-import { joinPath, splitPath, FILESYSTEM_ROOT } from "../lib/path";
+import { joinPath, splitPath, FILESYSTEM_ROOT } from "@botnet/utils";
 import { CommandHandler } from "./CommandHandler";
 
 export const cdCommand: CommandHandler = ({

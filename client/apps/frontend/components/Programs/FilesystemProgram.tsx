@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Filesystem } from "@botnet/messages";
-import { Box } from "..";
-import { Link } from "../library/Link";
+import { Box, Link, CommandLink } from "@botnet/ui";
 import { useSet } from "../../hooks/useSet";
-import { useFiles } from "../../hooks/useFiles";
-import { CommandLink } from "../library/CommandLink";
+import { useFiles } from "@botnet/commands";
 
 type Props = {
   filesystem: Filesystem;

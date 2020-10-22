@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { SpaceProps, space } from "../../lib/spaceProps";
+import { SpaceProps, space } from "./spaceProps";
 
 export const Box = styled.div<SpaceProps>`
   ${space}

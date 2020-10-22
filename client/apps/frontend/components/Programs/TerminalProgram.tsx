@@ -1,5 +1,5 @@
+import { Markdown } from "@botnet/ui";
 import React, { useEffect } from "react";
-import { Markdown } from "../library/Markdown";
 import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 
 type TerminalProgramProps = {

@@ -1,9 +1,9 @@
 import { useImmer } from "use-immer";
-import { State } from "../types/State";
+import { State } from "./State";
 import { useSocket } from "./useSocket";
 import { useEffect, useCallback, useRef } from "react";
 import { MailProcess } from "@botnet/messages";
-import { FILESYSTEM_ROOT } from "../lib/path";
+import { FILESYSTEM_ROOT } from "@botnet/utils";
 
 /**
  * Set up local state to hold onto messages received from the server.

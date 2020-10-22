@@ -2,7 +2,7 @@ import React from "react";
 import { SPACE_CHARACTER } from "./Markdown";
 import { Anchor } from "./Anchor";
 import { css } from "@emotion/react";
-import { SpaceProps } from "../../lib/spaceProps";
+import { SpaceProps } from "./spaceProps";
 
 type LinkProps = {
   children: React.ReactNode;

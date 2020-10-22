@@ -8,6 +8,10 @@ import { mailCommand } from "./mailCommand";
 import { psCommand } from "./psCommand";
 import { CommandHandler } from "./CommandHandler";
 
+export * from "./CommandContext";
+export * from "./useFiles";
+export * from "./useLocalCommands";
+
 export const commands: { [key: string]: CommandHandler | undefined } = {
   background: bgCommand,
   bg: bgCommand,

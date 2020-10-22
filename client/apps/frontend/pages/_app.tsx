@@ -1,8 +1,8 @@
+import { GlobalStyles } from "@botnet/ui";
 import { ThemeProvider } from "@emotion/react";
 import { setAutoFreeze, enableMapSet, enablePatches } from "immer";
 import { AppProps } from "next/app";
 import React from "react";
-import { GlobalStyles } from "../components/GlobalStyles";
 import "../lib/polyfills";
 
 setAutoFreeze(false);

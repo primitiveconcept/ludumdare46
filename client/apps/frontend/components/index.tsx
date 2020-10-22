@@ -1,4 +1,3 @@
-export * from "./library/Box";
 export * from "./CommandPrompt";
 export * from "./Panels/DevicesPanel";
 export * from "./Programs/TerminalProgram";

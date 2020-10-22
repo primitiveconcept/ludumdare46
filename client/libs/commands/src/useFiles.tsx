@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Filesystem, Folder, File } from "@botnet/messages";
-import { joinPath } from "../lib/path";
+import { joinPath } from "@botnet/utils";
 
 export const useFiles = (filesystem: Filesystem | undefined) => {
   return useMemo(() => {

@@ -1,9 +1,9 @@
 import { useCallback } from "react";
-import { State } from "../types";
 import { MailProcess } from "@botnet/messages";
 import { useFiles } from "./useFiles";
-import { commands } from "../commands";
-import { FILESYSTEM_ROOT } from "../lib/path";
+import { commands } from "@botnet/commands";
+import { State } from "@botnet/store";
+import { FILESYSTEM_ROOT } from "@botnet/utils";
 
 type UseLocalCommands = {
   addHistory: (command: string) => void;

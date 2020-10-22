@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Markdown } from "../library/Markdown";
-import { Link } from "../library/Link";
-import { Box } from "..";
+import { Box, Link, Markdown } from "@botnet/ui";
 import { Device } from "@botnet/messages";
 
 type Category = "install";
