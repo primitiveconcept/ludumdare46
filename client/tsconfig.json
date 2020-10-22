@@ -4,6 +4,7 @@
     { "path": "./apps/frontend/tsconfig.json" },
     { "path": "./apps/frontend/tsconfig.spec.json" },
     { "path": "./apps/frontend-e2e/tsconfig.json" },
-    { "path": "./apps/frontend-e2e/tsconfig.e2e.json" }
+    { "path": "./apps/frontend-e2e/tsconfig.e2e.json" },
+    { "path": "./libs/messages/tsconfig.json" }
   ]
 }

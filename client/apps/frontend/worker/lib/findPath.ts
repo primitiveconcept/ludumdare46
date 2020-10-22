@@ -13,9 +13,9 @@ export const findPath = (
   source: string,
   target: string,
 ): Connection[] | undefined => {
-  // if (source === target) {
-  //   return [{ ip: target, type: "workstation", latency: 0 }];
-  // }
+  if (source === target) {
+    return [{ ip: target, type: "workstation", latency: 0 }];
+  }
   const upPath: Connection[] = [];
   const downPath: Connection[] = [];
   const up = traverse(source);

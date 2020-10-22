@@ -36,7 +36,7 @@ describe("ecs", () => {
         {
           id: "3",
           components: {
-            Player: { type: "Player" },
+            Player: { type: "Player", homeIp: "199.201.159.1" },
             Location: { type: "Location", ip: "10.1.20.42" },
           },
         },
