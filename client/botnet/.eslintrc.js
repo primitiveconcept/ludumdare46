@@ -1,5 +1,3 @@
-const { warn } = require("console");
-
 const warnOnLocal = process.env.LINT_ERRORS ? "error" : "warn";
 
 module.exports = {
@@ -8,7 +6,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 6,
     sourceType: "module",
-    project: ["./tsconfig.json", "./cypress/tsconfig.json"],
+    project: "./tsconfig.*?.json",
     ecmaFeatures: {
       modules: true,
     },
@@ -96,6 +94,21 @@ module.exports = {
     "react/no-unknown-property": "error",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "error",
+    "@nrwl/nx/enforce-module-boundaries": [
+      "error",
+      {
+        enforceBuildableLibDependency: true,
+        allow: [],
+        depConstraints: [{ sourceTag: "*", onlyDependOnLibsWithTags: ["*"] }],
+      },
+    ],
   },
-  plugins: ["@typescript-eslint", "jsx-a11y", "mocha", "react-hooks", "react"],
+  plugins: [
+    "@typescript-eslint",
+    "jsx-a11y",
+    "mocha",
+    "react-hooks",
+    "react",
+    "@nrwl/nx",
+  ],
 };

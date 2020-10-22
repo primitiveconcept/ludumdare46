@@ -1,11 +1,11 @@
-import React, { createRef, useContext, useCallback } from 'react';
-import { css } from '@emotion/react';
-import { Box } from '.';
-import { CommandContext } from './CommandContext';
-import { useInputFocus } from '../hooks/useInputFocus';
-import { FILESYSTEM_ROOT } from '../lib/path';
+import React, { createRef, useContext, useCallback } from "react";
+import { css } from "@emotion/react";
+import { Box } from ".";
+import { CommandContext } from "./CommandContext";
+import { useInputFocus } from "../hooks/useInputFocus";
+import { FILESYSTEM_ROOT } from "../lib/path";
 
-const CURSOR = '█';
+const CURSOR = "█";
 
 type CommandPromptProps = {
   username: string;
@@ -20,12 +20,12 @@ export const CommandPrompt = ({
   const { command, setCommand, sendCommand } = useContext(CommandContext);
   const inputRef = createRef<HTMLInputElement>();
   const prompt = username
-    ? `${username}@${location}:${cwd.replace(FILESYSTEM_ROOT, '')}$`
+    ? `${username}@${location}:${cwd.replace(FILESYSTEM_ROOT, "")}$`
     : `username?`;
 
   const onSubmit = useCallback(() => {
     sendCommand(command);
-    setCommand('');
+    setCommand("");
   }, [command, sendCommand, setCommand]);
   useInputFocus(onSubmit, inputRef);
 

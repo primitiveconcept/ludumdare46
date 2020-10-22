@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
   },
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts"]
+  "include": ["**/*", "next-env.d.ts", "../../typings"]
 }

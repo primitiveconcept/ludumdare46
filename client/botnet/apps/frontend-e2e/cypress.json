@@ -1,4 +1,6 @@
 {
+  "projectId": "64ugpg",
+  "baseUrl": "http://localhost:3000",
   "fileServerFolder": ".",
   "fixturesFolder": "./src/fixtures",
   "integrationFolder": "./src/integration",
@@ -8,5 +10,6 @@
   "video": true,
   "videosFolder": "../../dist/cypress/apps/frontend-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/frontend-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "videoUploadOnPasses": false
 }
