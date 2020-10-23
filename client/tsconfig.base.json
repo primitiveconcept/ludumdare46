@@ -7,29 +7,17 @@
     "importHelpers": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@botnet/messages": [
-        "libs/messages/src/index.ts"
-      ],
-      "@botnet/ui": [
-        "libs/ui/src/index.ts"
-      ],
-      "@botnet/commands": [
-        "libs/commands/src/index.ts"
-      ],
-      "@botnet/utils": [
-        "libs/utils/src/index.ts"
-      ],
-      "@botnet/store": [
-        "libs/store/src/index.ts"
-      ]
+      "@botnet/messages": ["libs/messages/src/index.ts"],
+      "@botnet/ui": ["libs/ui/src/index.ts"],
+      "@botnet/commands": ["libs/commands/src/index.ts"],
+      "@botnet/utils": ["libs/utils/src/index.ts"],
+      "@botnet/store": ["libs/store/src/index.ts"],
+      "@botnet/worker": ["libs/worker/src/index.ts"]
     },
     "rootDir": ".",
     "skipDefaultLibCheck": true,
@@ -37,15 +25,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "types": [
-      "./typings"
-    ]
+    "typeRoots": ["node_modules/@types"],
+    "types": ["./typings"]
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

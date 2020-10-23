@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-import { dictionary } from "../features/sshcrack/dictionary";
+import { dictionary } from "@botnet/utils";
 import { DeviceType } from "../types/DeviceConfig";
 import { devices } from "./devices";
 

@@ -2,7 +2,7 @@ import { findDevice } from "../../lib/findDevice";
 import { findOrCreate } from "../../lib/findOrCreate";
 import { findPath } from "../../lib/findPath";
 import { System } from "../../types/System";
-import { dictionary } from "./dictionary";
+import { dictionary } from "@botnet/utils";
 
 export const sshCrackSystem = ({ world, addMessage }: System) => {
   const eventsComponent = world.with("Events")[0].components.Events;

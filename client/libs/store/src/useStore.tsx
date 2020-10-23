@@ -1,6 +1,6 @@
 import { useImmer } from "use-immer";
 import { State } from "./State";
-import { useSocket } from "./useSocket";
+import { useWorker } from "@botnet/worker";
 import { useEffect, useCallback, useRef } from "react";
 import { MailProcess } from "@botnet/messages";
 import { FILESYSTEM_ROOT } from "@botnet/utils";
@@ -26,7 +26,7 @@ export const useStore = (username: string) => {
     filesystems: {},
     cwd: FILESYSTEM_ROOT,
   });
-  const { lastMessage, ready, sendMessage } = useSocket();
+  const { lastMessage, ready, sendMessage } = useWorker();
 
   useEffect(() => {
     if (!username) {

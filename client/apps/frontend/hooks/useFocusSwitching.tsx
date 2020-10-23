@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import keycode from "keycode";
 
 export const useFocusSwitching = (count: number) => {
   const [current, setCurrent] = useState(0);
@@ -12,12 +11,12 @@ export const useFocusSwitching = (count: number) => {
 
     const changeFocus = (event: KeyboardEvent): void => {
       // don't interfere with accessibility
-      if (event.keyCode === keycode.codes.up) {
+      if (event.key === "ArrowUp") {
         prevRef.current?.focus();
         setCurrent((curr) => Math.max(curr - 1, 0));
       }
 
-      if (event.keyCode === keycode.codes.down) {
+      if (event.key === "ArrowUp") {
         nextRef.current?.focus();
         setCurrent((curr) => Math.min(curr + 1, count - 1));
       }

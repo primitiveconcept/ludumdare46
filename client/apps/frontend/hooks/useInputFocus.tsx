@@ -1,5 +1,4 @@
 import { useEffect, useContext } from "react";
-import keycode from "keycode";
 import { CommandContext } from "@botnet/commands";
 
 export const useInputFocus = (
@@ -10,21 +9,21 @@ export const useInputFocus = (
   useEffect(() => {
     const focusInput = (event: KeyboardEvent): void => {
       // don't interfere with accessibility
-      if (event.keyCode === keycode.codes.tab) {
+      if (event.key === "Tab") {
         return;
       }
 
       inputRef.current?.focus();
-      if (event.keyCode === keycode.codes.enter) {
+      if (event.key === "Enter") {
         return onSubmit();
       }
-      if (event.keyCode === keycode.codes.up) {
+      if (event.key === "ArrowUp") {
         // prevent scrolling, that would be bad
         event.preventDefault();
         setPrevCommand();
         return;
       }
-      if (event.keyCode === keycode.codes.down) {
+      if (event.key === "ArrowDown") {
         // prevent scrolling, that would be bad
         event.preventDefault();
         setNextCommand();

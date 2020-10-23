@@ -6,5 +6,6 @@ module.exports = {
     "<rootDir>/libs/commands",
     "<rootDir>/libs/utils",
     "<rootDir>/libs/state",
+    "<rootDir>/libs/worker",
   ],
 };

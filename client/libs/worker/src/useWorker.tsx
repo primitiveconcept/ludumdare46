@@ -1,14 +1,14 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from "react";
 import { Message } from "@botnet/messages";
 
-const useWorker = () => {
+const useWorkerLoader = () => {
   const workerRef = useRef<Worker>();
   const [lastMessage, setLastMessage] = useState<Message | undefined>(
     undefined,
   );
 
   useEffect(() => {
-    workerRef.current = new Worker("../worker/worker.ts", { type: "module" });
+    workerRef.current = new Worker("./worker.ts", { type: "module" });
   }, []);
 
   if (workerRef.current) {
@@ -38,8 +38,12 @@ const useWorker = () => {
  * - Validate incoming message structure
  *
  */
-export const useSocket = () => {
-  const { sendMessage, lastMessage: lastMessageUnsafe, ready } = useWorker();
+export const useWorker = () => {
+  const {
+    sendMessage,
+    lastMessage: lastMessageUnsafe,
+    ready,
+  } = useWorkerLoader();
   const lastMessage = useMemo(() => {
     if (!lastMessageUnsafe) {
       return null;

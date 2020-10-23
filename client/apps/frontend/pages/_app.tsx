@@ -3,7 +3,7 @@ import { ThemeProvider } from "@emotion/react";
 import { setAutoFreeze, enableMapSet, enablePatches } from "immer";
 import { AppProps } from "next/app";
 import React from "react";
-import "../lib/polyfills";
+import "../polyfills";
 
 setAutoFreeze(false);
 enableMapSet();

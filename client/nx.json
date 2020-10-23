@@ -19,12 +19,7 @@
       "runner": "@nrwl/nx-cloud",
       "options": {
         "accessToken": "YjM3NTRhMTQtNjI4MC00MGM4LTg1ZDgtM2UwOTE0NTI1ZDAwfHJlYWQtd3JpdGU=",
-        "cacheableOperations": [
-          "build",
-          "test",
-          "lint",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
@@ -36,9 +31,7 @@
     },
     "frontend-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "frontend"
-      ]
+      "implicitDependencies": ["frontend"]
     },
     "messages": {
       "tags": []
@@ -53,6 +46,9 @@
       "tags": []
     },
     "store": {
+      "tags": []
+    },
+    "worker": {
       "tags": []
     }
   }

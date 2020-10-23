@@ -15,8 +15,8 @@ export const MailProgram = ({ emails }: MailProgramProps) => {
   const { sendCommand } = useContext(CommandContext);
   const focusSwitchRef = useFocusSwitching(emails.length);
 
-  useKeyHandler((keyCode) => {
-    if (keyCode === "q") {
+  useKeyHandler((key) => {
+    if (key === "q") {
       if (selectedId) {
         setSelectedId(null);
       } else {

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { format } from "date-fns";
 import { SshCrackProcess } from "@botnet/messages";
-import { dictionary } from "../../worker/features/sshcrack/dictionary";
+import { dictionary } from "@botnet/utils";
 import { useSteppedScroll } from "../../hooks/useSteppedScroll";
 import { CommandLink, Markdown } from "@botnet/ui";
 
