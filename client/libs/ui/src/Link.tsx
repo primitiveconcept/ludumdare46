@@ -1,7 +1,6 @@
 import React from "react";
 import { SPACE_CHARACTER } from "./Markdown";
 import { Anchor } from "./Anchor";
-import { css } from "@emotion/react";
 import { SpaceProps } from "./spaceProps";
 
 type LinkProps = {
@@ -17,9 +16,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     return (
       <Anchor
         ref={ref}
-        css={css`
-          display: ${block ? "block" : "inline-block"};
-        `}
+        display={block ? "block" : "inline-block"}
         href={href}
         onClick={(event) => {
           event.preventDefault();

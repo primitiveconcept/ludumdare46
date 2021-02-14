@@ -39,7 +39,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx}"]
+            "lintFilePatterns": ["apps/frontend/**/*"]
           }
         },
         "test": {
@@ -72,7 +72,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/frontend-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["apps/frontend-e2e/**/*"]
           }
         }
       }
@@ -86,7 +86,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/messages/**/*.ts"]
+            "lintFilePatterns": ["libs/messages/**/*"]
           }
         },
         "test": {
@@ -107,7 +107,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/ui/**/*"]
           }
         },
         "test": {
@@ -128,7 +128,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/commands/**/*.ts"]
+            "lintFilePatterns": ["libs/commands/**/*"]
           }
         },
         "test": {
@@ -149,7 +149,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/utils/**/*.ts"]
+            "lintFilePatterns": ["libs/utils/**/*"]
           }
         },
         "test": {
@@ -170,7 +170,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/store/**/*.ts"]
+            "lintFilePatterns": ["libs/store/**/*"]
           }
         },
         "test": {
@@ -191,7 +191,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/worker/**/*.ts"]
+            "lintFilePatterns": ["libs/worker/**/*"]
           }
         },
         "test": {

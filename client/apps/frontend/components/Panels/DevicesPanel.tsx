@@ -31,18 +31,17 @@ export const DevicesPanel = ({ devices }: DevicesPanelProps) => {
       <Box marginBottom={1}>Known Devices</Box>
       {devices.map((dev) => {
         return (
-          <React.Fragment key={dev.ip}>
-            <Link
-              block
-              href={dev.ip}
-              data-test="knownIp"
-              onClick={() => {
-                setCurrentIp(dev.ip);
-              }}
-            >
-              {dev.ip}
-            </Link>
-          </React.Fragment>
+          <Link
+            key={dev.ip}
+            block
+            href={dev.ip}
+            data-test="knownIp"
+            onClick={() => {
+              setCurrentIp(dev.ip);
+            }}
+          >
+            {dev.ip}
+          </Link>
         );
       })}
     </Box>
