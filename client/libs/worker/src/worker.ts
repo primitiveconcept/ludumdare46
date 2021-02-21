@@ -88,7 +88,15 @@ const isTruthy = <T>(
 };
 
 const INTERVAL = 250;
+
+let last = new Date().valueOf();
+
 const gameLoop = () => {
+  if (new Date().valueOf() - last < INTERVAL) {
+    requestAnimationFrame(gameLoop);
+    return;
+  }
+  last = new Date().valueOf();
   const messages: string[] = [];
   const addMessage = (message: string) => {
     messages.push(message);
@@ -138,10 +146,7 @@ const gameLoop = () => {
   };
   worker.postMessage(playerMessage);
 
-  // Normally a terrible idea, but we don't need per-frame
-  // updates, or even consistent timing between frames.
-  // Save some cycles.
-  setTimeout(gameLoop, INTERVAL);
+  requestAnimationFrame(gameLoop);
 };
 
 gameLoop();
