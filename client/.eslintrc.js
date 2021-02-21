@@ -6,7 +6,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 6,
     sourceType: "module",
-    project: ["./tsconfig.json", "./cypress/tsconfig.json"],
+    project: ["./apps/**/*.tsconfig.*?.json", "./libs/**/tsconfig.*?.json"],
     ecmaFeatures: {
       modules: true,
     },
@@ -19,7 +19,6 @@ module.exports = {
   rules: {
     "object-shorthand": [warnOnLocal, "always"],
     "no-console": warnOnLocal,
-    "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-array-constructor": "error",
     "@typescript-eslint/no-empty-interface": "error",
@@ -73,7 +72,8 @@ module.exports = {
     "jsx-a11y/tabindex-no-positive": "error",
     "mocha/no-exclusive-tests": "error",
     "no-sequences": "error",
-    "no-shadow": "error",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
     "padding-line-between-statements": [
       warnOnLocal,
       {
@@ -95,6 +95,21 @@ module.exports = {
     "react/no-unknown-property": "error",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "error",
+    "@nrwl/nx/enforce-module-boundaries": [
+      "error",
+      {
+        enforceBuildableLibDependency: true,
+        allow: [],
+        depConstraints: [{ sourceTag: "*", onlyDependOnLibsWithTags: ["*"] }],
+      },
+    ],
   },
-  plugins: ["@typescript-eslint", "jsx-a11y", "mocha", "react-hooks", "react"],
+  plugins: [
+    "@typescript-eslint",
+    "jsx-a11y",
+    "mocha",
+    "react-hooks",
+    "react",
+    "@nrwl/nx",
+  ],
 };
